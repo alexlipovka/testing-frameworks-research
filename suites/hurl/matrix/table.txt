@@ -1,0 +1,7 @@
+# 8. identity × operation → expected status. One row per identity; run.sh feeds each row to matrix.hurl.
+# token_var       read_patient  search_patient  update_patient  read_encounter
+pat_self_token    200           403             403             200
+p1_token          200           200             403             403
+p2_token          403           403             403             403
+rec_token         200           200             403             403
+norole_token      403           403             403             403
