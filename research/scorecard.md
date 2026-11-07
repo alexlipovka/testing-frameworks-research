@@ -6,7 +6,7 @@ Date: 2026-11-07 · Spec: Phase 1 of `.scratch/framework-bakeoff/spec.md`
 
 | Rank | Tool | Desk score | Status |
 |---|---|---|---|
-| 1 | Karate 1.5.x | 81.2% | finalist (fixed) |
+| 1 | Karate 2.1.4 | 85.9% | finalist (fixed) |
 | 2 | Hurl | 80.0% | finalist (fixed) |
 | 2 | pytest + httpx | 80.0% | finalist (fixed) |
 | 4 | **Playwright API testing** | **75.3%** | **joins as 4th finalist** |
@@ -26,7 +26,7 @@ Date: 2026-11-07 · Spec: Phase 1 of `.scratch/framework-bakeoff/spec.md`
 
 - These scores come from docs and repo data only. The bake-off measurements in the spec replace them in Phase 2.
 - **AI-agent authorability (weight 15) is excluded.** It can only be measured by running the experiment. The remaining weights add up to 85, and each score is weighted sum ÷ (85 × 5).
-- The three finalists are scored here as well, because the within-10% rule needs a baseline. Karate is scored as the pinned 1.5.x line, not v2.
+- The three finalists are scored here as well, because the within-10% rule needs a baseline. Karate is scored as the pinned 2.1.4 (re-scored 2026-11-08; the 1.5.x line scored 81.2%: Diag 4, Eco 3).
 - Each desk score is a proxy for the bake-off measurement:
 
 | Criterion | Weight | Desk proxy |
@@ -46,7 +46,7 @@ Column key: AP = access-policy expressiveness, Diag = failure diagnostics, Run =
 
 | Tool | AP | Diag | Run | Read | Fix | CI | Eco | FHIR | Σ | % |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Karate 1.5.x | 5 | 4 | 3 | 4 | 4 | 5 | 3 | 2 | 345 | 81.2 |
+| Karate 2.1.4 | 5 | 5 | 3 | 4 | 4 | 5 | 4 | 2 | 365 | 85.9 |
 | Hurl | 4 | 4 | 5 | 5 | 3 | 5 | 4 | 1 | 340 | 80.0 |
 | pytest + httpx | 4 | 4 | 4 | 3 | 5 | 4 | 5 | 3 | 340 | 80.0 |
 | Playwright API | 3 | 4 | 4 | 3 | 5 | 5 | 5 | 3 | 320 | 75.3 |
@@ -62,12 +62,13 @@ Weights: AP 25 · Diag 15 · Run 10 · Read 10 · Fix 10 · CI 5 · Eco 5 · FHI
 
 ### Rationale
 
-- **Karate 1.5.x.**
+- **Karate 2.1.4.**
   - `match` handles fuzzy and partial JSON.
   - Scenario Outline `Examples:` tables give the matrix with no copy-paste.
-  - The HTML report shows the request and response for each step.
-  - Runs are parallel, but the JVM and GraalJS start slowly.
-  - Eco is 3 because 1.5.2 (2025-11-30) is the last 1.x release; development has moved to v2. Also, one author wrote 1660 of the 1800 commits in the last 12 months.
+  - v2 is a ground-up rewrite (2.0.0, 2026-03-26). Soft assertions collect every JSON mismatch instead of stopping at the first. The interactive HTML report shows the request and response for each step. Diag is 5.
+  - A custom JS engine (`karate-js`) replaces GraalJS, and parallel runs use Java 21 virtual threads. Run stays 3: a cold JVM start remains, and the bake-off measures it.
+  - It ships as a standalone jar and a CLI, so no Maven or Gradle is needed.
+  - Eco is 4: 17 v2 releases in 12 months, MIT. But one author wrote 1660 of the 1800 commits.
 - **Hurl.**
   - JSONPath filter assertions sit next to the request in plain text, the best fit for `eval-result`.
   - There is no loop or parameterization, so the matrix needs one file per row or an external loop.
@@ -138,7 +139,7 @@ These solve different problems and are out of scope.
 - **[Inferno](https://inferno-framework.github.io)** ([inferno-core](https://github.com/inferno-framework/inferno-core); Apache-2.0, v1.6.0, 2026-10-27). Checks FHIR server conformance against Implementation Guides.
 - **[k6](https://grafana.com/docs/k6/latest/)** ([repo](https://github.com/grafana/k6); AGPL-3.0, v1.8.2, 2026-10-12). Load testing with JS `check()` assertions.
 
-Newer versions exist than the spec's pins: Hurl 8.1.0 (the spec pins 8.0.1) and Karate v2 (the spec pins 1.5.x). The bake-off keeps the pins.
+Pins (decision 2026-11-08): Hurl 8.1.0 and Karate 2.1.4. The existing production suite still runs Hurl 8.0.1; `REPORT.md` must note it.
 
 ## Open questions for the user
 
