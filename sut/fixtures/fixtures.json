@@ -1,0 +1,65 @@
+{
+  "secrets": {"client_id": "{{run_id}}-client", "client_secret": "bakeoff-client-secret", "user_password": "bakeoff-password"},
+  "sql": {
+    "install": "CREATE OR REPLACE FUNCTION drop_before_all(integer) RETURNS VOID AS $$ DECLARE e record; BEGIN FOR e IN (SELECT table_name FROM information_schema.columns WHERE column_name = 'txid' AND table_schema = 'public' AND table_name NOT LIKE '%_history') LOOP EXECUTE 'DELETE FROM \"' || e.table_name || '\" WHERE txid > ' || $1; END LOOP; END; $$ LANGUAGE plpgsql;",
+    "stamp": "SELECT last_value FROM transaction_id_seq;",
+    "rollback": "SELECT drop_before_all({{tx_id}});"
+  },
+  "identities": [
+    {"name": "pat-self", "token_var": "pat_self_token", "user": "{{run_id}}-pat-self", "role": "patient", "fhirUser": "Patient/{{run_id}}-patient-self"},
+    {"name": "p1", "token_var": "p1_token", "user": "{{run_id}}-p1", "role": "practitioner", "fhirUser": "Practitioner/practitioner1"},
+    {"name": "p2", "token_var": "p2_token", "user": "{{run_id}}-p2", "role": "practitioner", "fhirUser": "Practitioner/practitioner2"},
+    {"name": "rec", "token_var": "rec_token", "user": "{{run_id}}-rec", "role": "receptionist", "fhirUser": "Practitioner/receptionist"},
+    {"name": "norole", "token_var": "norole_token", "user": "{{run_id}}-norole", "role": null, "fhirUser": null}
+  ],
+  "setup": [
+    {"method": "PUT", "path": "/Client/{{run_id}}-client",
+     "body": {"resourceType": "Client", "id": "{{run_id}}-client", "secret": "bakeoff-client-secret", "grant_types": ["password"], "first_party": true}},
+
+    {"method": "PUT", "path": "/fhir/Patient/{{run_id}}-patient-self",
+     "body": {"resourceType": "Patient", "id": "{{run_id}}-patient-self", "name": [{"given": ["Self"], "family": "Bakeoff"}]}},
+    {"method": "PUT", "path": "/fhir/Patient/{{run_id}}-patient-other",
+     "body": {"resourceType": "Patient", "id": "{{run_id}}-patient-other", "name": [{"given": ["Other"], "family": "Bakeoff"}]}},
+    {"method": "PUT", "path": "/fhir/Patient/{{run_id}}-patient-unlinked",
+     "body": {"resourceType": "Patient", "id": "{{run_id}}-patient-unlinked", "name": [{"given": ["Unlinked"], "family": "Bakeoff"}]}},
+
+    {"method": "PUT", "path": "/fhir/Encounter/{{run_id}}-enc-match",
+     "body": {"resourceType": "Encounter", "id": "{{run_id}}-enc-match", "status": "finished", "class": {"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB"}, "subject": {"reference": "Patient/{{run_id}}-patient-self"}}},
+    {"method": "PUT", "path": "/fhir/Encounter/{{run_id}}-enc-mismatch",
+     "body": {"resourceType": "Encounter", "id": "{{run_id}}-enc-mismatch", "status": "finished", "class": {"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "AMB"}, "subject": {"reference": "Patient/{{run_id}}-patient-other"}}},
+    {"method": "PUT", "path": "/fhir/Observation/{{run_id}}-obs-match",
+     "body": {"resourceType": "Observation", "id": "{{run_id}}-obs-match", "status": "final", "code": {"text": "Bakeoff weight"}, "subject": {"reference": "Patient/{{run_id}}-patient-self"}, "valueQuantity": {"value": 70, "unit": "kg"}}},
+    {"method": "PUT", "path": "/fhir/Observation/{{run_id}}-obs-mismatch",
+     "body": {"resourceType": "Observation", "id": "{{run_id}}-obs-mismatch", "status": "final", "code": {"text": "Bakeoff weight"}, "subject": {"reference": "Patient/{{run_id}}-patient-other"}, "valueQuantity": {"value": 80, "unit": "kg"}}},
+    {"method": "PUT", "path": "/fhir/Condition/{{run_id}}-cond-match",
+     "body": {"resourceType": "Condition", "id": "{{run_id}}-cond-match", "code": {"text": "Bakeoff condition"}, "subject": {"reference": "Patient/{{run_id}}-patient-self"}}},
+    {"method": "PUT", "path": "/fhir/Appointment/{{run_id}}-appt-match",
+     "body": {"resourceType": "Appointment", "id": "{{run_id}}-appt-match", "status": "booked", "start": "2030-01-01T09:00:00Z", "end": "2030-01-01T09:30:00Z", "participant": [{"actor": {"reference": "Patient/{{run_id}}-patient-self"}, "status": "accepted"}, {"actor": {"reference": "Practitioner/practitioner1"}, "status": "accepted"}]}},
+
+    {"method": "PUT", "path": "/User/{{run_id}}-pat-self",
+     "body": {"resourceType": "User", "id": "{{run_id}}-pat-self", "password": "bakeoff-password", "fhirUser": {"resourceType": "Patient", "id": "{{run_id}}-patient-self"}}},
+    {"method": "PUT", "path": "/Role/{{run_id}}-pat-self-role",
+     "body": {"resourceType": "Role", "id": "{{run_id}}-pat-self-role", "name": "patient", "user": {"resourceType": "User", "id": "{{run_id}}-pat-self"}, "links": {"patient": {"resourceType": "Patient", "id": "{{run_id}}-patient-self"}}}},
+    {"method": "PUT", "path": "/User/{{run_id}}-p1",
+     "body": {"resourceType": "User", "id": "{{run_id}}-p1", "password": "bakeoff-password", "fhirUser": {"resourceType": "Practitioner", "id": "practitioner1"}}},
+    {"method": "PUT", "path": "/Role/{{run_id}}-p1-role",
+     "body": {"resourceType": "Role", "id": "{{run_id}}-p1-role", "name": "practitioner", "user": {"resourceType": "User", "id": "{{run_id}}-p1"}, "links": {"practitioner": {"resourceType": "Practitioner", "id": "practitioner1"}}}},
+    {"method": "PUT", "path": "/User/{{run_id}}-p2",
+     "body": {"resourceType": "User", "id": "{{run_id}}-p2", "password": "bakeoff-password", "fhirUser": {"resourceType": "Practitioner", "id": "practitioner2"}}},
+    {"method": "PUT", "path": "/Role/{{run_id}}-p2-role",
+     "body": {"resourceType": "Role", "id": "{{run_id}}-p2-role", "name": "practitioner", "user": {"resourceType": "User", "id": "{{run_id}}-p2"}, "links": {"practitioner": {"resourceType": "Practitioner", "id": "practitioner2"}}}},
+    {"method": "PUT", "path": "/User/{{run_id}}-rec",
+     "body": {"resourceType": "User", "id": "{{run_id}}-rec", "password": "bakeoff-password", "fhirUser": {"resourceType": "Practitioner", "id": "receptionist"}}},
+    {"method": "PUT", "path": "/Role/{{run_id}}-rec-role",
+     "body": {"resourceType": "Role", "id": "{{run_id}}-rec-role", "name": "receptionist", "user": {"resourceType": "User", "id": "{{run_id}}-rec"}, "links": {"practitioner": {"resourceType": "Practitioner", "id": "receptionist"}}}},
+    {"method": "PUT", "path": "/User/{{run_id}}-norole",
+     "body": {"resourceType": "User", "id": "{{run_id}}-norole", "password": "bakeoff-password"}},
+
+    {"method": "PUT", "path": "/fhir/Consent/{{run_id}}-consent-p1-self",
+     "body": {"resourceType": "Consent", "id": "{{run_id}}-consent-p1-self", "status": "active", "scope": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/consentscope", "code": "patient-privacy"}]}, "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "data-sharing"}]}], "patient": {"reference": "Patient/{{run_id}}-patient-self"}, "policy": [{"uri": "https://beda.software/patient-consent"}], "provision": {"type": "permit", "actor": [{"role": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-RoleClass", "code": "PROV"}]}, "reference": {"reference": "Practitioner/practitioner1"}}]}}},
+    {"method": "PUT", "path": "/fhir/Consent/{{run_id}}-consent-p2-other",
+     "body": {"resourceType": "Consent", "id": "{{run_id}}-consent-p2-other", "status": "active", "scope": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/consentscope", "code": "patient-privacy"}]}, "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "data-sharing"}]}], "patient": {"reference": "Patient/{{run_id}}-patient-other"}, "policy": [{"uri": "https://beda.software/patient-consent"}], "provision": {"type": "permit", "actor": [{"role": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-RoleClass", "code": "PROV"}]}, "reference": {"reference": "Practitioner/practitioner2"}}]}}},
+    {"method": "PUT", "path": "/fhir/Consent/{{run_id}}-consent-p1-other-revoked",
+     "body": {"resourceType": "Consent", "id": "{{run_id}}-consent-p1-other-revoked", "status": "inactive", "scope": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/consentscope", "code": "patient-privacy"}]}, "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "data-sharing"}]}], "patient": {"reference": "Patient/{{run_id}}-patient-other"}, "policy": [{"uri": "https://beda.software/patient-consent"}], "provision": {"type": "permit", "actor": [{"role": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-RoleClass", "code": "PROV"}]}, "reference": {"reference": "Practitioner/practitioner1"}}]}}}
+  ]
+}
