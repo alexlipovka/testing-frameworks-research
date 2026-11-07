@@ -1,0 +1,4 @@
+Hurl
+    filter remove_matches ^\s*#
+    extension hurl
+    3rd_gen_scale 1.00
