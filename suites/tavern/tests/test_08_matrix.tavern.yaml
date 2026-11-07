@@ -1,0 +1,42 @@
+# Case 8: 5 identities x 4 operations, one table; every cell asserts the
+# policy decision and the status.
+test_name: access matrix
+marks:
+  - parametrize:
+      key: [who, op, expect, status]
+      vals:
+        #  who       operation                                    decision  status
+        - [pat-self, "Patient/{run_id}-patient-self",             allow,    200]
+        - [pat-self, "Patient?_id={run_id}-patient-self",         deny,     403]
+        - [pat-self, "Encounter/{run_id}-enc-match",              allow,    200]
+        - [pat-self, "Appointment/{run_id}-appt-match",           deny,     403]
+        - [p1,       "Patient/{run_id}-patient-self",             allow,    200]
+        - [p1,       "Patient?_id={run_id}-patient-self",         allow,    200]
+        - [p1,       "Encounter/{run_id}-enc-match",              deny,     403]
+        - [p1,       "Appointment/{run_id}-appt-match",           deny,     403]
+        - [p2,       "Patient/{run_id}-patient-self",             deny,     403]
+        - [p2,       "Patient?_id={run_id}-patient-self",         deny,     403]
+        - [p2,       "Encounter/{run_id}-enc-match",              deny,     403]
+        - [p2,       "Appointment/{run_id}-appt-match",           deny,     403]
+        - [rec,      "Patient/{run_id}-patient-self",             allow,    200]
+        - [rec,      "Patient?_id={run_id}-patient-self",         allow,    200]
+        - [rec,      "Encounter/{run_id}-enc-match",              deny,     403]
+        - [rec,      "Appointment/{run_id}-appt-match",           allow,    200]
+        - [norole,   "Patient/{run_id}-patient-self",             deny,     403]
+        - [norole,   "Patient?_id={run_id}-patient-self",         deny,     403]
+        - [norole,   "Encounter/{run_id}-enc-match",              deny,     403]
+        - [norole,   "Appointment/{run_id}-appt-match",           deny,     403]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}

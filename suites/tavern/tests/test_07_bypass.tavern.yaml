@@ -1,0 +1,66 @@
+# Case 7: no way around the per-resource policies: transaction and batch
+# Bundles, JSON Patch, merge-patch. Each write leaves the Patient unchanged.
+test_name: Bundle bypass is denied
+marks:
+  - parametrize:
+      key: [who, type]
+      vals:
+        - [pat-self, transaction]
+        - [pat-self, batch]
+        - [rec, transaction]
+        - [p1, batch]
+stages:
+  - name: policy decision
+    request: &bundle
+      url: "{base}/fhir"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json:
+        resourceType: Bundle
+        type: "{type}"
+        entry:
+          - request: {method: GET, url: "Patient/{run_id}-patient-other"}
+          - request: {method: PUT, url: "Patient/{run_id}-patient-self"}
+            resource: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Bundled}]}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: status
+    request: {<<: *bundle, params: {}}
+    response: {status_code: 403}
+  - &unchanged
+    name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+---
+test_name: PATCH bypass is denied
+marks:
+  - parametrize:
+      key: [who, ctype, patch]
+      vals:
+        - [pat-self, application/json-patch+json, [{op: replace, path: /name/0/family, value: Patched}]]
+        - [rec, application/merge-patch+json, {name: [{family: Merged}]}]
+stages:
+  - name: policy decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+        Content-Type: "{ctype}"
+      json: !force_format_include "{patch}"
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: status
+    request: {<<: *patch, params: {}}
+    response: {status_code: 403}
+  - name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}

@@ -1,0 +1,50 @@
+# Case 10: create, read, update, JSON Patch, delete (admin).
+test_name: Patient CRUD + JSON Patch
+stages:
+  - name: create
+    request:
+      url: "{base}/fhir/Patient"
+      method: POST
+      headers: {Authorization: "{admin_auth}"}
+      json: {resourceType: Patient, name: [{given: [Crud], family: "{run_id}"}]}
+    response:
+      status_code: 201
+      json: {resourceType: Patient, name: [{family: "{run_id}"}]}
+      save:
+        json: {pid: id}
+  - name: read
+    request: {url: "{base}/fhir/Patient/{pid}", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {id: "{pid}", name: [{given: [Crud]}]}
+  - name: update
+    request:
+      url: "{base}/fhir/Patient/{pid}"
+      method: PUT
+      headers: {Authorization: "{admin_auth}"}
+      json: {resourceType: Patient, id: "{pid}", gender: female, name: [{given: [Updated], family: "{run_id}"}]}
+    response:
+      status_code: 200
+      json: {gender: female, name: [{given: [Updated]}]}
+  - name: JSON Patch
+    request:
+      url: "{base}/fhir/Patient/{pid}"
+      method: PATCH
+      headers: {Authorization: "{admin_auth}", Content-Type: application/json-patch+json}
+      json:
+        - {op: replace, path: /gender, value: male}
+        - {op: add, path: /birthDate, value: "2000-01-02"}
+    response:
+      status_code: 200
+      json: {gender: male, birthDate: "2000-01-02", name: [{given: [Updated]}]}
+  - name: patched state is stored
+    request: {url: "{base}/fhir/Patient/{pid}", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {gender: male, birthDate: "2000-01-02"}
+  - name: delete
+    request: {url: "{base}/fhir/Patient/{pid}", method: DELETE, headers: {Authorization: "{admin_auth}"}}
+    response: {status_code: [200, 204]}
+  - name: gone
+    request: {url: "{base}/fhir/Patient/{pid}", headers: {Authorization: "{admin_auth}"}}
+    response: {status_code: [404, 410]}

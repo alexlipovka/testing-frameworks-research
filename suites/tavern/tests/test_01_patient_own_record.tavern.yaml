@@ -1,0 +1,25 @@
+# Case 1: a patient reads their own Patient (matcho), not another's.
+test_name: pat-self reads Patient
+marks:
+  - parametrize:
+      key: [patient, expect, status]
+      vals:
+        - [patient-self, allow, 200]
+        - [patient-other, deny, 403]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: patient-role-policy}
+  - name: status
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: !int "{status}"

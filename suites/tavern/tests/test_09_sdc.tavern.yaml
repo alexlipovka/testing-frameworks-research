@@ -1,0 +1,60 @@
+# Case 9: SDC $populate / $extract pass only for a practitioner consented on the
+# subject, with every patientId answer equal to it. Allowed calls assert the gate,
+# not the mapping output: the SUT lacks fhir-emr's launch context.
+test_name: SDC gate allows the consented practitioner
+marks:
+  - parametrize:
+      key: [who, op, patient]
+      vals:
+        - [p1, $populate, patient-self]
+        - [p1, $extract, patient-self]
+        - [p2, $populate, patient-other]
+        - [p2, $extract, patient-other]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}"}}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: allow, policy: as-practitioner-sdc-consented-patient}
+---
+test_name: SDC gate denies everyone else
+marks:
+  - parametrize:
+      key: [who, op, patient, answer]
+      vals:
+        # each role, own or unrelated subject
+        - [pat-self, $populate, patient-self, patient-self]
+        - [pat-self, $extract, patient-self, patient-self]
+        - [rec, $populate, patient-self, patient-self]
+        - [rec, $extract, patient-self, patient-self]
+        - [norole, $populate, patient-self, patient-self]
+        - [norole, $extract, patient-self, patient-self]
+        # practitioner, QR subject not consented (revoked / unlinked)
+        - [p1, $populate, patient-other, patient-other]
+        - [p1, $extract, patient-other, patient-other]
+        - [p1, $extract, patient-unlinked, patient-unlinked]
+        - [p2, $populate, patient-self, patient-self]
+        # forged answer: consented subject, patientId points elsewhere
+        - [p1, $extract, patient-self, patient-other]
+        - [p2, $extract, patient-other, patient-self]
+stages:
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: status
+    request: {<<: *sdc, params: {}}
+    response: {status_code: 403}

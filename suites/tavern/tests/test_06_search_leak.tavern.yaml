@@ -1,0 +1,57 @@
+# Case 6: allowed searches return nothing outside the caller's scope;
+# out-of-scope searches and includes are denied.
+test_name: allowed search returns only in-scope resources
+marks:
+  - parametrize:
+      key: [who, path, policy, expected]
+      vals:
+        - [pat-self, "fhir/Observation?subject=Patient/{run_id}-patient-self", as-patient-search-own-observations, ["Observation/{run_id}-obs-match"]]
+        - [pat-self, "fhir/Observation?subject={run_id}-patient-self", as-patient-search-own-observations, ["Observation/{run_id}-obs-match"]]
+        - [p1, "fhir/Patient?_id={run_id}-patient-self", as-practitioner-search-consented-patients, ["Patient/{run_id}-patient-self"]]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: allow, policy: "{policy}"}}
+  - name: results stay in scope
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:bundle_ids, extra_kwargs: {expected: !force_format_include "{expected}"}}
+---
+test_name: out-of-scope search is denied
+marks:
+  - parametrize:
+      key: [who, path]
+      vals:
+        - [pat-self, "fhir/Observation?subject=Patient/{run_id}-patient-other"]
+        - [pat-self, "fhir/Observation"]
+        - [pat-self, "fhir/Observation?subject=Patient/{run_id}-patient-self&subject=Patient/{run_id}-patient-other"]
+        - [pat-self, "fhir/Observation?subject=Patient/{run_id}-patient-self&_include=Observation:subject"]
+        - [pat-self, "fhir/Patient"]
+        - [p1, "fhir/Patient?_id={run_id}-patient-self,{run_id}-patient-other"]
+        - [p1, "fhir/Patient?_id={run_id}-patient-self&_revinclude=Observation:subject"]
+        - [p1, "fhir/Patient"]
+        - [rec, "fhir/Patient?_id={run_id}-patient-self&_revinclude=Observation:subject"]
+        - [rec, "fhir/Patient?_id={run_id}-patient-self&_include=Patient:general-practitioner"]
+        - [rec, "fhir/Observation"]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}

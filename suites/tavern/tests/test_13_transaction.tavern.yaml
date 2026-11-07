@@ -1,0 +1,54 @@
+# Case 13: transaction Bundles resolve urn:uuid references and are atomic.
+test_name: transaction resolves references
+stages:
+  - name: create Patient + Observation in one transaction
+    request:
+      url: "{base}/fhir"
+      method: POST
+      headers: {Authorization: "{admin_auth}"}
+      json:
+        resourceType: Bundle
+        type: transaction
+        entry:
+          - fullUrl: urn:uuid:7f6a1b2c-0000-4000-8000-000000000001
+            request: {method: POST, url: Patient}
+            resource: {resourceType: Patient, name: [{family: "{run_id}-tx"}]}
+          - request: {method: POST, url: Observation}
+            resource:
+              resourceType: Observation
+              status: final
+              code: {text: tx}
+              subject: {reference: urn:uuid:7f6a1b2c-0000-4000-8000-000000000001}
+    response:
+      status_code: 200
+      json: {resourceType: Bundle, type: transaction-response}
+      save:
+        $ext:
+          function: helpers:tx_ids
+  - name: Observation points at the created Patient
+    request: {url: "{base}/fhir/Observation/{obs_id}", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {subject: {reference: "Patient/{patient_id}"}}
+---
+test_name: transaction is atomic
+stages:
+  - name: one bad entry rejects the whole Bundle
+    request:
+      url: "{base}/fhir"
+      method: POST
+      headers: {Authorization: "{admin_auth}"}
+      json:
+        resourceType: Bundle
+        type: transaction
+        entry:
+          - request: {method: PUT, url: "Patient/{run_id}-tx-atomic"}
+            resource: {resourceType: Patient, id: "{run_id}-tx-atomic"}
+          - request: {method: POST, url: Observation}
+            resource: {resourceType: Observation, code: {text: missing status}}
+    response:
+      status_code: [400, 422]
+      json: {resourceType: OperationOutcome}
+  - name: the good entry was not written
+    request: {url: "{base}/fhir/Patient/{run_id}-tx-atomic", headers: {Authorization: "{admin_auth}"}}
+    response: {status_code: 404}

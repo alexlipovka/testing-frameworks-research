@@ -1,0 +1,61 @@
+# Case 4: a receptionist reads Patients but cannot write them.
+test_name: rec reads Patient
+marks:
+  - parametrize:
+      key: path
+      vals: ["fhir/Patient/{run_id}-patient-self", "fhir/Patient?_id={run_id}-patient-self"]
+stages:
+  - name: policy decision
+    request: {url: "{base}/{path}", params: {__debug: policy}, headers: {Authorization: "{rec_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: allow, policy: as-receptionist-read-patients}
+  - name: status
+    request: {url: "{base}/{path}", headers: {Authorization: "{rec_auth}"}}
+    response: {status_code: 200}
+---
+test_name: rec cannot write Patient
+stages:
+  - &deny_stage
+    name: PUT decision
+    request: &put
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PUT
+      params: {__debug: policy}
+      headers: {Authorization: "{rec_auth}"}
+      json: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Changed}]}
+    response: &deny
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: PUT status
+    request: {<<: *put, params: {}}
+    response: &forbidden {status_code: 403}
+  - name: POST decision
+    request: &post
+      url: "{base}/fhir/Patient"
+      method: POST
+      params: {__debug: policy}
+      headers: {Authorization: "{rec_auth}"}
+      json: {resourceType: Patient, name: [{family: Created}]}
+    response: *deny
+  - name: POST status
+    request: {<<: *post, params: {}}
+    response: *forbidden
+  - name: JSON Patch decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers: {Authorization: "{rec_auth}", Content-Type: application/json-patch+json}
+      json: [{op: replace, path: /name/0/family, value: Patched}]
+    response: *deny
+  - name: JSON Patch status
+    request: {<<: *patch, params: {}}
+    response: *forbidden
+  - name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}

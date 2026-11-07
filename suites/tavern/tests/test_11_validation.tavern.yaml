@@ -1,0 +1,21 @@
+# Case 11: invalid resources are rejected with an OperationOutcome.
+test_name: invalid resource -> OperationOutcome
+marks:
+  - parametrize:
+      key: [type, body]
+      vals:
+        - [Patient, {resourceType: Patient, birthDate: not-a-date}]
+        - [Patient, {resourceType: Patient, unknownElement: 1}]
+        - [Observation, {resourceType: Observation, code: {text: missing status}}]
+stages:
+  - name: create is rejected
+    request:
+      url: "{base}/fhir/{type}"
+      method: POST
+      headers: {Authorization: "{admin_auth}"}
+      json: !force_format_include "{body}"
+    response:
+      status_code: 422
+      json:
+        resourceType: OperationOutcome
+        issue: [{severity: !re_fullmatch "error|fatal", code: invalid}]

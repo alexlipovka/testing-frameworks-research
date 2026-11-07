@@ -1,0 +1,26 @@
+# Case 14: a run sees only its own fixtures and identities.
+test_name: identities are this run's users
+marks:
+  - parametrize:
+      key: who
+      vals: [pat-self, p1, p2, rec, norole]
+stages:
+  - name: session user carries the run_id
+    request:
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      json: {request: {user: {id: "{run_id}-{who}"}}}
+---
+test_name: fixture search finds only this run's rows
+stages:
+  - name: Bakeoff patients all belong to this run
+    request: {url: "{base}/fhir/Patient?family:exact=Bakeoff", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:bundle_ids
+        extra_kwargs:
+          expected: ["Patient/{run_id}-patient-self", "Patient/{run_id}-patient-other", "Patient/{run_id}-patient-unlinked"]

@@ -1,0 +1,22 @@
+# Case 5: a user with no Role is denied everywhere.
+test_name: norole is denied
+marks:
+  - parametrize:
+      key: [method, path]
+      vals:
+        - [GET, "fhir/Patient/{run_id}-patient-self"]
+        - [GET, "fhir/Patient?_id={run_id}-patient-self"]
+        - [GET, "fhir/Encounter/{run_id}-enc-match"]
+        - [GET, "fhir/Observation?subject=Patient/{run_id}-patient-self"]
+        - [GET, "fhir/Appointment/{run_id}-appt-match"]
+        - [GET, "fhir/Questionnaire/glucose"]
+        - [DELETE, "fhir/Appointment/{run_id}-appt-match"]
+stages:
+  - name: policy decision
+    request: {url: "{base}/{path}", method: "{method}", params: {__debug: policy}, headers: {Authorization: "{norole_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+  - name: status
+    request: {url: "{base}/{path}", method: "{method}", headers: {Authorization: "{norole_auth}"}}
+    response: {status_code: 403}

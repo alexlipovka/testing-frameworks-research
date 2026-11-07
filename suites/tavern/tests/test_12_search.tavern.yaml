@@ -1,0 +1,20 @@
+# Case 12: _include, _revinclude and chained search (admin).
+test_name: search with includes and chains
+marks:
+  - parametrize:
+      key: [query, expected]
+      vals:
+        - ["Encounter?_id={run_id}-enc-match&_include=Encounter:subject",
+           ["Encounter/{run_id}-enc-match", "Patient/{run_id}-patient-self"]]
+        - ["Patient?_id={run_id}-patient-self&_revinclude=Observation:subject",
+           ["Patient/{run_id}-patient-self", "Observation/{run_id}-obs-match"]]
+        - ["Observation?_id={run_id}-obs-match,{run_id}-obs-mismatch&subject:Patient.name=Self",
+           ["Observation/{run_id}-obs-match"]]
+        - ["Encounter?subject:Patient._id={run_id}-patient-other",
+           ["Encounter/{run_id}-enc-mismatch"]]
+stages:
+  - name: bundle holds exactly the expected resources
+    request: {url: "{base}/fhir/{query}", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:bundle_ids, extra_kwargs: {expected: !force_format_include "{expected}"}}

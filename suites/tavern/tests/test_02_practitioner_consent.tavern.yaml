@@ -1,0 +1,30 @@
+# Case 2: a practitioner reads a Patient through an active Consent (SQL);
+# a revoked Consent denies. p2 -> patient-other shows the revoked deny is about
+# the Consent's status, not about patient-other.
+test_name: practitioner reads Patient via Consent
+marks:
+  - parametrize:
+      key: [who, patient, expect, status]
+      vals:
+        - [p1, patient-self, allow, 200]
+        - [p1, patient-other, deny, 403]
+        - [p2, patient-other, allow, 200]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+  - name: status
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: !int "{status}"

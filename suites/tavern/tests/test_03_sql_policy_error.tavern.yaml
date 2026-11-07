@@ -1,0 +1,80 @@
+# Case 3: a SQL policy that throws shows up as an error in the debug dump,
+# not as a plain deny. A run-scoped user gets a policy that divides by zero.
+test_name: throwing SQL policy is reported as an error
+stages:
+  - name: crash user
+    request:
+      url: "{base}/User/{run_id}-crash"
+      method: PUT
+      headers: {Authorization: "{admin_auth}"}
+      json: {resourceType: User, id: "{run_id}-crash", password: bakeoff-password}
+    response:
+      status_code: [200, 201]
+  - name: throwing policy
+    request:
+      url: "{base}/AccessPolicy/{run_id}-throws"
+      method: PUT
+      headers: {Authorization: "{admin_auth}"}
+      json:
+        resourceType: AccessPolicy
+        id: "{run_id}-throws"
+        engine: sql
+        sql: {query: "SELECT 1/0"}
+        link: [{resourceType: User, id: "{run_id}-crash"}]
+    response:
+      status_code: [200, 201]
+  - name: crash user token
+    request:
+      url: "{base}/auth/token"
+      method: POST
+      json: {grant_type: password, client_id: "{run_id}-client", client_secret: bakeoff-client-secret,
+             username: "{run_id}-crash", password: bakeoff-password}
+    response:
+      status_code: 200
+      save:
+        json: {crash_token: access_token}
+  - name: debug dump shows the error
+    request:
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      params: {__debug: policy}
+      headers: {Authorization: "Bearer {crash_token}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:crashed
+        extra_kwargs: {policy: "{run_id}-throws"}
+  - name: and the request is denied
+    request:
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      headers: {Authorization: "Bearer {crash_token}"}
+    response:
+      status_code: 403
+finally:
+  - name: drop the policy through the API so Aidbox's cache forgets it
+    request:
+      url: "{base}/AccessPolicy/{run_id}-throws"
+      method: DELETE
+      headers: {Authorization: "{admin_auth}"}
+    response:
+      status_code: [200, 204, 404]
+---
+# The baseline's own policies never crash on patient requests.
+test_name: no baseline policy crashes for pat-self
+marks:
+  - parametrize:
+      key: path
+      vals:
+        - "fhir/Patient/{run_id}-patient-self"
+        - "fhir/Encounter/{run_id}-enc-match"
+        - "fhir/Condition/{run_id}-cond-match"
+        - "fhir/Observation?subject=Patient/{run_id}-patient-self"
+stages:
+  - name: no crashed policy
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:no_crash
