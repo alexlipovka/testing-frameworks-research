@@ -118,25 +118,25 @@ Weights: AP 25 · Diag 15 · Run 10 · Read 10 · Fix 10 · CI 5 · Eco 5 · FHI
 
 | Tool | Repo | License | ★ | Latest | Releases 12m | Commits / authors 12m |
 |---|---|---|---|---|---|---|
-| Hurl | Orange-OpenSource/hurl | Apache-2.0 | 19.3k | 8.1.0 (2026-10-28) | 4 | 814 / 14 |
-| Karate | karatelabs/karate | MIT | 9.0k | 1.x: 1.5.2 (2025-11-30); v2.1.4 (2026-10-22) | 18 (1 on 1.x) | 1800 / 11 |
-| pytest | pytest-dev/pytest | MIT | 14.7k | 9.2.0 (2026-10-27) | 7 | 931 / 124 |
-| Tavern | taverntesting/tavern | MIT | 1.2k | 3.7.2 (2026-10-28), 4.0.0rc2 | 22 (PyPI) | 119 / 6 |
-| Bruno | usebruno/bruno | MIT | 48.3k | v4.3.0 (2026-10-22) | 28 (30 CLI) | 1692 / 130 |
-| httpyac | AnWeber/httpyac | MIT | 0.9k | 6.16.7 (2025-03-30) | 0 | 3 / 3 |
-| Newman | postmanlabs/newman | Apache-2.0 | 7.3k | 6.2.3 (2026-10-09) | 2 (npm) | 11 / 5 |
-| Step CI | stepci/stepci | MPL-2.0 | 1.9k | 2.8.2 (2024-06-10) | 0 | 0 / 0 |
-| Venom | ovh/venom | Apache-2.0 | 1.2k | v1.4.0-beta.4 (2026-10-01); stable v1.3.0 | 4 | 28 / 10 |
-| REST Assured | rest-assured/rest-assured | Apache-2.0 | 7.1k | 6.3.0 (2026-10-23) | 4 (Maven) | 250 / 12 |
-| Playwright | microsoft/playwright | Apache-2.0 | 99.5k | v1.65.0 (2026-11-05) | 15 | 2834 / 174 |
+| [Hurl](https://hurl.dev) | [Orange-OpenSource/hurl](https://github.com/Orange-OpenSource/hurl) | Apache-2.0 | 19.3k | 8.1.0 (2026-10-28) | 4 | 814 / 14 |
+| [Karate](https://karatelabs.io) | [karatelabs/karate](https://github.com/karatelabs/karate) | MIT | 9.0k | 1.x: 1.5.2 (2025-11-30); v2.1.4 (2026-10-22) | 18 (1 on 1.x) | 1800 / 11 |
+| [pytest](https://docs.pytest.org) + [httpx](https://www.python-httpx.org) | [pytest-dev/pytest](https://github.com/pytest-dev/pytest) | MIT | 14.7k | 9.2.0 (2026-10-27) | 7 | 931 / 124 |
+| [Tavern](https://taverntesting.github.io) | [taverntesting/tavern](https://github.com/taverntesting/tavern) | MIT | 1.2k | 3.7.2 (2026-10-28), 4.0.0rc2 | 22 (PyPI) | 119 / 6 |
+| [Bruno](https://www.usebruno.com) | [usebruno/bruno](https://github.com/usebruno/bruno) | MIT | 48.3k | v4.3.0 (2026-10-22) | 28 (30 CLI) | 1692 / 130 |
+| [httpyac](https://httpyac.github.io) | [AnWeber/httpyac](https://github.com/AnWeber/httpyac) | MIT | 0.9k | 6.16.7 (2025-03-30) | 0 | 3 / 3 |
+| [Newman](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/) | [postmanlabs/newman](https://github.com/postmanlabs/newman) | Apache-2.0 | 7.3k | 6.2.3 (2026-10-09) | 2 (npm) | 11 / 5 |
+| [Step CI](https://stepci.com) | [stepci/stepci](https://github.com/stepci/stepci) | MPL-2.0 | 1.9k | 2.8.2 (2024-06-10) | 0 | 0 / 0 |
+| [Venom](https://github.com/ovh/venom) | [ovh/venom](https://github.com/ovh/venom) | Apache-2.0 | 1.2k | v1.4.0-beta.4 (2026-10-01); stable v1.3.0 | 4 | 28 / 10 |
+| [REST Assured](https://rest-assured.io) | [rest-assured/rest-assured](https://github.com/rest-assured/rest-assured) | Apache-2.0 | 7.1k | 6.3.0 (2026-10-23) | 4 (Maven) | 250 / 12 |
+| [Playwright](https://playwright.dev/docs/api-testing) | [microsoft/playwright](https://github.com/microsoft/playwright) | Apache-2.0 | 99.5k | v1.65.0 (2026-11-05) | 15 | 2834 / 174 |
 
 ## Noted, not scored
 
 These solve different problems and are out of scope.
 
-- **Schemathesis** (MIT, v4.33.1, 2026-11-04; very active). Property-based fuzzing from an OpenAPI schema. It cannot check per-identity authorization decisions.
-- **Inferno** (inferno-core, Apache-2.0, v1.6.0, 2026-10-27). Checks FHIR server conformance against Implementation Guides.
-- **k6** (AGPL-3.0, v1.8.2, 2026-10-12). Load testing with JS `check()` assertions.
+- **[Schemathesis](https://schemathesis.readthedocs.io)** ([repo](https://github.com/schemathesis/schemathesis); MIT, v4.33.1, 2026-11-04; very active). Property-based fuzzing from an OpenAPI schema. It cannot check per-identity authorization decisions.
+- **[Inferno](https://inferno-framework.github.io)** ([inferno-core](https://github.com/inferno-framework/inferno-core); Apache-2.0, v1.6.0, 2026-10-27). Checks FHIR server conformance against Implementation Guides.
+- **[k6](https://grafana.com/docs/k6/latest/)** ([repo](https://github.com/grafana/k6); AGPL-3.0, v1.8.2, 2026-10-12). Load testing with JS `check()` assertions.
 
 Newer versions exist than the spec's pins: Hurl 8.1.0 (the spec pins 8.0.1) and Karate v2 (the spec pins 1.5.x). The bake-off keeps the pins.
 
