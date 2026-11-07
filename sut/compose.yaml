@@ -1,0 +1,82 @@
+# sdc and fhirpath_mapping mirror fhir-emr/compose.yaml at the pinned submodule commit.
+name: bakeoff-sut
+services:
+  aidbox:
+    image: healthsamurai/aidboxone:2608
+    depends_on:
+      database:
+        condition: service_healthy
+      build-seeds:
+        condition: service_completed_successfully
+    ports:
+      - "8280:8080"
+    env_file:
+      - ./env/aidbox
+      - .env
+    volumes:
+      - ./build:/build:ro
+    healthcheck:
+      test: curl --fail http://localhost:8080/health || exit 1
+      start_period: 60s
+      interval: 5s
+      timeout: 10s
+      retries: 60
+
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: devbox
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  build-seeds:
+    image: bedasoftware/fhirsnake:latest
+    command:
+      - export
+      - --input
+      - /fhir-emr/resources/init-seeds
+      - --input
+      - /fhir-emr/resources/demo-seeds
+      - --output
+      - /build/initBundle.json
+      - --external-questionnaire-fce-fhir-converter-url
+      - http://questionnaire-fce-fhir-converter:3000/to-fhir
+    env_file:
+      - ./env/seeds
+    depends_on:
+      questionnaire-fce-fhir-converter:
+        condition: service_healthy
+    volumes:
+      - ./fhir-emr/resources:/fhir-emr/resources:ro
+      - ./build:/build
+
+  questionnaire-fce-fhir-converter:
+    image: bedasoftware/questionnaire-fce-fhir-converter:latest
+    healthcheck:
+      test: curl --fail http://localhost:3000/health || exit 1
+      interval: 5s
+      timeout: 30s
+      retries: 50
+
+  sdc:
+    image: bedasoftware/fhir-sdc:2.1.0a5
+    depends_on:
+      aidbox:
+        condition: service_healthy
+      fhirpath_mapping:
+        condition: service_started
+    env_file:
+      - ./env/sdc
+    healthcheck:
+      test: curl --fail http://localhost:8081/health || exit 1
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  fhirpath_mapping:
+    image: bedasoftware/fhirpath-extract:0.2.0

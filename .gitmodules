@@ -1,0 +1,3 @@
+[submodule "sut/fhir-emr"]
+	path = sut/fhir-emr
+	url = https://github.com/beda-software/fhir-emr.git
