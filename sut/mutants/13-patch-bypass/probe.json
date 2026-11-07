@@ -1,0 +1,1 @@
+{"as": "rec", "method": "PATCH", "path": "/fhir/Patient/{{run_id}}-patient-self", "content_type": "application/json-patch+json", "body": [{"op": "replace", "path": "/gender", "value": "other"}]}

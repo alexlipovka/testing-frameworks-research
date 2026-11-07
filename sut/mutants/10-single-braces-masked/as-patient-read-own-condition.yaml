@@ -1,0 +1,12 @@
+id: as-patient-read-own-condition
+resourceType: AccessPolicy
+roleName: patient
+description: A patient reads a Condition by id when its subject is their own Patient.
+engine: sql
+sql:
+  query: |
+    SELECT true
+    FROM condition
+    WHERE {{params.resource/type}} = 'Condition'
+      AND id = {{params.resource/id}}
+      AND resource#>>'{subject,id}' = {role.links.patient.id}

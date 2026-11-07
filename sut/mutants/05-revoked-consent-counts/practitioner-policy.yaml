@@ -1,0 +1,23 @@
+# Same id as upstream: replaces fhir-emr's `engine: allow` practitioner policy.
+id: practitioner-policy
+resourceType: AccessPolicy
+roleName: practitioner
+description: A practitioner reads a Patient by id when an active Consent names them as an actor.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      operation:
+        id: FhirRead
+      request-method: get
+      params:
+        resource/type: Patient
+  - engine: sql
+    sql:
+      query: |
+        SELECT true
+        FROM consent c
+        JOIN jsonb_array_elements(c.resource#>'{provision,actor}') AS actor ON true
+        WHERE c.resource#>>'{patient,id}' = {{params.resource/id}}
+          AND actor#>>'{reference,id}' = {{role.links.practitioner.id}}
+        LIMIT 1

@@ -1,0 +1,15 @@
+id: as-receptionist-read-patients
+resourceType: AccessPolicy
+roleName: receptionist
+description: A receptionist reads and searches Patients to book them. No writes, no includes.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      params:
+        resource/type: Patient
+  - engine: sql
+    sql:
+      query: |
+        SELECT {{request-method}} NOT IN ('post', 'put', 'delete')
+          AND coalesce({{query-string}}, '') !~* '(^|&)(_|%5f)(rev)?include'

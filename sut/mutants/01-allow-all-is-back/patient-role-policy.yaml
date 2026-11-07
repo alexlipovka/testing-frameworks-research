@@ -1,0 +1,6 @@
+# Same id as upstream: replaces fhir-emr's `engine: allow` patient policy.
+id: patient-role-policy
+resourceType: AccessPolicy
+roleName: patient
+description: A patient reads their own Patient record by id, and nothing else.
+engine: allow

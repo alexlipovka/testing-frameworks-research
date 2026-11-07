@@ -1,0 +1,25 @@
+id: as-practitioner-search-consented-patients
+resourceType: AccessPolicy
+roleName: practitioner
+description: >
+  Search Patient by _id when EVERY comma-separated id has an active Consent naming the practitioner.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      operation:
+        id: FhirSearch
+      request-method: get
+      params:
+        resource/type: Patient
+        _id: present?
+  - engine: sql
+    sql:
+      query: |
+        SELECT true
+        FROM consent c
+        JOIN jsonb_array_elements(c.resource#>'{provision,actor}') AS actor ON true
+        WHERE c.resource->>'status' = 'active'
+          AND c.resource#>>'{patient,id}' = ANY(string_to_array({{params._id}}::text, ','))
+          AND actor#>>'{reference,id}' = {{role.links.practitioner.id}}
+        LIMIT 1

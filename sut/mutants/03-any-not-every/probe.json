@@ -1,0 +1,1 @@
+{"as": "p1", "method": "GET", "path": "/fhir/Patient?_id={{run_id}}-patient-self,{{run_id}}-patient-other"}

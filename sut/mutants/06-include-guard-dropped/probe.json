@@ -1,0 +1,1 @@
+{"as": "rec", "method": "GET", "path": "/fhir/Patient?_id={{run_id}}-patient-self&_revinclude=Observation:subject"}

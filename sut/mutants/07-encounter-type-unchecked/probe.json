@@ -1,0 +1,1 @@
+{"as": "pat-self", "method": "GET", "path": "/fhir/Observation/{{run_id}}-enc-match"}

@@ -1,0 +1,13 @@
+id: as-patient-read-own-encounter
+resourceType: AccessPolicy
+roleName: patient
+description: A patient reads an Encounter by id when its subject is their own Patient.
+engine: sql
+sql:
+  # Aidbox params take double braces; the Postgres path literal '{subject,id}' keeps single ones
+  query: |
+    SELECT true
+    FROM encounter
+    WHERE {{params.resource/type}} = 'Encounter'
+      AND id = {{params.resource/id}}
+      AND resource#>>'{subject,reference}' = 'Patient/' || {{role.links.patient.id}}
