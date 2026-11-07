@@ -10,7 +10,7 @@ Date: 2026-11-07 · Spec: Phase 1 of `.scratch/framework-bakeoff/spec.md`
 | 2 | Hurl | 80.0% | finalist (fixed) |
 | 2 | pytest + httpx | 80.0% | finalist (fixed) |
 | 4 | **Playwright API testing** | **75.3%** | **joins as 4th finalist** |
-| 5 | Tavern | 72.9% | also clears the threshold, but has no slot |
+| 5 | **Tavern** | **72.9%** | **joins as 5th finalist** (user decision) |
 | 6 | REST Assured | 62.4% | out |
 | 7 | httpyac | 61.2% | out |
 | 8 | Bruno | 58.8% | out |
@@ -18,7 +18,7 @@ Date: 2026-11-07 · Spec: Phase 1 of `.scratch/framework-bakeoff/spec.md`
 | 10 | Step CI | 51.8% | out |
 | 11 | Newman | 44.7% | out |
 
-**Within-10% rule.** Hurl and pytest tie for 3rd at 80.0%, so the baseline is 80.0% either way. Read as relative, a candidate qualifies at 0.9 × 80.0% = 72.0% or above. An absolute reading (70.0% or above) admits the same two tools. The spec allows one 4th finalist, so the higher-scoring Playwright takes the slot.
+**Within-10% rule.** Hurl and pytest tie for 3rd at 80.0%, so the baseline is 80.0% either way. Read as relative, a candidate qualifies at 0.9 × 80.0% = 72.0% or above. An absolute reading (70.0% or above) admits the same two tools. The spec allows one 4th finalist, which goes to the higher-scoring Playwright. Tavern also clears the threshold, and the user added it as a 5th finalist (2026-11-07), above the spec's 4-finalist budget.
 
 **The margins are thin.** Playwright clears 72.0% by 3.3 percentage points and Tavern by 0.9. A one-step drop on a weight-10 criterion is −2.35 pp, and on a weight-5 criterion it is −1.18 pp. So a single Eco or FHIR step would push Tavern out, and a single step on any weight-10 criterion would leave Playwright with only 1 pp to spare. Re-scoring Hurl or pytest would also move the threshold.
 
@@ -142,5 +142,4 @@ Newer versions exist than the spec's pins: Hurl 8.1.0 (the spec pins 8.0.1) and 
 
 ## Open questions for the user
 
-1. **4th finalist.** The rule picks Playwright. Tavern also qualifies, by 0.9 pp. Options: (a) Playwright, as the rule says; (b) Tavern instead, since it is closer to pytest and the Python stack; (c) both, which goes over the 4-finalist budget.
-2. **Excluding authorability.** Leaving AI-agent authorability out of the desk score is my call, not the spec's. If it were included as a guess, it would decide the cut.
+1. **Excluding authorability.** Leaving AI-agent authorability out of the desk score is my call, not the spec's. If it were included as a guess, it would decide the cut.
