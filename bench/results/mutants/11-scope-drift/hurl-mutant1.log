@@ -1,0 +1,60 @@
+run bakeoff-792b9ce0 open (vars in /home/alex/prj/personal/testing-frameworks-research/suites/hurl/.vars)
+error: Assert failure
+  --> cases/04-receptionist-read-not-write.hurl:11:0
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-self?__debug=policy
+   | ...
+11 | jsonpath "$.policies[?(@['eval-result'] == true)].id" == "as-receptionist-read-patients"
+   |   actual:   list <[receptionist-role-policy,as-receptionist-read-patients]>
+   |   expected: string <as-receptionist-read-patients>
+   |
+
+Failure cases/04-receptionist-read-not-write.hurl (2 request(s) in 9 ms)
+Success cases/01-patient-own-record.hurl (4 request(s) in 21 ms)
+Success cases/02-practitioner-consent.hurl (5 request(s) in 32 ms)
+Success cases/03-sql-error-not-deny.hurl (5 request(s) in 36 ms)
+Success cases/05-norole-denied.hurl (10 request(s) in 35 ms)
+error: Assert status code
+  --> cases/07-bypass.hurl:35:6
+   |
+   | PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+35 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/07-bypass.hurl (5 request(s) in 17 ms)
+Success cases/11-validation.hurl (2 request(s) in 4 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 22 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 17 ms)
+Success cases/06-search-leak.hurl (13 request(s) in 75 ms)
+error: Assert failure
+  --> cases/14-run-isolation.hurl:10:0
+   |
+   | GET {{url}}/fhir/Patient?family:exact=Bakeoff&_count=100
+   | ...
+10 | jsonpath "$.entry" count == 3
+   |   actual:   integer <2>
+   |   expected: integer <3>
+   |
+
+error: Assert failure
+  --> cases/14-run-isolation.hurl:11:0
+   |
+   | GET {{url}}/fhir/Patient?family:exact=Bakeoff&_count=100
+   | ...
+11 | jsonpath "$.entry[*].resource.id" contains "{{run_id}}-patient-self"
+   |   actual:   list <[bakeoff-792b9ce0-patient-other,bakeoff-792b9ce0-patient-unlinked]>
+   |   expected: contains string <bakeoff-792b9ce0-patient-self>
+   |
+
+Failure cases/14-run-isolation.hurl (1 request(s) in 21 ms)
+Success cases/13-transaction.hurl (4 request(s) in 38 ms)
+Success cases/09-sdc.hurl (13 request(s) in 93 ms)
+--------------------------------------------------------------------------------
+Executed files:    13
+Executed requests: 73 (500.0/s)
+Succeeded files:   10 (76.9%)
+Failed files:      3 (23.1%)
+Duration:          146 ms (0h:0m:0s:146ms)
+

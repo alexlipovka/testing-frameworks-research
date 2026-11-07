@@ -1,0 +1,368 @@
+.F.F.F.......FF............FF.F..........F......FF......FF.............. [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  pat_self_auth = 'Bearer Qx8UnLoQziiDgYHr5PJ8jK4u7rUwp4SrmGqMrkdD09AtxC080pX7M3STwvHa4foY'
+  patient = 'patient-other'
+  run_id = 'bakeoff-c0684920'
+  status = '403'
+
+Source test stage (line 19):
+  - name: status
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: !int "{status}"
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      Authorization: Bearer Qx8UnLoQziiDgYHr5PJ8jK4u7rUwp4SrmGqMrkdD09AtxC080pX7M3STwvHa4foY
+    url: http://localhost:8280/fhir/Patient/bakeoff-c0684920-patient-other
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403] _
+Format variables:
+  who = 'p1'
+  base = 'http://localhost:8280'
+  patient = 'patient-other'
+  run_id = 'bakeoff-c0684920'
+  status = '403'
+
+Source test stage (line 23):
+  - name: status
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: !int "{status}"
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: p1
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient/bakeoff-c0684920-patient-other
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error _
+Format variables:
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-c0684920'
+  crash_token = 'CFq2DxEKRQjbDTn0r5e6xfoGbYvBZVokhaolXZtCoWbkFd9QHeacBYYrOlglnBAM'
+
+Source test stage (line 45):
+  - name: and the request is denied
+    request:
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      headers: {Authorization: "Bearer {crash_token}"}
+    response:
+      status_code: 403
+
+Formatted stage:
+  name: and the request is denied
+  request:
+    headers:
+      Authorization: Bearer CFq2DxEKRQjbDTn0r5e6xfoGbYvBZVokhaolXZtCoWbkFd9QHeacBYYrOlglnBAM
+    url: http://localhost:8280/fhir/Patient/bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'and the request is denied' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-c0684920-patient-self] _
+Format variables:
+  status_code: 403 = '???'
+  norole_auth = 'Bearer HaEAc02AY0OyRuCVeAVMOn6D7zocaPEWndMTbwaLYutFC9LoHnr3aKDuhsXGmpEw'
+  base = 'http://localhost:8280'
+  method = 'GET'
+  path = 'fhir/Patient/bakeoff-c0684920-patient-self'
+
+Source test stage (line 19):
+  - name: status
+    request: {url: "{base}/{path}", method: "{method}", headers: {Authorization: "{norole_auth}"}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-c0684920-patient-self] _
+Format variables:
+  status_code: 403 = '???'
+  norole_auth = 'Bearer HaEAc02AY0OyRuCVeAVMOn6D7zocaPEWndMTbwaLYutFC9LoHnr3aKDuhsXGmpEw'
+  base = 'http://localhost:8280'
+  method = 'GET'
+  path = 'fhir/Patient?_id=bakeoff-c0684920-patient-self'
+
+Source test stage (line 19):
+  - name: status
+    request: {url: "{base}/{path}", method: "{method}", headers: {Authorization: "{norole_auth}"}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient] _
+Format variables:
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient'
+  who = 'pat-self'
+  status_code: 403 = '???'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-c0684920-patient-self,bakeoff-c0684920-patient-other] _
+Format variables:
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient?_id=bakeoff-c0684920-patient-self,bakeoff-c0684920-patient-other'
+  who = 'p1'
+  status_code: 403 = '???'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient] _
+Format variables:
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient'
+  who = 'p1'
+  status_code: 403 = '???'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-c0684920-patient-self-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  status = '403'
+  who = 'pat-self'
+  op = 'Patient?_id=bakeoff-c0684920-patient-self'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: pat-self
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient?_id=bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-c0684920-patient-self-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  status = '403'
+  who = 'p2'
+  op = 'Patient/bakeoff-c0684920-patient-self'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: p2
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient/bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-c0684920-patient-self-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  status = '403'
+  who = 'p2'
+  op = 'Patient?_id=bakeoff-c0684920-patient-self'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: p2
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient?_id=bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-c0684920-patient-self-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  status = '403'
+  who = 'norole'
+  op = 'Patient/bakeoff-c0684920-patient-self'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: norole
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient/bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-c0684920-patient-self-deny-403] _
+Format variables:
+  base = 'http://localhost:8280'
+  status = '403'
+  who = 'norole'
+  op = 'Patient?_id=bakeoff-c0684920-patient-self'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: norole
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient?_id=bakeoff-c0684920-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403]
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error
+FAILED tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-c0684920-patient-self]
+FAILED tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-c0684920-patient-self]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-c0684920-patient-self,bakeoff-c0684920-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-c0684920-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-c0684920-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-c0684920-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-c0684920-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-c0684920-patient-self-deny-403]
+13 failed, 80 passed in 7.77s

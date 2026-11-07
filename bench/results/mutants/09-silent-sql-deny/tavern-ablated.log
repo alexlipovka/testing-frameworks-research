@@ -1,0 +1,39 @@
+..........................................F............................. [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-790b0621-enc-match-allow-200] _
+Format variables:
+  who = 'pat-self'
+  status = '200'
+  op = 'Encounter/bakeoff-790b0621-enc-match'
+  base = 'http://localhost:8280'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: pat-self
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Encounter/bakeoff-790b0621-enc-match
+  response:
+    status_code: 200
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 403, expected 200:
+        {"resourceType": "OperationOutcome", "id": "forbidden", "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Forbidden</p></div>"}, "issue": [{"severity": "fatal", "code": "forbidden", "diagnostics": "Forbidden"}]}
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 403, expected 200:
+    {"resourceType": "OperationOutcome", "id": "forbidden", "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Forbidden</p></div>"}, "issue": [{"severity": "fatal", "code": "forbidden", "diagnostics": "Forbidden"}]}
+=========================== short test summary info ============================
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-790b0621-enc-match-allow-200]
+1 failed, 92 passed in 7.52s

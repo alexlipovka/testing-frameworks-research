@@ -1,0 +1,737 @@
+.F.F.F.......FF............FF.F..........F......FF......FF.............. [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  pat_self_auth = 'Bearer 1RUCaSmDYjfxuubCMToY1papL1lPqQf0IFipuMFQaiAuFLOmUW4RibXvELAcLHyG'
+  patient = 'patient-other'
+  run_id = 'bakeoff-34fc4b70'
+
+Source test stage (line 9):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: patient-role-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'p1'
+  base = 'http://localhost:8280'
+  patient = 'patient-other'
+  run_id = 'bakeoff-34fc4b70'
+
+Source test stage (line 12):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error _
+Format variables:
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  run_id = 'bakeoff-34fc4b70'
+  crash_token = 'E05wIM1nc0v3noSH1SfF1hMo7JTVn8Cckq0jyqOlHHDe1StiIFzZvhjn1RQiACYw'
+
+Source test stage (line 35):
+  - name: debug dump shows the error
+    request:
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      params: {__debug: policy}
+      headers: {Authorization: "Bearer {crash_token}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:crashed
+        extra_kwargs: {policy: "{run_id}-throws"}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'debug dump shows the error' failed:
+    - Error calling validate function '<function crashed at 0x7fe89d073ce0>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 35, in crashed
+            assert not granted, f"granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function crashed at 0x7fe89d073ce0>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 35, in crashed
+        assert not granted, f"granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 35, in crashed
+    assert not granted, f"granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-34fc4b70-patient-self] _
+Format variables:
+  method = 'GET'
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  norole_auth = 'Bearer RHkGFxgIsLWfW5rs7WaDhX29aMiJFDxp5E6nwLdSEBF2JskIvVIhwBoVswoP3DE5'
+  path = 'fhir/Patient/bakeoff-34fc4b70-patient-self'
+  expect: deny = '???'
+
+Source test stage (line 14):
+  - name: policy decision
+    request: {url: "{base}/{path}", method: "{method}", params: {__debug: policy}, headers: {Authorization: "{norole_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-34fc4b70-patient-self] _
+Format variables:
+  method = 'GET'
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  norole_auth = 'Bearer RHkGFxgIsLWfW5rs7WaDhX29aMiJFDxp5E6nwLdSEBF2JskIvVIhwBoVswoP3DE5'
+  path = 'fhir/Patient?_id=bakeoff-34fc4b70-patient-self'
+  expect: deny = '???'
+
+Source test stage (line 14):
+  - name: policy decision
+    request: {url: "{base}/{path}", method: "{method}", params: {__debug: policy}, headers: {Authorization: "{norole_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient] _
+Format variables:
+  __debug: policy = '???'
+  who = 'pat-self'
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient'
+  expect: deny = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-34fc4b70-patient-self,bakeoff-34fc4b70-patient-other] _
+Format variables:
+  __debug: policy = '???'
+  who = 'p1'
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient?_id=bakeoff-34fc4b70-patient-self,bakeoff-34fc4b70-patient-other'
+  expect: deny = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient] _
+Format variables:
+  __debug: policy = '???'
+  who = 'p1'
+  base = 'http://localhost:8280'
+  path = 'fhir/Patient'
+  expect: deny = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'pat-self'
+  base = 'http://localhost:8280'
+  op = 'Patient?_id=bakeoff-34fc4b70-patient-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-34fc4b70-patient-self-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'p2'
+  base = 'http://localhost:8280'
+  op = 'Patient/bakeoff-34fc4b70-patient-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'p2'
+  base = 'http://localhost:8280'
+  op = 'Patient?_id=bakeoff-34fc4b70-patient-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-34fc4b70-patient-self-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'norole'
+  base = 'http://localhost:8280'
+  op = 'Patient/bakeoff-34fc4b70-patient-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403] _
+Format variables:
+  expect = 'deny'
+  __debug: policy = '???'
+  who = 'norole'
+  base = 'http://localhost:8280'
+  op = 'Patient?_id=bakeoff-34fc4b70-patient-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe89d073c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe89d073c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403]
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error
+FAILED tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-34fc4b70-patient-self]
+FAILED tests/test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-34fc4b70-patient-self]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-34fc4b70-patient-self,bakeoff-34fc4b70-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-34fc4b70-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-34fc4b70-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-34fc4b70-patient-self-deny-403]
+13 failed, 80 passed in 7.80s

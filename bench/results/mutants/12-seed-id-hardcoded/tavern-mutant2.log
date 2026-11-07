@@ -1,0 +1,121 @@
+....F...........................................F....................... [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p2-patient-other-allow-200] _
+Format variables:
+  __debug: policy = '???'
+  expect = 'allow'
+  base = 'http://localhost:8280'
+  who = 'p2'
+  patient = 'patient-other'
+  run_id = 'bakeoff-aff27c63'
+
+Source test stage (line 12):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f845b1f7c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 25, in decision
+            assert granted, "expected allow, no policy granted"
+                   ^^^^^^^
+        AssertionError: expected allow, no policy granted
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f845b1f7c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 25, in decision
+        assert granted, "expected allow, no policy granted"
+               ^^^^^^^
+    AssertionError: expected allow, no policy granted
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 25, in decision
+    assert granted, "expected allow, no policy granted"
+           ^^^^^^^
+AssertionError: expected allow, no policy granted
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-aff27c63-patient-self-deny-403] _
+Format variables:
+  op = 'Patient/bakeoff-aff27c63-patient-self'
+  expect = 'deny'
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'p2'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f845b1f7c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['practitioner-policy']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f845b1f7c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['practitioner-policy']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['practitioner-policy']
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p2-patient-other-allow-200]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-aff27c63-patient-self-deny-403]
+2 failed, 91 passed in 7.45s

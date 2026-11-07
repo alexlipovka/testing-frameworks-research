@@ -1,0 +1,30 @@
+run bakeoff-183ecfba open (vars in /tmp/claude-1000/-home-alex-prj-personal-testing-frameworks-research/670ad823-c87f-454a-9aea-6f973c78775a/scratchpad/ablated/suites/hurl/.vars)
+error: Assert status code
+  --> cases/03-sql-error-not-deny.hurl:7:6
+   |
+   | GET {{url}}/fhir/Encounter/{{run_id}}-enc-match
+   | ...
+ 7 | HTTP 200
+   |      ^^^ actual value is <403>
+   |
+
+Failure cases/03-sql-error-not-deny.hurl (1 request(s) in 3 ms)
+Success cases/01-patient-own-record.hurl (4 request(s) in 20 ms)
+Success cases/02-practitioner-consent.hurl (5 request(s) in 27 ms)
+Success cases/05-norole-denied.hurl (10 request(s) in 26 ms)
+Success cases/04-receptionist-read-not-write.hurl (10 request(s) in 38 ms)
+Success cases/07-bypass.hurl (9 request(s) in 29 ms)
+Success cases/11-validation.hurl (2 request(s) in 5 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 25 ms)
+Success cases/06-search-leak.hurl (13 request(s) in 48 ms)
+Success cases/14-run-isolation.hurl (2 request(s) in 6 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 15 ms)
+Success cases/13-transaction.hurl (4 request(s) in 18 ms)
+Success cases/09-sdc.hurl (13 request(s) in 66 ms)
+--------------------------------------------------------------------------------
+Executed files:    13
+Executed requests: 82 (738.7/s)
+Succeeded files:   12 (92.3%)
+Failed files:      1 (7.7%)
+Duration:          111 ms (0h:0m:0s:111ms)
+

@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0
+collected 65 items
+
+tests/test_01_patient_own_record.py ..                                   [  3%]
+tests/test_02_practitioner_consent.py ....                               [  9%]
+tests/test_03_policy_error.py ..                                         [ 12%]
+tests/test_04_receptionist.py ..                                         [ 15%]
+tests/test_05_norole.py .........                                        [ 29%]
+tests/test_06_search_leak.py ...F                                        [ 35%]
+tests/test_07_bypass.py ...                                              [ 40%]
+tests/test_08_matrix.py ....................                             [ 70%]
+tests/test_09_sdc.py .......                                             [ 81%]
+tests/test_10_crud.py ..                                                 [ 84%]
+tests/test_11_validation.py ..                                           [ 87%]
+tests/test_12_search.py ...                                              [ 92%]
+tests/test_13_transaction.py ..                                          [ 95%]
+tests/test_14_isolation.py ..                                            [ 98%]
+tests/test_15_rerunnable.py .                                            [100%]
+
+=================================== FAILURES ===================================
+___________________ test_receptionist_search_has_no_includes ___________________
+
+run = Run(run_id='bakeoff-47092c39', data={'secrets': {'client_id': 'bakeoff-47092c39-client', 'client_secret': 'bakeoff-cli...at 0x7fec22a5d340>, 'rec': <httpx.Client object at 0x7fec22a5e900>, 'norole': <httpx.Client object at 0x7fec22ad78c0>})
+rec = <httpx.Client object at 0x7fec22a5e900>
+
+    def test_receptionist_search_has_no_includes(run, rec):
+        r = expect_allow(rec, "GET", f"/fhir/Patient?_id={run.id('patient-self')}")
+        assert ids(r) == {f"Patient/{run.id('patient-self')}"}
+>       expect_deny(rec, "GET", f"/fhir/Patient?_id={run.id('patient-self')}&_revinclude=Observation:subject")
+
+tests/test_06_search_leak.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fec22a5e900>, method = 'GET'
+url = '/fhir/Patient?_id=bakeoff-47092c39-patient-self&_revinclude=Observation:subject'
+kw = {}
+v = Verdict(allowed_by=['as-receptionist-read-patients'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'opera...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient?_id=bakeoff-47092c39-patient-self&_revinclude=Observation:subject: allowed_by=['as-receptionist-read-patients'] errors=[]
+
+aidbox.py:116: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.py::test_receptionist_search_has_no_includes
+========================= 1 failed, 64 passed in 1.79s =========================

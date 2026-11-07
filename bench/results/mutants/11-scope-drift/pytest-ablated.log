@@ -1,0 +1,209 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0
+collected 65 items
+
+tests/test_01_patient_own_record.py ..                                   [  3%]
+tests/test_02_practitioner_consent.py ....                               [  9%]
+tests/test_03_policy_error.py ..                                         [ 12%]
+tests/test_04_receptionist.py .F                                         [ 15%]
+tests/test_05_norole.py .........                                        [ 29%]
+tests/test_06_search_leak.py ....                                        [ 35%]
+tests/test_07_bypass.py FFF                                              [ 40%]
+tests/test_08_matrix.py ..............F.....                             [ 70%]
+tests/test_09_sdc.py .......                                             [ 81%]
+tests/test_10_crud.py ..                                                 [ 84%]
+tests/test_11_validation.py ..                                           [ 87%]
+tests/test_12_search.py ..F                                              [ 92%]
+tests/test_13_transaction.py ..                                          [ 95%]
+tests/test_14_isolation.py F.                                            [ 98%]
+tests/test_15_rerunnable.py .                                            [100%]
+
+=================================== FAILURES ===================================
+___________________ test_receptionist_cannot_write_patients ____________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+rec = <httpx.Client object at 0x7f0157cf5190>
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_receptionist_cannot_write_patients(run, rec, admin):
+        pid = run.id("patient-self")
+        renamed = {"resourceType": "Patient", "id": pid, "name": [{"family": "Hacked"}]}
+>       expect_deny(rec, "PUT", f"/fhir/Patient/{pid}", json=renamed)
+
+tests/test_04_receptionist.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f0157cf5190>, method = 'PUT'
+url = '/fhir/Patient/bakeoff-cfd611f8-patient-self'
+kw = {'json': {'id': 'bakeoff-cfd611f8-patient-self', 'name': [{'family': 'Hacked'}], 'resourceType': 'Patient'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PUT /fhir/Patient/bakeoff-cfd611f8-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-cfd611f8-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:20:20.610378Z","versionId":"16310","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:20:19.493009Z"}]}}
+
+aidbox.py:114: AssertionError
+________________________ test_transaction_bundle_denied ________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+rec = <httpx.Client object at 0x7f0157cf5190>
+pat_self = <httpx.Client object at 0x7f0157df67e0>
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_transaction_bundle_denied(run, rec, pat_self, admin):
+        pid = run.id("patient-self")
+        expect_deny(rec, "POST", "/fhir", json={"resourceType": "Bundle", "type": "transaction", "entry": [{
+            "resource": {"resourceType": "Patient", "id": pid, "name": [{"family": "Hacked"}]},
+            "request": {"method": "PUT", "url": f"Patient/{pid}"}}]})
+        expect_deny(pat_self, "POST", "/fhir", json={"resourceType": "Bundle", "type": "batch", "entry": [{
+            "request": {"method": "GET", "url": f"Patient/{run.id('patient-other')}"}}]})
+>       assert_untouched(run, admin)
+
+tests/test_07_bypass.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def assert_untouched(run, admin):
+>       assert admin.get(f"/fhir/Patient/{run.id('patient-self')}").json()["name"][0]["family"] == "Bakeoff"
+E       AssertionError: assert 'Hacked' == 'Bakeoff'
+E         
+E         - Bakeoff
+E         + Hacked
+
+tests/test_07_bypass.py:8: AssertionError
+____________________________ test_json_patch_denied ____________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+rec = <httpx.Client object at 0x7f0157cf5190>
+p1 = <httpx.Client object at 0x7f0157df6990>
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_json_patch_denied(run, rec, p1, admin):
+        patch = json.dumps([{"op": "replace", "path": "/name/0/family", "value": "Hacked"}])
+        for c in (rec, p1):
+>           expect_deny(c, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                        headers={"Content-Type": "application/json-patch+json"}, content=patch)
+
+tests/test_07_bypass.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f0157cf5190>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-cfd611f8-patient-self'
+kw = {'content': '[{"op": "replace", "path": "/name/0/family", "value": "Hacked"}]', 'headers': {'Content-Type': 'application/json-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PATCH /fhir/Patient/bakeoff-cfd611f8-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-cfd611f8-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:20:20.610378Z","versionId":"16310","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:20:19.493009Z"}]}}
+
+aidbox.py:114: AssertionError
+___________________________ test_merge_patch_denied ____________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+rec = <httpx.Client object at 0x7f0157cf5190>
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_merge_patch_denied(run, rec, admin):
+>       expect_deny(rec, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                    headers={"Content-Type": "application/merge-patch+json"},
+                    content=json.dumps({"name": [{"family": "Hacked"}]}))
+
+tests/test_07_bypass.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f0157cf5190>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-cfd611f8-patient-self'
+kw = {'content': '{"name": [{"family": "Hacked"}]}', 'headers': {'Content-Type': 'application/merge-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PATCH /fhir/Patient/bakeoff-cfd611f8-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-cfd611f8-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:20:20.610378Z","versionId":"16310","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:20:19.493009Z"}]}}
+
+aidbox.py:114: AssertionError
+_______________________ test_matrix[rec-read_encounter] ________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+who = 'rec', op = 'read_encounter', decision = 'deny'
+
+    @pytest.mark.parametrize("who, op, decision", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, decision):
+        method, url, kw = request(run, op)
+>       (expect_allow if decision == "allow" else expect_deny)(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f0157cf5190>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-cfd611f8-enc-match', kw = {}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Encounter/bakeoff-cfd611f8-enc-match: 200 {"class":{"code":"AMB","system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"},"status":"finished","subject":{"reference":"Patient/bakeoff-cfd611f8-patient-self"},"id":"bakeoff-cfd611f8-enc-match","resourceType":"Encounter","meta":{"lastUpdated":"2026-11-07T22:20:19.504961Z","versionId":"16282","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:20:19.504961Z"}]}}
+
+aidbox.py:114: AssertionError
+________________________________ test_chaining _________________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_chaining(run, admin):
+        got = entries(admin.get("/fhir/Encounter?subject:Patient.given=Self"))
+>       assert f"Encounter/{run.id('enc-match')}" in got
+E       AssertionError: assert 'Encounter/bakeoff-cfd611f8-enc-match' in {}
+
+tests/test_12_search.py:22: AssertionError
+_________________________ test_no_rows_from_other_runs _________________________
+
+run = Run(run_id='bakeoff-cfd611f8', data={'secrets': {'client_id': 'bakeoff-cfd611f8-client', 'client_secret': 'bakeoff-cli...at 0x7f0157cf4f50>, 'rec': <httpx.Client object at 0x7f0157cf5190>, 'norole': <httpx.Client object at 0x7f0157cf5220>})
+admin = <httpx.Client object at 0x7f01571400e0>
+
+    def test_no_rows_from_other_runs(run, admin):
+        r = admin.get("/fhir/Patient?family=Bakeoff&_count=100")
+        assert r.status_code == 200, r.text
+        got = {e["resource"]["id"] for e in r.json().get("entry", [])}
+>       assert got == {run.id(n) for n in ("patient-self", "patient-other", "patient-unlinked")}
+E       AssertionError: assert {'bakeoff-cfd...ent-unlinked'} == {'bakeoff-cfd...ent-unlinked'}
+E         
+E         Extra items in the right set:
+E         'bakeoff-cfd611f8-patient-self'
+E         Use -v to get more diff
+
+tests/test_14_isolation.py:9: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.py::test_receptionist_cannot_write_patients
+FAILED tests/test_07_bypass.py::test_transaction_bundle_denied - AssertionErr...
+FAILED tests/test_07_bypass.py::test_json_patch_denied - AssertionError: PATC...
+FAILED tests/test_07_bypass.py::test_merge_patch_denied - AssertionError: PAT...
+FAILED tests/test_08_matrix.py::test_matrix[rec-read_encounter] - AssertionEr...
+FAILED tests/test_12_search.py::test_chaining - AssertionError: assert 'Encou...
+FAILED tests/test_14_isolation.py::test_no_rows_from_other_runs - AssertionEr...
+========================= 7 failed, 58 passed in 1.81s =========================

@@ -1,0 +1,159 @@
+
+Running 75 tests using 4 workers
+
+  ✘   1 tests/02-practitioner-consent.spec.ts:4:3 › 2. practitioner via Consent (SQL) › allow: p1 reads a patient with an active Consent (65ms)
+  ✘   3 tests/02-practitioner-consent.spec.ts:8:3 › 2. practitioner via Consent (SQL) › allow: p2 reads a patient with an active Consent (63ms)
+  ✓   2 tests/01-patient-own-record.spec.ts:8:3 › 1. patient reads own record (matcho) › deny: another patient's record (76ms)
+  ✓   4 tests/01-patient-own-record.spec.ts:4:3 › 1. patient reads own record (matcho) › allow: own Patient (69ms)
+  ✓   6 tests/03-sql-policy-error.spec.ts:4:3 › 3. a SQL policy that throws is an error, not a plain deny › a crashing SQL policy shows up in the debug dump although the client only sees 403 (41ms)
+  ✓   5 tests/02-practitioner-consent.spec.ts:20:3 › 2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient (79ms)
+  ✓   8 tests/04-receptionist.spec.ts:4:3 › 4. receptionist reads but does not write Patients › allow: read a Patient by id (45ms)
+  ✓   9 tests/04-receptionist.spec.ts:8:3 › 4. receptionist reads but does not write Patients › allow: search Patients (40ms)
+  ✓   7 tests/03-sql-policy-error.spec.ts:18:3 › 3. a SQL policy that throws is an error, not a plain deny › no policy crashes on patient requests, allowed or denied (139ms)
+  ✓  11 tests/04-receptionist.spec.ts:16:3 › 4. receptionist reads but does not write Patients › deny: PUT a Patient (35ms)
+  ✓  10 tests/04-receptionist.spec.ts:12:3 › 4. receptionist reads but does not write Patients › allow: Appointments are the receptionist's to manage (50ms)
+  ✓  13 tests/04-receptionist.spec.ts:29:3 › 4. receptionist reads but does not write Patients › deny: JSON Patch a Patient (30ms)
+  ✓  12 tests/04-receptionist.spec.ts:25:3 › 4. receptionist reads but does not write Patients › deny: POST a Patient (40ms)
+  ✓  15 tests/05-norole.spec.ts:23:3 › 5. an identity without a role is denied everywhere › allow (control): admin can do the same reads (14ms)
+  ✓  16 tests/06-search-leak.spec.ts:6:3 › 6. searches return nothing outside the caller's scope › allow: patient searches own Observations and gets only them (82ms)
+  ✓  17 tests/06-search-leak.spec.ts:14:3 › 6. searches return nothing outside the caller's scope › deny: patient searches another patient's Observations (37ms)
+  ✓  19 tests/06-search-leak.spec.ts:18:3 › 6. searches return nothing outside the caller's scope › deny: patient smuggles a second subject (44ms)
+  ✓  14 tests/05-norole.spec.ts:19:3 › 5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations (272ms)
+  ✓  21 tests/06-search-leak.spec.ts:24:3 › 6. searches return nothing outside the caller's scope › deny: patient searches all Observations (36ms)
+  ✓  18 tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked (72ms)
+  ✓  22 tests/06-search-leak.spec.ts:28:3 › 6. searches return nothing outside the caller's scope › deny: patient adds an _include (38ms)
+  ✓  20 tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 (82ms)
+  ✓  23 tests/06-search-leak.spec.ts:32:3 › 6. searches return nothing outside the caller's scope › allow: practitioner searches consented patients and gets only them (55ms)
+  ✓  25 tests/06-search-leak.spec.ts:41:3 › 6. searches return nothing outside the caller's scope › deny: practitioner adds a _revinclude (32ms)
+  ✓  24 tests/06-search-leak.spec.ts:37:3 › 6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient (49ms)
+  ✓  26 tests/06-search-leak.spec.ts:45:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Observations in through _revinclude (43ms)
+  ✓  27 tests/06-search-leak.spec.ts:49:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Patients in through an Appointment _include (35ms)
+  ✓  28 tests/07-bypass.spec.ts:6:3 › 7. bypass attempts › deny: patient reads another patient's record inside a transaction Bundle (43ms)
+  ✓  29 tests/07-bypass.spec.ts:14:3 › 7. bypass attempts › deny: even a request the patient may make on its own is refused inside a Bundle (40ms)
+  ✓  30 tests/07-bypass.spec.ts:22:3 › 7. bypass attempts › deny: receptionist writes a Patient inside a transaction Bundle (35ms)
+  ✓  31 tests/07-bypass.spec.ts:34:3 › 7. bypass attempts › deny: receptionist JSON-Patches a Patient (32ms)
+  ✓  32 tests/07-bypass.spec.ts:43:3 › 7. bypass attempts › deny: receptionist merge-patches a Patient (34ms)
+  ✓  33 tests/07-bypass.spec.ts:52:3 › 7. bypass attempts › deny: patient JSON-Patches own record (48ms)
+  ✓  34 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self read: allow via patient-role-policy (49ms)
+  ✓  35 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny (86ms)
+  ✘  38 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 read: allow via practitioner-policy (30ms)
+  ✓  37 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self create-appointment: deny (51ms)
+  ✓  36 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self update: deny (78ms)
+  ✓  39 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 search: allow via as-practitioner-search-consented-patients (33ms)
+  ✓  40 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny (26ms)
+  ✓  41 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 create-appointment: deny (28ms)
+  ✓  42 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny (28ms)
+  ✓  43 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny (24ms)
+  ✓  44 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 create-appointment: deny (28ms)
+  ✓  45 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec read: allow via as-receptionist-read-patients (28ms)
+  ✓  46 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec search: allow via as-receptionist-read-patients (31ms)
+  ✓  48 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec update: deny (48ms)
+  ✓  47 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec create-appointment: allow via receptionist-role-policy (80ms)
+  ✓  49 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole read: deny (40ms)
+  ✓  50 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole search: deny (27ms)
+  ✓  51 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole update: deny (22ms)
+  ✓  52 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole create-appointment: deny (28ms)
+  ✓  53 tests/09-sdc.spec.ts:44:3 › 9. SDC $populate / $extract under each role › allow: p1 populates for a consented patient (56ms)
+  ✓  54 tests/09-sdc.spec.ts:48:3 › 9. SDC $populate / $extract under each role › allow: p2 populates for a consented patient (61ms)
+  ✓  55 tests/09-sdc.spec.ts:52:3 › 9. SDC $populate / $extract under each role › deny: $populate for an unconsented patient (96ms)
+  ✓  57 tests/09-sdc.spec.ts:62:3 › 9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient (54ms)
+  ✓  58 tests/09-sdc.spec.ts:67:3 › 9. SDC $populate / $extract under each role › deny: forged patientId answer pointing at another patient (26ms)
+  ✓  59 tests/09-sdc.spec.ts:71:3 › 9. SDC $populate / $extract under each role › deny: QR subject is a patient the practitioner is not consented to (27ms)
+  ✓  56 tests/09-sdc.spec.ts:58:3 › 9. SDC $populate / $extract under each role › deny: $populate by patient, receptionist and no-role (119ms)
+  ✓  60 tests/09-sdc.spec.ts:76:3 › 9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented (35ms)
+  ✓  63 tests/11-validation.spec.ts:4:3 › 11. validation errors come back as OperationOutcome › wrong type for a known element (16ms)
+  ✓  61 tests/09-sdc.spec.ts:81:3 › 9. SDC $populate / $extract under each role › deny: $extract by patient, receptionist and no-role (80ms)
+  ✓  64 tests/11-validation.spec.ts:13:3 › 11. validation errors come back as OperationOutcome › unknown element (15ms)
+  ✓  62 tests/10-crud-patch.spec.ts:3:1 › 10. CRUD + JSON Patch (76ms)
+  ✓  65 tests/11-validation.spec.ts:19:3 › 11. validation errors come back as OperationOutcome › missing required element (19ms)
+  ✓  66 tests/12-search.spec.ts:10:3 › 12. search: _include, _revinclude, chaining › _include brings the subject Patient (19ms)
+  ✓  67 tests/12-search.spec.ts:18:3 › 12. search: _include, _revinclude, chaining › _revinclude brings the Encounters pointing at the Patient (26ms)
+  ✓  68 tests/12-search.spec.ts:24:3 › 12. search: _include, _revinclude, chaining › chained parameter filters by the referenced Patient (17ms)
+  ✓  69 tests/13-transaction.spec.ts:4:3 › 13. transaction Bundle semantics › entries commit together and urn:uuid references are resolved (41ms)
+  ✓  70 tests/14-run-isolation.spec.ts:5:3 › 14. run_id isolation › every fixture carries the run_id and was written after the stamp (31ms)
+  ✓  71 tests/13-transaction.spec.ts:41:3 › 13. transaction Bundle semantics › one failing entry rolls back the whole transaction (32ms)
+  ✓  73 tests/14-run-isolation.spec.ts:18:3 › 14. run_id isolation › a server-generated id is still inside the run, so teardown removes it (26ms)
+  ✓  75 tests/15-rerunnable.spec.ts:5:1 › 15. no residue from earlier runs: only this run's rows exist (26ms)
+  ✓  74 tests/14-run-isolation.spec.ts:24:3 › 14. run_id isolation › identities only see this run: the tokens resolve to run-prefixed users (90ms)
+  ✓  72 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 update: deny (63ms)
+
+
+  1) tests/02-practitioner-consent.spec.ts:4:3 › 2. practitioner via Consent (SQL) › allow: p1 reads a patient with an active Consent 
+
+    Error: granting policies on p1 GET /fhir/Patient/bakeoff-751d8377-patient-self
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "practitioner-policy"
+    Received array: []
+
+       at ../lib/test.ts:83
+
+      81 |       const v = await verdict(who, req);
+      82 |       expect(v.errors, `policy errors on ${describe(who, req)}`).toEqual([]);
+    > 83 |       expect(v.granted, `granting policies on ${describe(who, req)}`).toContain(policyId);
+         |                                                                       ^
+      84 |       const res = await send(await as(who), req);
+      85 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBeLessThan(300);
+      86 |       return res;
+        at /suite/lib/test.ts:83:71
+        at /suite/tests/02-practitioner-consent.spec.ts:5:5
+
+    Error Context: test-results/02-practitioner-consent-2--18eeb-ient-with-an-active-Consent/error-context.md
+
+  2) tests/02-practitioner-consent.spec.ts:8:3 › 2. practitioner via Consent (SQL) › allow: p2 reads a patient with an active Consent 
+
+    Error: granting policies on p2 GET /fhir/Patient/bakeoff-751d8377-patient-other
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "practitioner-policy"
+    Received array: []
+
+       at ../lib/test.ts:83
+
+      81 |       const v = await verdict(who, req);
+      82 |       expect(v.errors, `policy errors on ${describe(who, req)}`).toEqual([]);
+    > 83 |       expect(v.granted, `granting policies on ${describe(who, req)}`).toContain(policyId);
+         |                                                                       ^
+      84 |       const res = await send(await as(who), req);
+      85 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBeLessThan(300);
+      86 |       return res;
+        at /suite/lib/test.ts:83:71
+        at /suite/tests/02-practitioner-consent.spec.ts:9:5
+
+    Error Context: test-results/02-practitioner-consent-2--61226-ient-with-an-active-Consent/error-context.md
+
+  3) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 read: allow via practitioner-policy 
+
+    Error: granting policies on p1 GET /fhir/Patient/bakeoff-751d8377-patient-self
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "practitioner-policy"
+    Received array: []
+
+       at ../lib/test.ts:83
+
+      81 |       const v = await verdict(who, req);
+      82 |       expect(v.errors, `policy errors on ${describe(who, req)}`).toEqual([]);
+    > 83 |       expect(v.granted, `granting policies on ${describe(who, req)}`).toContain(policyId);
+         |                                                                       ^
+      84 |       const res = await send(await as(who), req);
+      85 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBeLessThan(300);
+      86 |       return res;
+        at /suite/lib/test.ts:83:71
+        at /suite/tests/08-matrix.spec.ts:37:21
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-ddbce-low-via-practitioner-policy/error-context.md
+
+  3 failed
+    tests/02-practitioner-consent.spec.ts:4:3 › 2. practitioner via Consent (SQL) › allow: p1 reads a patient with an active Consent 
+    tests/02-practitioner-consent.spec.ts:8:3 › 2. practitioner via Consent (SQL) › allow: p2 reads a patient with an active Consent 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 read: allow via practitioner-policy 
+  72 passed (3.7s)
+npm notice
+npm notice New minor version of npm available! 11.6.2 -> 11.21.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.2
+npm notice To update run: npm install -g npm@11.21.2
+npm notice

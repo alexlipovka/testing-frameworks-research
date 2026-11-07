@@ -1,0 +1,49 @@
+............................FF.......................................... [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-192b57fd-patient-self,bakeoff-192b57fd-patient-other] _
+Format variables:
+  path = 'fhir/Patient?_id=bakeoff-192b57fd-patient-self,bakeoff-192b57fd-patient-other'
+  who = 'p1'
+  status_code: 403 = '???'
+  base = 'http://localhost:8280'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-192b57fd-patient-self&_revinclude=Observation:subject] _
+Format variables:
+  path = 'fhir/Patient?_id=bakeoff-192b57fd-patient-self&_revinclude=Observation:subject'
+  who = 'p1'
+  status_code: 403 = '???'
+  base = 'http://localhost:8280'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-192b57fd-patient-self,bakeoff-192b57fd-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-192b57fd-patient-self&_revinclude=Observation:subject]
+2 failed, 91 passed in 7.71s

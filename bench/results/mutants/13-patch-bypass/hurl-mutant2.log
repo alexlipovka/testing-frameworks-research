@@ -1,0 +1,59 @@
+run bakeoff-869b1899 open (vars in /home/alex/prj/personal/testing-frameworks-research/suites/hurl/.vars)
+Success cases/01-patient-own-record.hurl (4 request(s) in 23 ms)
+Success cases/02-practitioner-consent.hurl (5 request(s) in 33 ms)
+Success cases/03-sql-error-not-deny.hurl (5 request(s) in 40 ms)
+Success cases/05-norole-denied.hurl (10 request(s) in 29 ms)
+error: Assert status code
+  --> cases/04-receptionist-read-not-write.hurl:47:6
+   |
+   | PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+47 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/04-receptionist-read-not-write.hurl (8 request(s) in 56 ms)
+error: Assert status code
+  --> cases/07-bypass.hurl:35:6
+   |
+   | PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+35 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/07-bypass.hurl (5 request(s) in 20 ms)
+Success cases/11-validation.hurl (2 request(s) in 5 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 13 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 25 ms)
+Success cases/06-search-leak.hurl (13 request(s) in 50 ms)
+error: Assert failure
+  --> cases/14-run-isolation.hurl:10:0
+   |
+   | GET {{url}}/fhir/Patient?family:exact=Bakeoff&_count=100
+   | ...
+10 | jsonpath "$.entry" count == 3
+   |   actual:   integer <2>
+   |   expected: integer <3>
+   |
+
+error: Assert failure
+  --> cases/14-run-isolation.hurl:11:0
+   |
+   | GET {{url}}/fhir/Patient?family:exact=Bakeoff&_count=100
+   | ...
+11 | jsonpath "$.entry[*].resource.id" contains "{{run_id}}-patient-self"
+   |   actual:   list <[bakeoff-869b1899-patient-other,bakeoff-869b1899-patient-unlinked]>
+   |   expected: contains string <bakeoff-869b1899-patient-self>
+   |
+
+Failure cases/14-run-isolation.hurl (1 request(s) in 4 ms)
+Success cases/13-transaction.hurl (4 request(s) in 17 ms)
+Success cases/09-sdc.hurl (13 request(s) in 66 ms)
+--------------------------------------------------------------------------------
+Executed files:    13
+Executed requests: 79 (612.4/s)
+Succeeded files:   10 (76.9%)
+Failed files:      3 (23.1%)
+Duration:          129 ms (0h:0m:0s:129ms)
+

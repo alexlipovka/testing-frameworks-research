@@ -1,0 +1,123 @@
+............F..........................F................................ [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+___ /suite/tests/test_04_receptionist.tavern.yaml::rec cannot write Patient ____
+Format variables:
+  op: replace, path: /name/0/family, value: Patched = '???'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-9226d86a'
+  __debug: policy = '???'
+  rec_auth = 'Bearer 2nRkvZI4UnuRZ7aHgED1gsHXidUSEDrnowU6mQGrTxs1YUaUO0NlZpWeP56Lm1PE'
+
+Source test stage (line 45):
+  - name: JSON Patch decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers: {Authorization: "{rec_auth}", Content-Type: application/json-patch+json}
+      json: [{op: replace, path: /name/0/family, value: Patched}]
+    response: *deny
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'JSON Patch decision' failed:
+    - Error calling validate function '<function decision at 0x7fe722b8bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe722b8bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}] _
+Format variables:
+  patch = '{'name': [{'family': 'Merged'}]}'
+  expect: deny = '???'
+  ctype = 'application/merge-patch+json'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-9226d86a'
+  __debug: policy = '???'
+  who = 'rec'
+
+Source test stage (line 46):
+  - name: policy decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+        Content-Type: "{ctype}"
+      json: !force_format_include "{patch}"
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe722b8bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 22, in decision
+            assert not granted, f"expected deny, granted by {granted}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe722b8bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 22, in decision
+        assert not granted, f"expected deny, granted by {granted}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 22, in decision
+    assert not granted, f"expected deny, granted by {granted}"
+           ^^^^^^^^^^^
+AssertionError: expected deny, granted by ['as-receptionist-read-patients']
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.tavern.yaml::rec cannot write Patient
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}]
+2 failed, 91 passed in 7.56s

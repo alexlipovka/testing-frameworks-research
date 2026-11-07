@@ -1,0 +1,351 @@
+
+Running 75 tests using 4 workers
+
+  ✓   1 tests/02-practitioner-consent.spec.ts:8:3 › 2. practitioner via Consent (SQL) › allow: p2 reads a patient with an active Consent (74ms)
+  ✓   2 tests/02-practitioner-consent.spec.ts:4:3 › 2. practitioner via Consent (SQL) › allow: p1 reads a patient with an active Consent (71ms)
+  ✘   4 tests/01-patient-own-record.spec.ts:8:3 › 1. patient reads own record (matcho) › deny: another patient's record (75ms)
+  ✓   3 tests/01-patient-own-record.spec.ts:4:3 › 1. patient reads own record (matcho) › allow: own Patient (96ms)
+  ✘   5 tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked (39ms)
+  ✘   6 tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 (54ms)
+  ✓   7 tests/03-sql-policy-error.spec.ts:4:3 › 3. a SQL policy that throws is an error, not a plain deny › a crashing SQL policy shows up in the debug dump although the client only sees 403 (59ms)
+  ✓   8 tests/04-receptionist.spec.ts:8:3 › 4. receptionist reads but does not write Patients › allow: search Patients (33ms)
+  ✓   9 tests/04-receptionist.spec.ts:12:3 › 4. receptionist reads but does not write Patients › allow: Appointments are the receptionist's to manage (37ms)
+  ✓  10 tests/04-receptionist.spec.ts:16:3 › 4. receptionist reads but does not write Patients › deny: PUT a Patient (32ms)
+  ✓  11 tests/04-receptionist.spec.ts:25:3 › 4. receptionist reads but does not write Patients › deny: POST a Patient (60ms)
+  ✓  12 tests/04-receptionist.spec.ts:29:3 › 4. receptionist reads but does not write Patients › deny: JSON Patch a Patient (21ms)
+  ✘  13 tests/05-norole.spec.ts:19:3 › 5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations (51ms)
+  ✘  14 tests/02-practitioner-consent.spec.ts:20:3 › 2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient (72ms)
+  ✓  16 tests/04-receptionist.spec.ts:4:3 › 4. receptionist reads but does not write Patients › allow: read a Patient by id (70ms)
+  ✓  15 tests/03-sql-policy-error.spec.ts:16:3 › 3. a SQL policy that throws is an error, not a plain deny › no policy crashes on patient requests, allowed or denied (136ms)
+  ✓  17 tests/06-search-leak.spec.ts:14:3 › 6. searches return nothing outside the caller's scope › deny: patient searches another patient's Observations (44ms)
+  ✓  18 tests/06-search-leak.spec.ts:18:3 › 6. searches return nothing outside the caller's scope › deny: patient smuggles a second subject (33ms)
+  ✓  19 tests/06-search-leak.spec.ts:24:3 › 6. searches return nothing outside the caller's scope › deny: patient searches all Observations (30ms)
+  ✓  20 tests/06-search-leak.spec.ts:28:3 › 6. searches return nothing outside the caller's scope › deny: patient adds an _include (40ms)
+  ✓  21 tests/06-search-leak.spec.ts:32:3 › 6. searches return nothing outside the caller's scope › allow: practitioner searches consented patients and gets only them (43ms)
+  ✘  22 tests/06-search-leak.spec.ts:37:3 › 6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient (34ms)
+  ✓  23 tests/06-search-leak.spec.ts:41:3 › 6. searches return nothing outside the caller's scope › deny: practitioner adds a _revinclude (41ms)
+  ✓  24 tests/06-search-leak.spec.ts:49:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Patients in through an Appointment _include (47ms)
+  ✓  26 tests/07-bypass.spec.ts:6:3 › 7. bypass attempts › deny: patient reads another patient's record inside a transaction Bundle (25ms)
+  ✓  25 tests/05-norole.spec.ts:23:3 › 5. an identity without a role is denied everywhere › allow (control): admin can do the same reads (78ms)
+  ✓  27 tests/07-bypass.spec.ts:14:3 › 7. bypass attempts › deny: even a request the patient may make on its own is refused inside a Bundle (63ms)
+  ✓  28 tests/07-bypass.spec.ts:22:3 › 7. bypass attempts › deny: receptionist writes a Patient inside a transaction Bundle (34ms)
+  ✓  29 tests/07-bypass.spec.ts:34:3 › 7. bypass attempts › deny: receptionist JSON-Patches a Patient (29ms)
+  ✓  31 tests/07-bypass.spec.ts:52:3 › 7. bypass attempts › deny: patient JSON-Patches own record (30ms)
+  ✓  30 tests/07-bypass.spec.ts:43:3 › 7. bypass attempts › deny: receptionist merge-patches a Patient (30ms)
+  ✓  32 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self read: allow via patient-role-policy (35ms)
+  ✘  33 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny (38ms)
+  ✓  34 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self update: deny (51ms)
+  ✓  36 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 read: allow via practitioner-policy (26ms)
+  ✓  37 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 search: allow via as-practitioner-search-consented-patients (33ms)
+  ✓  38 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 update: deny (33ms)
+  ✓  35 tests/06-search-leak.spec.ts:6:3 › 6. searches return nothing outside the caller's scope › allow: patient searches own Observations and gets only them (123ms)
+  ✓  40 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 create-appointment: deny (42ms)
+  ✘  41 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny (45ms)
+  ✘  42 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny (41ms)
+  ✓  39 tests/06-search-leak.spec.ts:45:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Observations in through _revinclude (79ms)
+  ✓  43 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec read: allow via as-receptionist-read-patients (37ms)
+  ✓  44 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec search: allow via as-receptionist-read-patients (42ms)
+  ✓  45 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec update: deny (35ms)
+  ✓  46 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec create-appointment: allow via receptionist-role-policy (44ms)
+  ✘  47 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole read: deny (62ms)
+  ✓  48 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self create-appointment: deny (75ms)
+  ✓  49 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole update: deny (41ms)
+  ✓  50 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole create-appointment: deny (30ms)
+  ✓  51 tests/09-sdc.spec.ts:42:3 › 9. SDC $populate / $extract under each role › allow: p1 populates for a consented patient (56ms)
+  ✓  54 tests/09-sdc.spec.ts:46:3 › 9. SDC $populate / $extract under each role › allow: p2 populates for a consented patient (49ms)
+  ✓  52 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny (76ms)
+  ✓  53 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 create-appointment: deny (93ms)
+  ✓  55 tests/09-sdc.spec.ts:50:3 › 9. SDC $populate / $extract under each role › deny: $populate for an unconsented patient (99ms)
+  ✓  57 tests/09-sdc.spec.ts:60:3 › 9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient (40ms)
+  ✓  56 tests/09-sdc.spec.ts:56:3 › 9. SDC $populate / $extract under each role › deny: $populate by patient, receptionist and no-role (125ms)
+  ✓  58 tests/09-sdc.spec.ts:65:3 › 9. SDC $populate / $extract under each role › deny: forged patientId answer pointing at another patient (46ms)
+  ✓  59 tests/09-sdc.spec.ts:69:3 › 9. SDC $populate / $extract under each role › deny: QR subject is a patient the practitioner is not consented to (36ms)
+  ✓  60 tests/09-sdc.spec.ts:74:3 › 9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented (55ms)
+  ✓  63 tests/11-validation.spec.ts:4:3 › 11. validation errors come back as OperationOutcome › wrong type for a known element (17ms)
+  ✓  61 tests/09-sdc.spec.ts:79:3 › 9. SDC $populate / $extract under each role › deny: $extract by patient, receptionist and no-role (86ms)
+  ✓  62 tests/10-crud-patch.spec.ts:3:1 › 10. CRUD + JSON Patch (85ms)
+  ✓  64 tests/11-validation.spec.ts:13:3 › 11. validation errors come back as OperationOutcome › unknown element (23ms)
+  ✓  66 tests/11-validation.spec.ts:19:3 › 11. validation errors come back as OperationOutcome › missing required element (31ms)
+  ✓  67 tests/12-search.spec.ts:10:3 › 12. search: _include, _revinclude, chaining › _include brings the subject Patient (34ms)
+  ✓  68 tests/12-search.spec.ts:18:3 › 12. search: _include, _revinclude, chaining › _revinclude brings the Encounters pointing at the Patient (17ms)
+  ✓  69 tests/12-search.spec.ts:24:3 › 12. search: _include, _revinclude, chaining › chained parameter filters by the referenced Patient (19ms)
+  ✓  70 tests/13-transaction.spec.ts:4:3 › 13. transaction Bundle semantics › entries commit together and urn:uuid references are resolved (27ms)
+  ✘  65 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole search: deny (73ms)
+  ✓  71 tests/13-transaction.spec.ts:41:3 › 13. transaction Bundle semantics › one failing entry rolls back the whole transaction (27ms)
+  ✓  72 tests/14-run-isolation.spec.ts:5:3 › 14. run_id isolation › every fixture carries the run_id and was written after the stamp (34ms)
+  ✓  73 tests/14-run-isolation.spec.ts:18:3 › 14. run_id isolation › a server-generated id is still inside the run, so teardown removes it (31ms)
+  ✓  74 tests/15-rerunnable.spec.ts:5:1 › 15. no residue from earlier runs: only this run's rows exist (28ms)
+  ✓  75 tests/14-run-isolation.spec.ts:24:3 › 14. run_id isolation › identities only see this run: the tokens resolve to run-prefixed users (136ms)
+
+
+  1) tests/01-patient-own-record.spec.ts:8:3 › 1. patient reads own record (matcho) › deny: another patient's record 
+
+    Error: pat-self GET /fhir/Patient/bakeoff-16330b11-patient-other: {"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.110018Z","versionId":"18786","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.110018Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/01-patient-own-record.spec.ts:9:5
+
+    Error Context: test-results/01-patient-own-record-1-pa-0c800-ny-another-patient-s-record/error-context.md
+
+  2) tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked 
+
+    Error: p1 GET /fhir/Patient/bakeoff-16330b11-patient-other: {"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.110018Z","versionId":"18786","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.110018Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/02-practitioner-consent.spec.ts:13:5
+
+    Error Context: test-results/02-practitioner-consent-2--e7be5-nt-whose-Consent-is-revoked/error-context.md
+
+  3) tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 
+
+    Error: p2 GET /fhir/Patient/bakeoff-16330b11-patient-self: {"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/02-practitioner-consent.spec.ts:17:5
+
+    Error Context: test-results/02-practitioner-consent-2--6292e-atient-consented-only-to-p1/error-context.md
+
+  4) tests/02-practitioner-consent.spec.ts:20:3 › 2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient 
+
+    Error: p1 GET /fhir/Patient/bakeoff-16330b11-patient-unlinked: {"name":[{"given":["Unlinked"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-unlinked","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.115257Z","versionId":"18787","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.115257Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/02-practitioner-consent.spec.ts:21:5
+
+    Error Context: test-results/02-practitioner-consent-2--95854-ted-to-the-unlinked-patient/error-context.md
+
+  5) tests/05-norole.spec.ts:19:3 › 5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations 
+
+    Error: norole GET /fhir/Patient/bakeoff-16330b11-patient-self: {"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/05-norole.spec.ts:20:41
+
+    Error Context: test-results/05-norole-5-an-identity-wi-954d5-s-writes-and-SDC-operations/error-context.md
+
+  6) tests/06-search-leak.spec.ts:37:3 › 6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient 
+
+    Error: p1 GET /fhir/Patient?_id=bakeoff-16330b11-patient-self,bakeoff-16330b11-patient-other: {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":2,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self,bakeoff-16330b11-patient-other&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self,bakeoff-16330b11-patient-other&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self"}]},{"resource":{"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.110018Z","versionId":"18786","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.110018Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-other","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-other"}]}]}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/06-search-leak.spec.ts:38:5
+
+    Error Context: test-results/06-search-leak-6-searches--e1825--and-an-unconsented-patient/error-context.md
+
+  7) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny 
+
+    Error: pat-self GET /fhir/Patient?_id=bakeoff-16330b11-patient-self: {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self"}]}]}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-6489c-t-self-pat-self-search-deny/error-context.md
+
+  8) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny 
+
+    Error: p2 GET /fhir/Patient/bakeoff-16330b11-patient-self: {"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-e12a4-n-patient-self-p2-read-deny/error-context.md
+
+  9) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny 
+
+    Error: p2 GET /fhir/Patient?_id=bakeoff-16330b11-patient-self: {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self"}]}]}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-c3bd3-patient-self-p2-search-deny/error-context.md
+
+  10) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole read: deny 
+
+    Error: norole GET /fhir/Patient/bakeoff-16330b11-patient-self: {"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-4bdf6-tient-self-norole-read-deny/error-context.md
+
+  11) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole search: deny 
+
+    Error: norole GET /fhir/Patient?_id=bakeoff-16330b11-patient-self: {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-16330b11-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-16330b11-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T22:25:31.104561Z","versionId":"18785","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T22:25:31.104561Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-16330b11-patient-self"}]}]}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+       at ../lib/test.ts:92
+
+      90 |       const v = await verdict(who, req);
+      91 |       const res = await send(await as(who), req);
+    > 92 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+         |                                                                          ^
+      93 |       return res;
+      94 |     });
+      95 |   },
+        at /suite/lib/test.ts:92:74
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-8b14e-ent-self-norole-search-deny/error-context.md
+
+  11 failed
+    tests/01-patient-own-record.spec.ts:8:3 › 1. patient reads own record (matcho) › deny: another patient's record 
+    tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked 
+    tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 
+    tests/02-practitioner-consent.spec.ts:20:3 › 2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient 
+    tests/05-norole.spec.ts:19:3 › 5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations 
+    tests/06-search-leak.spec.ts:37:3 › 6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole read: deny 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole search: deny 
+  64 passed (5.5s)
+npm notice
+npm notice New minor version of npm available! 11.6.2 -> 11.21.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.2
+npm notice To update run: npm install -g npm@11.21.2
+npm notice

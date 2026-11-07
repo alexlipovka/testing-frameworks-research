@@ -1,0 +1,1279 @@
+FF....FFFF..........FF.FFFFF......FF..F.FFFF....................FF...... [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-self-allow-200] _
+Format variables:
+  run_id = 'bakeoff-20e48f06'
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  expect = 'allow'
+  base = 'http://localhost:8280'
+  patient = 'patient-self'
+  __debug: policy = '???'
+
+Source test stage (line 9):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: patient-role-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403] _
+Format variables:
+  run_id = 'bakeoff-20e48f06'
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  patient = 'patient-other'
+  __debug: policy = '???'
+
+Source test stage (line 9):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: patient-role-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Patient/bakeoff-20e48f06-patient-self] _
+Format variables:
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  path = 'fhir/Patient/bakeoff-20e48f06-patient-self'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+
+Source test stage (line 71):
+  - name: no crashed policy
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:no_crash
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'no crashed policy' failed:
+    - Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 58, in no_crash
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 58, in no_crash
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 58, in no_crash
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Encounter/bakeoff-20e48f06-enc-match] _
+Format variables:
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  path = 'fhir/Encounter/bakeoff-20e48f06-enc-match'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+
+Source test stage (line 71):
+  - name: no crashed policy
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:no_crash
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'no crashed policy' failed:
+    - Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 58, in no_crash
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 58, in no_crash
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 58, in no_crash
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Condition/bakeoff-20e48f06-cond-match] _
+Format variables:
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  path = 'fhir/Condition/bakeoff-20e48f06-cond-match'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+
+Source test stage (line 71):
+  - name: no crashed policy
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:no_crash
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'no crashed policy' failed:
+    - Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 58, in no_crash
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 58, in no_crash
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 58, in no_crash
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self] _
+Format variables:
+  pat_self_auth = 'Bearer Dr3sdF8UOLiFT6wmeWiiY0OvIhYPYNyxzeVpluILZzEE9AajRXYSMVAvefGKpD3A'
+  path = 'fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+
+Source test stage (line 71):
+  - name: no crashed policy
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:no_crash
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'no crashed policy' failed:
+    - Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 58, in no_crash
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function no_crash at 0x7fb7a1a4bec0>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 58, in no_crash
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 58, in no_crash
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::allowed search returns only in-scope resources[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self-as-patient-search-own-observations-['Observation/bakeoff-20e48f06-obs-match']] _
+Format variables:
+  path = 'fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self'
+  policy = 'as-patient-search-own-observations'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 11):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: allow, policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::allowed search returns only in-scope resources[pat-self-fhir/Observation?subject=bakeoff-20e48f06-patient-self-as-patient-search-own-observations-['Observation/bakeoff-20e48f06-obs-match']] _
+Format variables:
+  path = 'fhir/Observation?subject=bakeoff-20e48f06-patient-self'
+  policy = 'as-patient-search-own-observations'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 11):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: allow, policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-other] _
+Format variables:
+  path = 'fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-other'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation] _
+Format variables:
+  path = 'fhir/Observation'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&subject=Patient/bakeoff-20e48f06-patient-other] _
+Format variables:
+  path = 'fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&subject=Patient/bakeoff-20e48f06-patient-other'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&_include=Observation:subject] _
+Format variables:
+  path = 'fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&_include=Observation:subject'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient] _
+Format variables:
+  path = 'fhir/Patient'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction] _
+Format variables:
+  __debug: policy = '???'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  type = 'transaction'
+  family: Bundled = '???'
+  who = 'pat-self'
+  run_id = 'bakeoff-20e48f06'
+
+Source test stage (line 12):
+  - name: policy decision
+    request: &bundle
+      url: "{base}/fhir"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json:
+        resourceType: Bundle
+        type: "{type}"
+        entry:
+          - request: {method: GET, url: "Patient/{run_id}-patient-other"}
+          - request: {method: PUT, url: "Patient/{run_id}-patient-self"}
+            resource: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Bundled}]}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch] _
+Format variables:
+  __debug: policy = '???'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  type = 'batch'
+  family: Bundled = '???'
+  who = 'pat-self'
+  run_id = 'bakeoff-20e48f06'
+
+Source test stage (line 12):
+  - name: policy decision
+    request: &bundle
+      url: "{base}/fhir"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json:
+        resourceType: Bundle
+        type: "{type}"
+        entry:
+          - request: {method: GET, url: "Patient/{run_id}-patient-other"}
+          - request: {method: PUT, url: "Patient/{run_id}-patient-self"}
+            resource: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Bundled}]}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]] _
+Format variables:
+  patch = '[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]'
+  run_id = 'bakeoff-20e48f06'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  ctype = 'application/json-patch+json'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 46):
+  - name: policy decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+        Content-Type: "{ctype}"
+      json: !force_format_include "{patch}"
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient/bakeoff-20e48f06-patient-self-allow-200] _
+Format variables:
+  op = 'Patient/bakeoff-20e48f06-patient-self'
+  expect = 'allow'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-20e48f06-patient-self-deny-403] _
+Format variables:
+  op = 'Patient?_id=bakeoff-20e48f06-patient-self'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-20e48f06-enc-match-allow-200] _
+Format variables:
+  op = 'Encounter/bakeoff-20e48f06-enc-match'
+  expect = 'allow'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Appointment/bakeoff-20e48f06-appt-match-deny-403] _
+Format variables:
+  op = 'Appointment/bakeoff-20e48f06-appt-match'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  __debug: policy = '???'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$populate-patient-self-patient-self] _
+Format variables:
+  answer = 'patient-self'
+  __debug: policy = '???'
+  op = '$populate'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  patient = 'patient-self'
+  who = 'pat-self'
+  run_id = 'bakeoff-20e48f06'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$extract-patient-self-patient-self] _
+Format variables:
+  answer = 'patient-self'
+  __debug: policy = '???'
+  op = '$extract'
+  expect: deny = '???'
+  base = 'http://localhost:8280'
+  patient = 'patient-self'
+  who = 'pat-self'
+  run_id = 'bakeoff-20e48f06'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 19, in decision
+            assert not crashed, f"policies crashed: {crashed}"
+                   ^^^^^^^^^^^
+        AssertionError: policies crashed: ['as-patient-read-own-condition']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fb7a1a4bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 19, in decision
+        assert not crashed, f"policies crashed: {crashed}"
+               ^^^^^^^^^^^
+    AssertionError: policies crashed: ['as-patient-read-own-condition']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 19, in decision
+    assert not crashed, f"policies crashed: {crashed}"
+           ^^^^^^^^^^^
+AssertionError: policies crashed: ['as-patient-read-own-condition']
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-self-allow-200]
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Patient/bakeoff-20e48f06-patient-self]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Encounter/bakeoff-20e48f06-enc-match]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Condition/bakeoff-20e48f06-cond-match]
+FAILED tests/test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self]
+FAILED tests/test_06_search_leak.tavern.yaml::allowed search returns only in-scope resources[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self-as-patient-search-own-observations-['Observation/bakeoff-20e48f06-obs-match']]
+FAILED tests/test_06_search_leak.tavern.yaml::allowed search returns only in-scope resources[pat-self-fhir/Observation?subject=bakeoff-20e48f06-patient-self-as-patient-search-own-observations-['Observation/bakeoff-20e48f06-obs-match']]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&subject=Patient/bakeoff-20e48f06-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-20e48f06-patient-self&_include=Observation:subject]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch]
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient/bakeoff-20e48f06-patient-self-allow-200]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-20e48f06-patient-self-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-20e48f06-enc-match-allow-200]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Appointment/bakeoff-20e48f06-appt-match-deny-403]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$populate-patient-self-patient-self]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$extract-patient-self-patient-self]
+22 failed, 71 passed in 7.66s

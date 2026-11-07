@@ -1,0 +1,40 @@
+...F.................................................................... [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403] _
+Format variables:
+  status = '403'
+  run_id = 'bakeoff-e4bc09f2'
+  patient = 'patient-other'
+  base = 'http://localhost:8280'
+  who = 'p1'
+
+Source test stage (line 23):
+  - name: status
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: !int "{status}"
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: p1
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient/bakeoff-e4bc09f2-patient-other
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+1 failed, 92 passed in 7.62s
