@@ -23,3 +23,30 @@ stages:
       headers: {Authorization: "{pat_self_auth}"}
     response:
       status_code: !int "{status}"
+---
+# Own Encounter, another patient's, and an Encounter id under another resource type.
+test_name: pat-self on Encounter ids
+marks:
+  - parametrize:
+      key: [path, expect, policy, status]
+      vals:
+        - ["Encounter/{run_id}-enc-match", allow, as-patient-read-own-encounter, 200]
+        - ["Encounter/{run_id}-enc-mismatch", deny, "", 403]
+        - ["Observation/{run_id}-enc-match", deny, "", 403]
+stages:
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: "{policy}"}
+  - name: status
+    request:
+      url: "{base}/fhir/{path}"
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: !int "{status}"

@@ -6,6 +6,7 @@ import json
 import os
 import secrets
 import signal
+import time
 from pathlib import Path
 
 import pytest
@@ -18,6 +19,7 @@ ADMIN = ("root", "secret")
 FIXTURES = Path(os.environ.get("FIXTURES_JSON", "/fixtures/fixtures.json"))
 STATE = Path(__file__).parent / ".run" / "state.json"
 RUN_ID = f"bakeoff-{secrets.token_hex(4)}"
+INTERRUPTED = False
 
 
 def load(run_id):
@@ -33,6 +35,9 @@ def sql(query):
 
 
 def rollback(tx_id):
+    # A request the interrupt cut off can still commit on the server; rolling back first would miss it.
+    if INTERRUPTED:
+        time.sleep(1)
     sql(json.loads(FIXTURES.read_text())["sql"]["rollback"].replace("{{tx_id}}", str(tx_id)))
     STATE.unlink(missing_ok=True)
 
@@ -42,24 +47,44 @@ def recover():
         rollback(json.loads(STATE.read_text())["tx_id"])
 
 
+def _sigterm(*_):
+    global INTERRUPTED
+    INTERRUPTED = True
+    raise KeyboardInterrupt
+
+
 def pytest_configure(config):
+    global RUN_ID
+    worker = getattr(config, "workerinput", None)
+    if worker:
+        RUN_ID = worker["run_id"]
+        helpers.TOKENS.update(worker["tokens"])
+    else:
+        # Python as PID 1 ignores SIGTERM; docker stop would skip the teardown.
+        signal.signal(signal.SIGTERM, _sigterm)
+        _open_run()
     # Tavern formats parametrize values at collection, before any fixture runs,
     # so run_id must reach it through a global config file.
-    cfg = STATE.parent / "global.yaml"
-    cfg.parent.mkdir(exist_ok=True)
+    STATE.parent.mkdir(exist_ok=True)
+    cfg = STATE.parent / f"global-{worker['workerid'] if worker else 'main'}.yaml"
     cfg.write_text(json.dumps({"variables": {"run_id": RUN_ID, "base": BASE}}))
     config.option.tavern_global_cfg = [*(config.option.tavern_global_cfg or []), str(cfg)]
 
 
-def _sigterm(*_):
-    raise KeyboardInterrupt
+@pytest.hookimpl(optionalhook=True)
+def pytest_configure_node(node):
+    # One run for the whole session: a session fixture would open one per xdist worker.
+    node.workerinput.update(run_id=RUN_ID, tokens=helpers.TOKENS)
 
 
-@pytest.fixture(scope="session", autouse=True)
-def run():
-    # Python as PID 1 ignores SIGTERM; docker stop would skip the teardown.
-    signal.signal(signal.SIGTERM, _sigterm)
+def pytest_unconfigure(config):
+    if not hasattr(config, "workerinput") and STATE.exists():
+        recover()
+
+
+def _open_run():
     recover()
+    STATE.parent.mkdir(exist_ok=True)
     data = load(RUN_ID)
     sql(data["sql"]["install"])
     tx_id = sql(data["sql"]["stamp"])["result"][0]["data"][0]["last_value"]
@@ -69,17 +94,21 @@ def run():
             r = requests.request(s["method"], BASE + s["path"], json=s["body"], auth=ADMIN, timeout=30)
             assert r.ok, f"setup {s['path']}: {r.status_code} {r.text}"
         sec = data["secrets"]
-        tokens = {"admin": "Basic " + base64.b64encode(":".join(ADMIN).encode()).decode()}
+        helpers.TOKENS["admin"] = "Basic " + base64.b64encode(":".join(ADMIN).encode()).decode()
         for i in data["identities"]:
             r = requests.post(f"{BASE}/auth/token", timeout=30, json={
                 "grant_type": "password", "client_id": sec["client_id"], "client_secret": sec["client_secret"],
                 "username": i["user"], "password": sec["user_password"]})
             assert r.ok, f"token {i['name']}: {r.status_code} {r.text}"
-            tokens[i["name"]] = "Bearer " + r.json()["access_token"]
-        helpers.TOKENS.update(tokens)
-        yield {f"{k.replace('-', '_')}_auth": v for k, v in tokens.items()}
-    finally:
+            helpers.TOKENS[i["name"]] = "Bearer " + r.json()["access_token"]
+    except BaseException:
         rollback(tx_id)
+        raise
+
+
+@pytest.fixture(scope="session", autouse=True)
+def run():
+    return {f"{k.replace('-', '_')}_auth": v for k, v in helpers.TOKENS.items()}
 
 
 def pytest_tavern_beta_before_every_test_run(test_dict, variables):

@@ -12,18 +12,32 @@ def _policies(response):
     return response.json()["policies"]
 
 
+def _granted(pols):
+    return [p["policy-id"] for p in pols if p.get("eval-result") is True]
+
+
+def _crashes(pols):
+    return [{"id": p["policy-id"], "error": p["error"]} for p in pols if p.get("error")]
+
+
+def _report(response):
+    """Who asked for what, and how Aidbox decided: the text of every failed decision."""
+    user = (response.json()["request"].get("user") or {}).get("id")
+    pols = _policies(response)
+    return f"user={user} {response.request.method} {response.request.url}: granted={_granted(pols)} crashed={_crashes(pols)}"
+
+
 def decision(response, expect, policy=None):
     """Assert a __debug=policy dump: no policy crashed, and the request is allowed or denied."""
     pols = _policies(response)
-    crashed = [p["policy-id"] for p in pols if p.get("error")]
-    assert not crashed, f"policies crashed: {crashed}"
-    granted = [p["policy-id"] for p in pols if p.get("eval-result") is True]
+    assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+    granted = _granted(pols)
     if expect == "deny":
-        assert not granted, f"expected deny, granted by {granted}"
+        assert not granted, f"expected deny: {_report(response)}"
     else:
         assert expect == "allow", f"expect must be allow or deny, got {expect!r}"
-        assert granted, "expected allow, no policy granted"
-        assert policy is None or policy in granted, f"expected {policy}, granted by {granted}"
+        assert granted, f"expected allow: {_report(response)}"
+        assert not policy or policy in granted, f"expected allow by {policy}: {_report(response)}"
 
 
 def crashed(response, policy):
@@ -54,8 +68,7 @@ def sdc_body(op, subject, answer=None):
 
 
 def no_crash(response):
-    crashed = [p["policy-id"] for p in _policies(response) if p.get("error")]
-    assert not crashed, f"policies crashed: {crashed}"
+    assert not _crashes(_policies(response)), f"a policy crashed: {_report(response)}"
 
 
 def tx_ids(response):
