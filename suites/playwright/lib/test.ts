@@ -79,10 +79,9 @@ export const test = base.extend<Fixtures>({
   allows: async ({ as, verdict }, use) => {
     await use(async (who, req, policyId) => {
       const v = await verdict(who, req);
-      expect(v.errors, `policy errors on ${describe(who, req)}`).toEqual([]);
-      expect(v.granted, `granting policies on ${describe(who, req)}`).toContain(policyId);
+      expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: expect.arrayContaining([policyId]), errors: [] });
       const res = await send(await as(who), req);
-      expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBeLessThan(300);
+      expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBeLessThan(300);
       return res;
     });
   },
@@ -90,10 +89,9 @@ export const test = base.extend<Fixtures>({
   denies: async ({ as, verdict }, use) => {
     await use(async (who, req) => {
       const v = await verdict(who, req);
-      expect(v.errors, `policy errors on ${describe(who, req)}`).toEqual([]);
-      expect(v.granted, `granting policies on ${describe(who, req)}`).toEqual([]);
+      expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: [], errors: [] });
       const res = await send(await as(who), req);
-      expect(res.status(), `${describe(who, req)}: ${await res.text()}`).toBe(403);
+      expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBe(403);
       return res;
     });
   },
