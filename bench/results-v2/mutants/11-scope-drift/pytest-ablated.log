@@ -1,0 +1,203 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+............F........F............F....F....F..................F.F.      [100%]
+=================================== FAILURES ===================================
+___________________ test_receptionist_cannot_write_patients ____________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+rec = <httpx.Client object at 0x7f3365176510>
+admin = <httpx.Client object at 0x7f336591b680>
+
+    def test_receptionist_cannot_write_patients(run, rec, admin):
+        pid = run.id("patient-self")
+        renamed = {"resourceType": "Patient", "id": pid, "name": [{"family": "Hacked"}]}
+>       expect_deny(rec, "PUT", f"/fhir/Patient/{pid}", json=renamed)
+
+tests/test_04_receptionist.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f3365176510>, method = 'PUT'
+url = '/fhir/Patient/bakeoff-e5b1791b-patient-self'
+kw = {'json': {'id': 'bakeoff-e5b1791b-patient-self', 'name': [{'family': 'Hacked'}], 'resourceType': 'Patient'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PUT /fhir/Patient/bakeoff-e5b1791b-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-e5b1791b-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:50:55.269618Z","versionId":"89757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:50:53.725140Z"}]}}; decision: user=bakeoff-e5b1791b-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+___________________________ test_merge_patch_denied ____________________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+rec = <httpx.Client object at 0x7f3365176510>
+admin = <httpx.Client object at 0x7f336591b680>
+
+    def test_merge_patch_denied(run, rec, admin):
+>       expect_deny(rec, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                    headers={"Content-Type": "application/merge-patch+json"},
+                    content=json.dumps({"name": [{"family": "Hacked"}]}))
+
+tests/test_07_bypass.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f3365176510>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-e5b1791b-patient-self'
+kw = {'content': '{"name": [{"family": "Hacked"}]}', 'headers': {'Content-Type': 'application/merge-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PATCH /fhir/Patient/bakeoff-e5b1791b-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-e5b1791b-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:50:55.269618Z","versionId":"89757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:50:53.725140Z"}]}}; decision: user=bakeoff-e5b1791b-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+________________________ test_transaction_bundle_denied ________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+rec = <httpx.Client object at 0x7fd66e7a5460>
+pat_self = <httpx.Client object at 0x7fd66e900320>
+admin = <httpx.Client object at 0x7fd66ef83bf0>
+
+    def test_transaction_bundle_denied(run, rec, pat_self, admin):
+        pid = run.id("patient-self")
+        expect_deny(rec, "POST", "/fhir", json={"resourceType": "Bundle", "type": "transaction", "entry": [{
+            "resource": {"resourceType": "Patient", "id": pid, "name": [{"family": "Hacked"}]},
+            "request": {"method": "PUT", "url": f"Patient/{pid}"}}]})
+        expect_deny(pat_self, "POST", "/fhir", json={"resourceType": "Bundle", "type": "batch", "entry": [{
+            "request": {"method": "GET", "url": f"Patient/{run.id('patient-other')}"}}]})
+>       assert_untouched(run, admin)
+
+tests/test_07_bypass.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+admin = <httpx.Client object at 0x7fd66ef83bf0>
+
+    def assert_untouched(run, admin):
+>       assert admin.get(f"/fhir/Patient/{run.id('patient-self')}").json()["name"][0]["family"] == "Bakeoff"
+E       AssertionError: assert 'Hacked' == 'Bakeoff'
+E         
+E         - Bakeoff
+E         + Hacked
+
+tests/test_07_bypass.py:8: AssertionError
+____________________________ test_json_patch_denied ____________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+rec = <httpx.Client object at 0x7fd66e7a5460>
+p1 = <httpx.Client object at 0x7fd66e900440>
+admin = <httpx.Client object at 0x7fd66ef83bf0>
+
+    def test_json_patch_denied(run, rec, p1, admin):
+        patch = json.dumps([{"op": "replace", "path": "/name/0/family", "value": "Hacked"}])
+        for c in (rec, p1):
+>           expect_deny(c, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                        headers={"Content-Type": "application/json-patch+json"}, content=patch)
+
+tests/test_07_bypass.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fd66e7a5460>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-e5b1791b-patient-self'
+kw = {'content': '[{"op": "replace", "path": "/name/0/family", "value": "Hacked"}]', 'headers': {'Content-Type': 'application/json-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: PATCH /fhir/Patient/bakeoff-e5b1791b-patient-self: 200 {"name":[{"family":"Hacked"}],"id":"bakeoff-e5b1791b-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:50:55.269618Z","versionId":"89757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:50:53.725140Z"}]}}; decision: user=bakeoff-e5b1791b-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+_______________________ test_matrix[rec-read_encounter] ________________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+who = 'rec', op = 'read_encounter', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f6e4e5ea090>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-e5b1791b-enc-match', kw = {}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Encounter/bakeoff-e5b1791b-enc-match: 200 {"class":{"code":"AMB","system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"},"status":"finished","subject":{"reference":"Patient/bakeoff-e5b1791b-patient-self"},"id":"bakeoff-e5b1791b-enc-match","resourceType":"Encounter","meta":{"lastUpdated":"2026-11-08T19:50:53.736444Z","versionId":"89734","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:50:53.736444Z"}]}}; decision: user=bakeoff-e5b1791b-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+_________________________ test_no_rows_from_other_runs _________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+admin = <httpx.Client object at 0x7fd66ef83bf0>
+
+    def test_no_rows_from_other_runs(run, admin):
+        r = admin.get("/fhir/Patient?family:exact=Bakeoff&_count=100")
+        assert r.status_code == 200, r.text
+        got = {e["resource"]["id"] for e in r.json().get("entry", [])}
+>       assert got == {run.id(n) for n in ("patient-self", "patient-other", "patient-unlinked")}
+E       AssertionError: assert {'bakeoff-e5b...ent-unlinked'} == {'bakeoff-e5b...ent-unlinked'}
+E         
+E         Extra items in the right set:
+E         'bakeoff-e5b1791b-patient-self'
+E         Use -v to get more diff
+
+tests/test_14_isolation.py:9: AssertionError
+________________________________ test_chaining _________________________________
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5b1791b', data={'secrets': {'client_id': 'bakeoff-e5b1791b-client', 'client_secret': 'bakeoff-cli...oADNJjqaR1i1u71yYc0wF9k5twSlhQXf2lne3l', 'norole': 'tYDrAsGqWcK4ut9kk4C04uDknZGzJzGXx52TiVL06Be0XHyMGjkTXRI70pSHJJDw'})
+admin = <httpx.Client object at 0x7fb71549fbf0>
+
+    def test_chaining(run, admin):
+        got = entries(admin.get("/fhir/Encounter?subject:Patient.given=Self"))
+>       assert f"Encounter/{run.id('enc-match')}" in got
+E       AssertionError: assert 'Encounter/bakeoff-e5b1791b-enc-match' in {}
+
+tests/test_12_search.py:22: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.py::test_receptionist_cannot_write_patients
+FAILED tests/test_07_bypass.py::test_merge_patch_denied - AssertionError: PAT...
+FAILED tests/test_07_bypass.py::test_transaction_bundle_denied - AssertionErr...
+FAILED tests/test_07_bypass.py::test_json_patch_denied - AssertionError: PATC...
+FAILED tests/test_08_matrix.py::test_matrix[rec-read_encounter] - AssertionEr...
+FAILED tests/test_14_isolation.py::test_no_rows_from_other_runs - AssertionEr...
+FAILED tests/test_12_search.py::test_chaining - AssertionError: assert 'Encou...
+========================= 7 failed, 60 passed in 1.13s =========================

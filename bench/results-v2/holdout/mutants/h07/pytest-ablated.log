@@ -1,0 +1,44 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+............................................F......................      [100%]
+=================================== FAILURES ===================================
+_______________________ test_matrix[rec-read_encounter] ________________________
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-9015c5fa', data={'secrets': {'client_id': 'bakeoff-9015c5fa-client', 'client_secret': 'bakeoff-cli...pBgCLbOp8MrtJDiJ3AxW7XNdKrRJyFSEhVrnl9', 'norole': 'BMkd1uEmNCdCkFJFSP4Y8jhN1LI8wWSABqr4QlIjdeR1vlUjzGX2xhG3FKlMeGTP'})
+who = 'rec', op = 'read_encounter', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f4dabb25100>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-9015c5fa-enc-match', kw = {}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'..., 'policy-id': 'as-practitioner-search-consented-patients', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Encounter/bakeoff-9015c5fa-enc-match: 200 {"class":{"code":"AMB","system":"http://terminology.hl7.org/CodeSystem/v3-ActCode"},"status":"finished","subject":{"reference":"Patient/bakeoff-9015c5fa-patient-self"},"id":"bakeoff-9015c5fa-enc-match","resourceType":"Encounter","meta":{"lastUpdated":"2026-11-08T20:06:08.842465Z","versionId":"98241","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T20:06:08.842465Z"}]}}; decision: user=bakeoff-9015c5fa-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_08_matrix.py::test_matrix[rec-read_encounter] - AssertionEr...
+========================= 1 failed, 66 passed in 1.13s =========================

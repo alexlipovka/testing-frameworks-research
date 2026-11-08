@@ -1,0 +1,134 @@
+bringing up nodes...
+bringing up nodes...
+
+................................................................F..F.... [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p2-$extract-patient-other] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  expect: allow, policy: as-practitioner-sdc-consented-patient = '???'
+  base = 'http://localhost:8280'
+  op = '$extract'
+  who = 'p2'
+  patient = 'patient-other'
+  run_id = 'bakeoff-f81e5e2f'
+  __debug: policy = '???'
+
+Source test stage (line 13):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}"}}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: allow, policy: as-practitioner-sdc-consented-patient}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbb66d7bb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 39, in decision
+            assert granted, f"expected allow: {_report(response)}"
+                   ^^^^^^^
+        AssertionError: expected allow: user=bakeoff-f81e5e2f-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbb66d7bb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 39, in decision
+        assert granted, f"expected allow: {_report(response)}"
+               ^^^^^^^
+    AssertionError: expected allow: user=bakeoff-f81e5e2f-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 39, in decision
+    assert granted, f"expected allow: {_report(response)}"
+           ^^^^^^^
+AssertionError: expected allow: user=bakeoff-f81e5e2f-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p1-$extract-patient-self] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-f81e5e2f'
+  __debug: policy = '???'
+  op = '$extract'
+  expect: allow, policy: as-practitioner-sdc-consented-patient = '???'
+  who = 'p1'
+  patient = 'patient-self'
+
+Source test stage (line 13):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}"}}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: allow, policy: as-practitioner-sdc-consented-patient}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f7a9559bb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 39, in decision
+            assert granted, f"expected allow: {_report(response)}"
+                   ^^^^^^^
+        AssertionError: expected allow: user=bakeoff-f81e5e2f-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f7a9559bb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 39, in decision
+        assert granted, f"expected allow: {_report(response)}"
+               ^^^^^^^
+    AssertionError: expected allow: user=bakeoff-f81e5e2f-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 39, in decision
+    assert granted, f"expected allow: {_report(response)}"
+           ^^^^^^^
+AssertionError: expected allow: user=bakeoff-f81e5e2f-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p2-$extract-patient-other]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p1-$extract-patient-self]
+2 failed, 93 passed in 3.26s

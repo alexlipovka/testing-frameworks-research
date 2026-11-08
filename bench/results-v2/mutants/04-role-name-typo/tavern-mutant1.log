@@ -1,0 +1,188 @@
+bringing up nodes...
+bringing up nodes...
+
+.F......F.......................................F....................... [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-self-allow-200] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  who = 'p1'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  expect = 'allow'
+  patient = 'patient-self'
+  run_id = 'bakeoff-412ca75e'
+
+Source test stage (line 12):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe32c643b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 39, in decision
+            assert granted, f"expected allow: {_report(response)}"
+                   ^^^^^^^
+        AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe32c643b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 39, in decision
+        assert granted, f"expected allow: {_report(response)}"
+               ^^^^^^^
+    AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 39, in decision
+    assert granted, f"expected allow: {_report(response)}"
+           ^^^^^^^
+AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p2-patient-other-allow-200] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  who = 'p2'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  expect = 'allow'
+  patient = 'patient-other'
+  run_id = 'bakeoff-412ca75e'
+
+Source test stage (line 12):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fe32c643b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 39, in decision
+            assert granted, f"expected allow: {_report(response)}"
+                   ^^^^^^^
+        AssertionError: expected allow: user=bakeoff-412ca75e-p2 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-other?__debug=policy: granted=[] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fe32c643b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 39, in decision
+        assert granted, f"expected allow: {_report(response)}"
+               ^^^^^^^
+    AssertionError: expected allow: user=bakeoff-412ca75e-p2 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-other?__debug=policy: granted=[] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 39, in decision
+    assert granted, f"expected allow: {_report(response)}"
+           ^^^^^^^
+AssertionError: expected allow: user=bakeoff-412ca75e-p2 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-other?__debug=policy: granted=[] crashed=[]
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p1-Patient/bakeoff-412ca75e-patient-self-allow-practitioner-policy-200] _
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  policy = 'practitioner-policy'
+  who = 'p1'
+  op = 'Patient/bakeoff-412ca75e-patient-self'
+  base = 'http://localhost:8280'
+  expect = 'allow'
+  __debug: policy = '???'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}", policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f55f9dabb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 39, in decision
+            assert granted, f"expected allow: {_report(response)}"
+                   ^^^^^^^
+        AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f55f9dabb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 39, in decision
+        assert granted, f"expected allow: {_report(response)}"
+               ^^^^^^^
+    AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 39, in decision
+    assert granted, f"expected allow: {_report(response)}"
+           ^^^^^^^
+AssertionError: expected allow: user=bakeoff-412ca75e-p1 GET http://localhost:8280/fhir/Patient/bakeoff-412ca75e-patient-self?__debug=policy: granted=[] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-self-allow-200]
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p2-patient-other-allow-200]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p1-Patient/bakeoff-412ca75e-patient-self-allow-practitioner-policy-200]
+3 failed, 92 passed in 3.31s

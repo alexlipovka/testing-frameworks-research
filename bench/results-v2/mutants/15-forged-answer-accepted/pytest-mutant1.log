@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+..........................................................F........      [100%]
+=================================== FAILURES ===================================
+__________________________ test_forged_answer_denied ___________________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-4d18c4b0', data={'secrets': {'client_id': 'bakeoff-4d18c4b0-client', 'client_secret': 'bakeoff-cli...NWGPOSbz8vLncTxIkLcUJROj4wjCr2dk74TrQi', 'norole': 'cCHKvGs58BgSGESFd3OSkFvHYN1nwmes6B6zDDrOZBMmePlMH7Pv5P8HlWDw8Kdc'})
+p1 = <httpx.Client object at 0x7f6254675be0>
+
+    def test_forged_answer_denied(run, p1):
+        # QR subject is a consented patient, but the hidden patientId answer points elsewhere
+>       expect_deny(p1, "POST", EXTRACT, json=extract(run, "patient-self", "patient-other"))
+
+tests/test_09_sdc.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f6254675be0>, method = 'POST'
+url = '/fhir/Questionnaire/glucose/$extract'
+kw = {'json': {'parameter': [{'name': 'questionnaire_response', 'resource': {'item': [{...}, {...}, {...}], 'questionnaire': 'glucose', 'resourceType': 'QuestionnaireResponse', 'status': 'completed', ...}}], 'resourceType': 'Parameters'}}
+v = Verdict(allowed_by=['as-practitioner-sdc-consented-patient'], errors=[], dump={'request': {'remote-addr': '172.23.0.7'...ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for POST /fhir/Questionnaire/glucose/$extract: user=bakeoff-4d18c4b0-p1 allowed_by=['as-practitioner-sdc-consented-patient'] errors=[]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_09_sdc.py::test_forged_answer_denied - AssertionError: expe...
+========================= 1 failed, 66 passed in 1.20s =========================

@@ -1,0 +1,49 @@
+run bakeoff-79382218 open (vars in /home/alex/prj/personal/testing-frameworks-research/bench/.ablated-v2/suites/hurl/.vars)
+Success cases/02-practitioner-consent.hurl (5 request(s) in 23 ms)
+Success cases/03-sql-error-not-deny.hurl (7 request(s) in 30 ms)
+Success cases/04-receptionist-read-not-write.hurl (10 request(s) in 33 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer HMIxKy5c2i452xz5SBbe07AAjIVpZfQpiFJHeNSTczlOQRQw3cviNcCZkbrhKDnl' 'http://localhost:8280/fhir/Observation/bakeoff-79382218-enc-match'
+
+HTTP/1.1 404
+Connection: keep-alive
+license-mode: normal
+x-request-id: 914671f9a98109f5c1c5283fa0a86980
+Content-Type: application/json
+Content-Length: 329
+x-duration: 2
+Date: Sun, 08 Nov 2026 19:44:45 GMT
+
+{"resourceType":"OperationOutcome","id":"not-found","text":{"status":"generated","div":"<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Resource Observation/bakeoff-79382218-enc-match not found</p></div>"},"issue":[{"severity":"fatal","code":"not-found","diagnostics":"Resource Observation/bakeoff-79382218-enc-match not found"}]}
+
+error: Assert status code
+  --> cases/01-patient-own-record.hurl:53:6
+   |
+   | GET {{url}}/fhir/Observation/{{run_id}}-enc-match
+   | ...
+53 | HTTP 403
+   |      ^^^ actual value is <404>
+   |
+
+Failure cases/01-patient-own-record.hurl (10 request(s) in 41 ms)
+Success cases/05-norole-denied.hurl (10 request(s) in 19 ms)
+Success cases/07-bypass.hurl (9 request(s) in 28 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 22 ms)
+Success cases/11-validation.hurl (2 request(s) in 4 ms)
+Success cases/06-search-leak.hurl (13 request(s) in 40 ms)
+Success cases/14-run-isolation.hurl (2 request(s) in 8 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 19 ms)
+Success cases/13-transaction.hurl (4 request(s) in 24 ms)
+Success matrix/.gen/norole.hurl (8 request(s) in 21 ms)
+Success cases/09-sdc.hurl (13 request(s) in 61 ms)
+Success matrix/.gen/p1.hurl (8 request(s) in 28 ms)
+Success matrix/.gen/p2.hurl (8 request(s) in 27 ms)
+Success matrix/.gen/pat-self.hurl (8 request(s) in 24 ms)
+Success matrix/.gen/rec.hurl (8 request(s) in 20 ms)
+--------------------------------------------------------------------------------
+Executed files:    18
+Executed requests: 134 (943.7/s)
+Succeeded files:   17 (94.4%)
+Failed files:      1 (5.6%)
+Duration:          142 ms (0h:0m:0s:142ms)
+

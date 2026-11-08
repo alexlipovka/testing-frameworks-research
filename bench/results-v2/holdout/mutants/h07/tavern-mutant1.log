@@ -1,0 +1,66 @@
+bringing up nodes...
+bringing up nodes...
+
+.................................................................F...... [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-930b0ad7-enc-match-deny--403] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  base = 'http://localhost:8280'
+  expect = 'deny'
+  op = 'Encounter/bakeoff-930b0ad7-enc-match'
+  __debug: policy = '???'
+  who = 'rec'
+  policy = ''
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}", policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f851f3ffb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-930b0ad7-rec GET http://localhost:8280/fhir/Encounter/bakeoff-930b0ad7-enc-match?__debug=policy: granted=['receptionist-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f851f3ffb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-930b0ad7-rec GET http://localhost:8280/fhir/Encounter/bakeoff-930b0ad7-enc-match?__debug=policy: granted=['receptionist-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-930b0ad7-rec GET http://localhost:8280/fhir/Encounter/bakeoff-930b0ad7-enc-match?__debug=policy: granted=['receptionist-role-policy'] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-930b0ad7-enc-match-deny--403]
+1 failed, 94 passed in 3.33s

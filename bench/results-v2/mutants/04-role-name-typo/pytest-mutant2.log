@@ -1,0 +1,101 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+..........F...F.....................F..............................      [100%]
+=================================== FAILURES ===================================
+_________________ test_active_consent_allows[p1-patient-self] __________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-47e2ba0b', data={'secrets': {'client_id': 'bakeoff-47e2ba0b-client', 'client_secret': 'bakeoff-cli...nO8aZ1hvWJ54mg9soQpmNjdN1t2t0wK8P0KZAl', 'norole': 'h8YmichTjDqIaGadCv7FxauJIx0JyyTKu23f6B9lvvvqyJJKb5439tX9zdBNTgki'})
+who = 'p1', patient = 'patient-self'
+
+    @pytest.mark.parametrize("who, patient", [("p1", "patient-self"), ("p2", "patient-other")])
+    def test_active_consent_allows(run, who, patient):
+>       r = expect_allow(run.clients[who], "GET", f"/fhir/Patient/{run.id(patient)}", by="practitioner-policy")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_02_practitioner_consent.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7ff4a5ae3740>, method = 'GET'
+url = '/fhir/Patient/bakeoff-47e2ba0b-patient-self', by = 'practitioner-policy'
+send = True, kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...: 'practitioner-policy', 'policy-id': 'practitioner-policy', 'reason': 'wrong role', 'expected-role': 'practitoner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-47e2ba0b-patient-self: user=bakeoff-47e2ba0b-p1 allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+_________________ test_active_consent_allows[p2-patient-other] _________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-47e2ba0b', data={'secrets': {'client_id': 'bakeoff-47e2ba0b-client', 'client_secret': 'bakeoff-cli...nO8aZ1hvWJ54mg9soQpmNjdN1t2t0wK8P0KZAl', 'norole': 'h8YmichTjDqIaGadCv7FxauJIx0JyyTKu23f6B9lvvvqyJJKb5439tX9zdBNTgki'})
+who = 'p2', patient = 'patient-other'
+
+    @pytest.mark.parametrize("who, patient", [("p1", "patient-self"), ("p2", "patient-other")])
+    def test_active_consent_allows(run, who, patient):
+>       r = expect_allow(run.clients[who], "GET", f"/fhir/Patient/{run.id(patient)}", by="practitioner-policy")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_02_practitioner_consent.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7ff4a59d62a0>, method = 'GET'
+url = '/fhir/Patient/bakeoff-47e2ba0b-patient-other', by = 'practitioner-policy'
+send = True, kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...: 'practitioner-policy', 'policy-id': 'practitioner-policy', 'reason': 'wrong role', 'expected-role': 'practitoner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-47e2ba0b-patient-other: user=bakeoff-47e2ba0b-p2 allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+_________________________ test_matrix[p1-read_patient] _________________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-47e2ba0b', data={'secrets': {'client_id': 'bakeoff-47e2ba0b-client', 'client_secret': 'bakeoff-cli...nO8aZ1hvWJ54mg9soQpmNjdN1t2t0wK8P0KZAl', 'norole': 'h8YmichTjDqIaGadCv7FxauJIx0JyyTKu23f6B9lvvvqyJJKb5439tX9zdBNTgki'})
+who = 'p1', op = 'read_patient', policy = 'practitioner-policy'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+            expect_deny(run.clients[who], method, url, **kw)
+        else:
+>           expect_allow(run.clients[who], method, url, by=policy, **kw)
+
+tests/test_08_matrix.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fae3a48ff80>, method = 'GET'
+url = '/fhir/Patient/bakeoff-47e2ba0b-patient-self', by = 'practitioner-policy'
+send = True, kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...policy-id': 'bakeoff-47e2ba0b-throwing-policy', 'reason': 'wrong role', 'expected-role': 'bakeoff-47e2ba0b-thrower'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-47e2ba0b-patient-self: user=bakeoff-47e2ba0b-p1 allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.py::test_active_consent_allows[p1-patient-self]
+FAILED tests/test_02_practitioner_consent.py::test_active_consent_allows[p2-patient-other]
+FAILED tests/test_08_matrix.py::test_matrix[p1-read_patient] - AssertionError...
+========================= 3 failed, 64 passed in 1.11s =========================

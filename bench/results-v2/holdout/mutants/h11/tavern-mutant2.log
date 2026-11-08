@@ -1,0 +1,132 @@
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [ 75%]
+.......F..F............                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  base = 'http://localhost:8280'
+  patient = 'patient-self'
+  run_id = 'bakeoff-a6bece1a'
+  who = 'p1'
+  op = '$extract'
+  answer = 'patient-other'
+  __debug: policy = '???'
+  expect: deny = '???'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f75b737bb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 33, in decision
+            assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+                   ^^^^^^^^^^^^^^^^^^
+        AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-other"'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f75b737bb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 33, in decision
+        assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+               ^^^^^^^^^^^^^^^^^^
+    AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-other"'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 33, in decision
+    assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p1 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-other"'}]
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  patient = 'patient-other'
+  who = 'p2'
+  run_id = 'bakeoff-a6bece1a'
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  answer = 'patient-self'
+  expect: deny = '???'
+  op = '$extract'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fdf71e67b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 33, in decision
+            assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+                   ^^^^^^^^^^^^^^^^^^
+        AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-self"'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fdf71e67b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 33, in decision
+        assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+               ^^^^^^^^^^^^^^^^^^
+    AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-self"'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 33, in decision
+    assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: expected deny, a policy crashed: user=bakeoff-a6bece1a-p2 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=[] crashed=[{'id': 'as-practitioner-sdc-consented-patient', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-a6bece1a-patient-self"'}]
+=========================== short test summary info ============================
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self]
+2 failed, 93 passed in 3.61s

@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+...........................F.......................................      [100%]
+=================================== FAILURES ===================================
+__________________ test_patient_out_of_scope_searches_denied ___________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-e5775add', data={'secrets': {'client_id': 'bakeoff-e5775add-client', 'client_secret': 'bakeoff-cli...ujbEYX8beJ65gSkpwhGqdmnVNuTX5qy1SOMB6X', 'norole': 'kLCTkgSx907qvR1ffwMzrKm600wWmwnbhBo832TCTeTxD3A8BhN3lNjKkltDSp5j'})
+pat_self = <httpx.Client object at 0x7f8e37990980>
+
+    def test_patient_out_of_scope_searches_denied(run, pat_self):
+        expect_deny(pat_self, "GET", f"/fhir/Observation?subject=Patient/{run.id('patient-other')}")
+        expect_deny(pat_self, "GET", "/fhir/Observation")
+>       expect_deny(pat_self, "GET", f"/fhir/Observation?subject=Patient/{run.id('patient-self')}"
+                                     f"&subject=Patient/{run.id('patient-other')}")
+
+tests/test_06_search_leak.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f8e37990980>, method = 'GET'
+url = '/fhir/Observation?subject=Patient/bakeoff-e5775add-patient-self&subject=Patient/bakeoff-e5775add-patient-other'
+kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'as-patient-search-own-observations', 'error': 'ERROR: operator does not exist: ..., 'policy-id': 'as-practitioner-search-consented-patients', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Observation?subject=Patient/bakeoff-e5775add-patient-self&subject=Patient/bakeoff-e5775add-patient-other: user=bakeoff-e5775add-pat-self allowed_by=[] errors=[{'id': 'as-patient-search-own-observations', 'error': 'ERROR: operator does not exist: jsonb = text\n  Hint: No operator matches the given name and argument types. You might need to add explicit type casts.\n  Position: 18'}]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.py::test_patient_out_of_scope_searches_denied
+========================= 1 failed, 66 passed in 1.08s =========================

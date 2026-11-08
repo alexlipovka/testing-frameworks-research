@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+...................................................................      [100%]
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+============================== 67 passed in 1.06s ==============================

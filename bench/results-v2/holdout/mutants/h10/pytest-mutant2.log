@@ -1,0 +1,94 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+............F.....F.................F..............................      [100%]
+=================================== FAILURES ===================================
+____________________________ test_no_consent_denies ____________________________
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-55e08ce5', data={'secrets': {'client_id': 'bakeoff-55e08ce5-client', 'client_secret': 'bakeoff-cli...vkoNWrL1A8vcCoqX2rdbYywnQYf3xvIHCEBCHe', 'norole': '7JHQVzMSECT4TwaW4zJgnFETEhA9PyDiB0qZs0xOj5evcVvqnYRyyrZJxzOKnm2K'})
+p1 = <httpx.Client object at 0x7f9523a58a40>
+p2 = <httpx.Client object at 0x7f95238f5430>
+
+    def test_no_consent_denies(run, p1, p2):
+        expect_deny(p1, "GET", f"/fhir/Patient/{run.id('patient-unlinked')}")
+>       expect_deny(p2, "GET", f"/fhir/Patient/{run.id('patient-self')}")
+
+tests/test_02_practitioner_consent.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f95238f5430>, method = 'GET'
+url = '/fhir/Patient/bakeoff-55e08ce5-patient-self', kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "p...ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient/bakeoff-55e08ce5-patient-self: user=bakeoff-55e08ce5-p2 allowed_by=[] errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner1"'}]
+
+aidbox.py:174: AssertionError
+_________________________ test_revoked_consent_denies __________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-55e08ce5', data={'secrets': {'client_id': 'bakeoff-55e08ce5-client', 'client_secret': 'bakeoff-cli...vkoNWrL1A8vcCoqX2rdbYywnQYf3xvIHCEBCHe', 'norole': '7JHQVzMSECT4TwaW4zJgnFETEhA9PyDiB0qZs0xOj5evcVvqnYRyyrZJxzOKnm2K'})
+p1 = <httpx.Client object at 0x7f949a81f740>
+
+    def test_revoked_consent_denies(run, p1):
+>       expect_deny(p1, "GET", f"/fhir/Patient/{run.id('patient-other')}")
+
+tests/test_02_practitioner_consent.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f949a81f740>, method = 'GET'
+url = '/fhir/Patient/bakeoff-55e08ce5-patient-other', kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "p...ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient/bakeoff-55e08ce5-patient-other: user=bakeoff-55e08ce5-p1 allowed_by=[] errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner2"'}]
+
+aidbox.py:174: AssertionError
+_________________________ test_matrix[p2-read_patient] _________________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-55e08ce5', data={'secrets': {'client_id': 'bakeoff-55e08ce5-client', 'client_secret': 'bakeoff-cli...vkoNWrL1A8vcCoqX2rdbYywnQYf3xvIHCEBCHe', 'norole': '7JHQVzMSECT4TwaW4zJgnFETEhA9PyDiB0qZs0xOj5evcVvqnYRyyrZJxzOKnm2K'})
+who = 'p2', op = 'read_patient', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fe967d5c980>, method = 'GET'
+url = '/fhir/Patient/bakeoff-55e08ce5-patient-self', kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "p...policy-id': 'bakeoff-55e08ce5-throwing-policy', 'reason': 'wrong role', 'expected-role': 'bakeoff-55e08ce5-thrower'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient/bakeoff-55e08ce5-patient-self: user=bakeoff-55e08ce5-p2 allowed_by=[] errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner1"'}]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.py::test_no_consent_denies - Assert...
+FAILED tests/test_02_practitioner_consent.py::test_revoked_consent_denies - A...
+FAILED tests/test_08_matrix.py::test_matrix[p2-read_patient] - AssertionError...
+========================= 3 failed, 64 passed in 1.12s =========================

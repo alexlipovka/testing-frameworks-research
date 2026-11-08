@@ -1,0 +1,50 @@
+run bakeoff-8fdb28f3 open (vars in /home/alex/prj/personal/testing-frameworks-research/bench/.ablated-v2/suites/hurl/.vars)
+Success cases/02-practitioner-consent.hurl (5 request(s) in 23 ms)
+Success cases/03-sql-error-not-deny.hurl (7 request(s) in 31 ms)
+Success cases/01-patient-own-record.hurl (10 request(s) in 34 ms)
+Success cases/04-receptionist-read-not-write.hurl (10 request(s) in 34 ms)
+Success cases/05-norole-denied.hurl (10 request(s) in 19 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 20 ms)
+Success cases/11-validation.hurl (2 request(s) in 5 ms)
+Success cases/07-bypass.hurl (9 request(s) in 32 ms)
+Success cases/06-search-leak.hurl (13 request(s) in 40 ms)
+Success cases/14-run-isolation.hurl (2 request(s) in 4 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 17 ms)
+Success cases/13-transaction.hurl (4 request(s) in 20 ms)
+Success matrix/.gen/norole.hurl (8 request(s) in 20 ms)
+Success matrix/.gen/p1.hurl (8 request(s) in 28 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer HpWJG1eyjnsacKltPJLtdhVrZqE9bWxnb8rq7fJdLErBDuTjIwp3Y9nGae3gaX2P' --header 'Content-Type: application/json' --data $'{"resourceType": "Parameters", "parameter": [{"name": "questionnaire_response", "resource": {\n  "resourceType": "QuestionnaireResponse", "questionnaire": "glucose", "status": "completed",\n  "subject": {"reference": "Patient/bakeoff-8fdb28f3-patient-self"},\n  "item": [{"linkId": "patientId", "answer": [{"valueString": "bakeoff-8fdb28f3-patient-other"}]},\n           {"linkId": "glucose-level", "answer": [{"valueDecimal": 5.5}]}]}}]}' 'http://localhost:8280/fhir/Questionnaire/glucose/$extract'
+
+HTTP/1.1 422
+Connection: keep-alive
+license-mode: normal
+server: Python/3.11 aiohttp/3.14.1
+x-request-id: f267a5cbfde14640e29f240060539d56
+content-length: 252
+Content-Type: application/json;charset=utf-8
+x-duration: 8
+date: Sun, 08 Nov 2026 19:56:01 GMT
+
+{"resourceType": "OperationOutcome", "issue": [{"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Patient not defined"}, {"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Author not defined"}]}
+
+error: Assert status code
+   --> cases/09-sdc.hurl:81:6
+    |
+    | POST {{url}}/fhir/Questionnaire/glucose/$extract
+    | ...
+ 81 | HTTP 403
+    |      ^^^ actual value is <422>
+    |
+
+Failure cases/09-sdc.hurl (13 request(s) in 74 ms)
+Success matrix/.gen/p2.hurl (8 request(s) in 26 ms)
+Success matrix/.gen/pat-self.hurl (8 request(s) in 24 ms)
+Success matrix/.gen/rec.hurl (8 request(s) in 20 ms)
+--------------------------------------------------------------------------------
+Executed files:    18
+Executed requests: 134 (905.4/s)
+Succeeded files:   17 (94.4%)
+Failed files:      1 (5.6%)
+Duration:          148 ms (0h:0m:0s:148ms)
+

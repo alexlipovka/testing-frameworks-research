@@ -1,0 +1,910 @@
+bringing up nodes...
+bringing up nodes...
+
+....F.......F..F..F..F...F.F.F.F.F...F.....F.....F.................F.F.. [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  patient = 'patient-other'
+  run_id = 'bakeoff-265580cb'
+  pat_self_auth = 'Bearer BpXV6OlTW9fQINnIBFmWVeJyefjBoPl2eU5pdnegIs9KBoCX2xJtrLAiyNDzb1Uz'
+
+Source test stage (line 9):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: patient-role-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-other?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-other?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-other?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Encounter/bakeoff-265580cb-enc-mismatch-deny--403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  pat_self_auth = 'Bearer BpXV6OlTW9fQINnIBFmWVeJyefjBoPl2eU5pdnegIs9KBoCX2xJtrLAiyNDzb1Uz'
+  policy = ''
+  path = 'Encounter/bakeoff-265580cb-enc-mismatch'
+
+Source test stage (line 36):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: "{policy}"}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Encounter/bakeoff-265580cb-enc-mismatch?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Encounter/bakeoff-265580cb-enc-mismatch?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Encounter/bakeoff-265580cb-enc-mismatch?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Observation/bakeoff-265580cb-enc-match-deny--403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  pat_self_auth = 'Bearer BpXV6OlTW9fQINnIBFmWVeJyefjBoPl2eU5pdnegIs9KBoCX2xJtrLAiyNDzb1Uz'
+  policy = ''
+  path = 'Observation/bakeoff-265580cb-enc-match'
+
+Source test stage (line 36):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: "{policy}"}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-265580cb-enc-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-265580cb-enc-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-265580cb-enc-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  expect: deny = '???'
+  path = 'fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  expect: deny = '???'
+  path = 'fhir/Observation'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  expect: deny = '???'
+  path = 'fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other&__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  family: Bundled = '???'
+  expect: deny = '???'
+  run_id = 'bakeoff-265580cb'
+  type = 'transaction'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  who = 'pat-self'
+
+Source test stage (line 12):
+  - name: policy decision
+    request: &bundle
+      url: "{base}/fhir"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json:
+        resourceType: Bundle
+        type: "{type}"
+        entry:
+          - request: {method: GET, url: "Patient/{run_id}-patient-other"}
+          - request: {method: PUT, url: "Patient/{run_id}-patient-self"}
+            resource: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Bundled}]}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f83e8437b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f83e8437b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  expect: deny = '???'
+  path = 'fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject&__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject&__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject&__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  family: Bundled = '???'
+  expect: deny = '???'
+  run_id = 'bakeoff-265580cb'
+  type = 'batch'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  who = 'pat-self'
+
+Source test stage (line 12):
+  - name: policy decision
+    request: &bundle
+      url: "{base}/fhir"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json:
+        resourceType: Bundle
+        type: "{type}"
+        entry:
+          - request: {method: GET, url: "Patient/{run_id}-patient-other"}
+          - request: {method: PUT, url: "Patient/{run_id}-patient-self"}
+            resource: {resourceType: Patient, id: "{run_id}-patient-self", name: [{family: Bundled}]}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f83e8437b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f83e8437b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  who = 'pat-self'
+  expect: deny = '???'
+  path = 'fhir/Patient'
+
+Source test stage (line 44):
+  - name: policy decision
+    request:
+      url: "{base}/{path}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  base = 'http://localhost:8280'
+  ctype = 'application/json-patch+json'
+  run_id = 'bakeoff-265580cb'
+  patch = '[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]'
+  who = 'pat-self'
+  expect: deny = '???'
+
+Source test stage (line 46):
+  - name: policy decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+        Content-Type: "{ctype}"
+      json: !force_format_include "{patch}"
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self PATCH http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-self?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self PATCH http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-self?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self PATCH http://localhost:8280/fhir/Patient/bakeoff-265580cb-patient-self?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Appointment/bakeoff-265580cb-appt-match-deny--403] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  expect = 'deny'
+  policy = ''
+  op = 'Appointment/bakeoff-265580cb-appt-match'
+  base = 'http://localhost:8280'
+  __debug: policy = '???'
+  who = 'pat-self'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}", policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f83e8437b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Appointment/bakeoff-265580cb-appt-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f83e8437b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Appointment/bakeoff-265580cb-appt-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Appointment/bakeoff-265580cb-appt-match?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-265580cb-patient-self-deny--403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  op = 'Patient?_id=bakeoff-265580cb-patient-self'
+  who = 'pat-self'
+  policy = ''
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}", policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?_id=bakeoff-265580cb-patient-self&__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fbde7bc3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?_id=bakeoff-265580cb-patient-self&__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self GET http://localhost:8280/fhir/Patient?_id=bakeoff-265580cb-patient-self&__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$extract-patient-self-patient-self] _
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  answer = 'patient-self'
+  __debug: policy = '???'
+  who = 'pat-self'
+  run_id = 'bakeoff-265580cb'
+  op = '$extract'
+  base = 'http://localhost:8280'
+  expect: deny = '???'
+  patient = 'patient-self'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f558ac03b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f558ac03b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy: granted=['patient-role-policy'] crashed=[]
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$populate-patient-self-patient-self] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  who = 'pat-self'
+  op = '$populate'
+  __debug: policy = '???'
+  patient = 'patient-self'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-265580cb'
+  answer = 'patient-self'
+  expect: deny = '???'
+
+Source test stage (line 47):
+  - name: policy decision
+    request: &sdc
+      url: "{base}/fhir/Questionnaire/glucose/{op}"
+      method: POST
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+      json: {$ext: {function: helpers:sdc_body, extra_kwargs: {op: "{op}", subject: "{run_id}-{patient}", answer: "{run_id}-{answer}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f6866adfb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy: granted=['patient-role-policy'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f6866adfb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy: granted=['patient-role-policy'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-265580cb-pat-self POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy: granted=['patient-role-policy'] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403]
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Encounter/bakeoff-265580cb-enc-mismatch-deny--403]
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Observation/bakeoff-265580cb-enc-match-deny--403]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-other]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&subject=Patient/bakeoff-265580cb-patient-other]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-265580cb-patient-self&_include=Observation:subject]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient]
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Appointment/bakeoff-265580cb-appt-match-deny--403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-265580cb-patient-self-deny--403]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$extract-patient-self-patient-self]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[pat-self-$populate-patient-self-patient-self]
+15 failed, 80 passed in 3.40s

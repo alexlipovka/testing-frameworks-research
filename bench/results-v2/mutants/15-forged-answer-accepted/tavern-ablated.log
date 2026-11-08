@@ -1,0 +1,48 @@
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [ 75%]
+.......F....F..........                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status_code: 403 = '???'
+
+Source test stage (line 57):
+  - name: status
+    request: {<<: *sdc, params: {}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 422, expected 403:
+        {"resourceType": "OperationOutcome", "issue": [{"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Patient not defined"}, {"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Author not defined"}]}
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 422, expected 403:
+    {"resourceType": "OperationOutcome", "issue": [{"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Patient not defined"}, {"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Author not defined"}]}
+_ /suite/tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self] _
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status_code: 403 = '???'
+
+Source test stage (line 57):
+  - name: status
+    request: {<<: *sdc, params: {}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 422, expected 403:
+        {"resourceType": "OperationOutcome", "issue": [{"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Patient not defined"}, {"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Author not defined"}]}
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 422, expected 403:
+    {"resourceType": "OperationOutcome", "issue": [{"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Patient not defined"}, {"severity": "error", "code": "undefined-var", "diagnostics": "Context variable Author not defined"}]}
+=========================== short test summary info ============================
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other]
+FAILED tests/test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self]
+2 failed, 93 passed in 3.21s

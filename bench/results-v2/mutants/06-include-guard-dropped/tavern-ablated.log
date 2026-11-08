@@ -1,0 +1,54 @@
+bringing up nodes...
+bringing up nodes...
+
+........................................F...F........................... [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Patient?_id=bakeoff-3f74f198-patient-self&_revinclude=Observation:subject] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  path = 'fhir/Patient?_id=bakeoff-3f74f198-patient-self&_revinclude=Observation:subject'
+  base = 'http://localhost:8280'
+  who = 'rec'
+  status_code: 403 = '???'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Patient?_id=bakeoff-3f74f198-patient-self&_include=Patient:general-practitioner] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  path = 'fhir/Patient?_id=bakeoff-3f74f198-patient-self&_include=Patient:general-practitioner'
+  base = 'http://localhost:8280'
+  who = 'rec'
+  status_code: 403 = '???'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Patient?_id=bakeoff-3f74f198-patient-self&_revinclude=Observation:subject]
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Patient?_id=bakeoff-3f74f198-patient-self&_include=Patient:general-practitioner]
+2 failed, 93 passed in 3.31s

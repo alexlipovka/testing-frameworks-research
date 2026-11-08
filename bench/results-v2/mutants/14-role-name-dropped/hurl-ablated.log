@@ -1,0 +1,271 @@
+run bakeoff-0f7c4bcc open (vars in /home/alex/prj/personal/testing-frameworks-research/bench/.ablated-v2/suites/hurl/.vars)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer ZF51aH2Nfyibi1iJ17VdCIuFmKVpraeZPq5028iRswm3HQodYOcg0vVPaSgXd7B3' 'http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other'
+
+HTTP/1.1 200
+cache-control: no-cache
+x-request-id: 8fd550265f5703e34b2a8b48e9f8ddf1
+x-duration: 1
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+Connection: keep-alive
+etag: 91758
+last-modified: Sun, 8 Nov 2026 19:54:32 GMT
+license-mode: normal
+Content-Type: application/json
+Content-Length: 267
+
+{"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.544839Z","versionId":"91758","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.544839Z"}]}}
+
+error: Assert status code
+  --> cases/02-practitioner-consent.hurl:25:6
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-other
+   | ...
+25 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/02-practitioner-consent.hurl (5 request(s) in 21 ms)
+Success cases/04-receptionist-read-not-write.hurl (10 request(s) in 29 ms)
+Success cases/03-sql-error-not-deny.hurl (7 request(s) in 30 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 5eXcAAU30nY24JzzmEgvo8W3TpricTHfO5J394o0uLEzYphoInNB1WjmvBrCElUP' 'http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other'
+
+HTTP/1.1 200
+cache-control: no-cache
+x-request-id: e15145191b4c47bc9b41e6618fa48060
+x-duration: 3
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+Connection: keep-alive
+etag: 91758
+last-modified: Sun, 8 Nov 2026 19:54:32 GMT
+license-mode: normal
+Content-Type: application/json
+Content-Length: 267
+
+{"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.544839Z","versionId":"91758","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.544839Z"}]}}
+
+error: Assert status code
+  --> cases/01-patient-own-record.hurl:21:6
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-other
+   | ...
+21 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/01-patient-own-record.hurl (10 request(s) in 42 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 6KHK0zpg3pwHJmwkZWG6rKwNkLcd8WG2WBtjY3km3isyUHuD2KXudF9IOhpvkKI2' 'http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+cache-control: no-cache
+x-request-id: ebd3138a25fd65efebaa0a7941314d94
+x-duration: 1
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+Connection: keep-alive
+etag: 91757
+last-modified: Sun, 8 Nov 2026 19:54:32 GMT
+license-mode: normal
+Content-Type: application/json
+Content-Length: 265
+
+{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}}
+
+error: Assert status code
+  --> cases/05-norole-denied.hurl:15:6
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+15 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 6KHK0zpg3pwHJmwkZWG6rKwNkLcd8WG2WBtjY3km3isyUHuD2KXudF9IOhpvkKI2' 'http://localhost:8280/fhir/Patient'
+
+HTTP/1.1 200
+Connection: keep-alive
+license-mode: normal
+x-request-id: b64ccfc9546ab82ea1a506c9da54497c
+Content-Type: application/json
+Content-Length: 2676
+x-duration: 3
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+
+{"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":5,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_page=1"}],"entry":[{"resource":{"name":[{"given":["First","Jr."],"family":"Patient"}],"active":true,"gender":"male","birthDate":"1989-01-01","id":"patient1","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T19:23:09.675732Z","versionId":"104","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T19:23:09.675732Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/patient1","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/patient1"}]},{"resource":{"name":[{"given":["Second","Jr."],"family":"Patient"}],"active":true,"gender":"male","birthDate":"1990-02-02","id":"patient2","resourceType":"Patient","meta":{"lastUpdated":"2026-11-07T19:23:09.675732Z","versionId":"105","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-07T19:23:09.675732Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/patient2","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/patient2"}]},{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self"}]},{"resource":{"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.544839Z","versionId":"91758","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.544839Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other"}]},{"resource":{"name":[{"given":["Unlinked"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-unlinked","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.561742Z","versionId":"91759","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.561742Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-unlinked","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-unlinked"}]}]}
+
+error: Assert status code
+  --> cases/05-norole-denied.hurl:24:6
+   |
+   | GET {{url}}/fhir/Patient
+   | ...
+24 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/05-norole-denied.hurl (10 request(s) in 27 ms)
+Success cases/07-bypass.hurl (9 request(s) in 30 ms)
+Success cases/11-validation.hurl (2 request(s) in 4 ms)
+Success cases/10-crud-patch.hurl (6 request(s) in 24 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer ZF51aH2Nfyibi1iJ17VdCIuFmKVpraeZPq5028iRswm3HQodYOcg0vVPaSgXd7B3' 'http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self,bakeoff-0f7c4bcc-patient-other'
+
+HTTP/1.1 200
+Connection: keep-alive
+license-mode: normal
+x-request-id: 65cd46dba836d325bcdda043f71081a2
+Content-Type: application/json
+Content-Length: 1343
+x-duration: 2
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+
+{"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":2,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self,bakeoff-0f7c4bcc-patient-other&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self,bakeoff-0f7c4bcc-patient-other&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self"}]},{"resource":{"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.544839Z","versionId":"91758","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.544839Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-other"}]}]}
+
+error: Assert status code
+  --> cases/06-search-leak.hurl:52:6
+   |
+   | GET {{url}}/fhir/Patient?_id={{run_id}}-patient-self,{{run_id}}-patient-other
+   | ...
+52 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure cases/06-search-leak.hurl (13 request(s) in 46 ms)
+Success cases/12-search-include-chain.hurl (3 request(s) in 14 ms)
+Success cases/14-run-isolation.hurl (2 request(s) in 9 ms)
+Success cases/13-transaction.hurl (4 request(s) in 21 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 6KHK0zpg3pwHJmwkZWG6rKwNkLcd8WG2WBtjY3km3isyUHuD2KXudF9IOhpvkKI2' 'http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+cache-control: no-cache
+x-request-id: fc82e954a389b7e96248aed7ac3a1ff2
+x-duration: 1
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+Connection: keep-alive
+etag: 91757
+last-modified: Sun, 8 Nov 2026 19:54:32 GMT
+license-mode: normal
+Content-Type: application/json
+Content-Length: 265
+
+{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}}
+
+error: Assert status code
+  --> matrix/.gen/norole.hurl:7:6
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+ 7 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 6KHK0zpg3pwHJmwkZWG6rKwNkLcd8WG2WBtjY3km3isyUHuD2KXudF9IOhpvkKI2' 'http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+Connection: keep-alive
+license-mode: normal
+x-request-id: 2af186ec0fc2daeac33d36744a2372cb
+Content-Type: application/json
+Content-Length: 793
+x-duration: 1
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+
+{"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self"}]}]}
+
+error: Assert status code
+  --> matrix/.gen/norole.hurl:15:6
+   |
+   | GET {{url}}/fhir/Patient?_id={{run_id}}-patient-self
+   | ...
+15 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure matrix/.gen/norole.hurl (8 request(s) in 22 ms)
+Success matrix/.gen/p1.hurl (8 request(s) in 32 ms)
+Success cases/09-sdc.hurl (13 request(s) in 80 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer LdaN60EFtEjGyeitjf32OPjBuzkgu1NtCaB3oRJ3a24nFs7co5825pZH0kc5XKih' 'http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+cache-control: no-cache
+x-request-id: f6d416ce95bf4e2887dde7f4d2986c9e
+x-duration: 2
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+Connection: keep-alive
+etag: 91757
+last-modified: Sun, 8 Nov 2026 19:54:32 GMT
+license-mode: normal
+Content-Type: application/json
+Content-Length: 265
+
+{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}}
+
+error: Assert status code
+  --> matrix/.gen/p2.hurl:7:6
+   |
+   | GET {{url}}/fhir/Patient/{{run_id}}-patient-self
+   | ...
+ 7 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer LdaN60EFtEjGyeitjf32OPjBuzkgu1NtCaB3oRJ3a24nFs7co5825pZH0kc5XKih' 'http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+Connection: keep-alive
+license-mode: normal
+x-request-id: 26a5a32e3b7ad499b02098456e5adaf5
+Content-Type: application/json
+Content-Length: 793
+x-duration: 2
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+
+{"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self"}]}]}
+
+error: Assert status code
+  --> matrix/.gen/p2.hurl:15:6
+   |
+   | GET {{url}}/fhir/Patient?_id={{run_id}}-patient-self
+   | ...
+15 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure matrix/.gen/p2.hurl (8 request(s) in 33 ms)
+* Request can be run with the following curl command:
+* curl --header 'Authorization: Bearer 5eXcAAU30nY24JzzmEgvo8W3TpricTHfO5J394o0uLEzYphoInNB1WjmvBrCElUP' 'http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self'
+
+HTTP/1.1 200
+Connection: keep-alive
+license-mode: normal
+x-request-id: b908d2382882943aa210dd3957236b3f
+Content-Type: application/json
+Content-Length: 793
+x-duration: 2
+Date: Sun, 08 Nov 2026 19:54:33 GMT
+
+{"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-0f7c4bcc-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-0f7c4bcc-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:54:32.527667Z","versionId":"91757","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:54:32.527667Z"}]}},"search":{"mode":"match"},"fullUrl":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self","link":[{"relation":"self","url":"http://localhost:8280/fhir/Patient/bakeoff-0f7c4bcc-patient-self"}]}]}
+
+error: Assert status code
+  --> matrix/.gen/pat-self.hurl:15:6
+   |
+   | GET {{url}}/fhir/Patient?_id={{run_id}}-patient-self
+   | ...
+15 | HTTP 403
+   |      ^^^ actual value is <200>
+   |
+
+Failure matrix/.gen/pat-self.hurl (8 request(s) in 23 ms)
+Success matrix/.gen/rec.hurl (8 request(s) in 19 ms)
+--------------------------------------------------------------------------------
+Executed files:    18
+Executed requests: 134 (864.5/s)
+Succeeded files:   11 (61.1%)
+Failed files:      7 (38.9%)
+Duration:          155 ms (0h:0m:0s:155ms)
+

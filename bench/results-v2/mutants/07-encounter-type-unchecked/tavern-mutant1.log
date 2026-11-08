@@ -1,0 +1,68 @@
+bringing up nodes...
+bringing up nodes...
+
+...............F........................................................ [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Observation/bakeoff-2214f22f-enc-match-deny--403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  pat_self_auth = 'Bearer QO0T8DoVivZYeEThChID4HnMTbK5gBMrYpXjwZWSsk7dHdfAexLWiaZStMtQeo9M'
+  policy = ''
+  base = 'http://localhost:8280'
+  path = 'Observation/bakeoff-2214f22f-enc-match'
+  expect = 'deny'
+  __debug: policy = '???'
+
+Source test stage (line 36):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{path}"
+      params: {__debug: policy}
+      headers: {Authorization: "{pat_self_auth}"}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: "{policy}"}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f7fa8b1fb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-2214f22f-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-2214f22f-enc-match?__debug=policy: granted=['as-patient-read-own-encounter'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f7fa8b1fb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-2214f22f-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-2214f22f-enc-match?__debug=policy: granted=['as-patient-read-own-encounter'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-2214f22f-pat-self GET http://localhost:8280/fhir/Observation/bakeoff-2214f22f-enc-match?__debug=policy: granted=['as-patient-read-own-encounter'] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.tavern.yaml::pat-self on Encounter ids[Observation/bakeoff-2214f22f-enc-match-deny--403]
+1 failed, 94 passed in 3.57s

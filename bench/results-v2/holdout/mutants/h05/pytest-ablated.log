@@ -1,0 +1,74 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+......................F..................F.........................      [100%]
+=================================== FAILURES ===================================
+______________ test_practitioner_searches_only_consented_patients ______________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-d55102fa', data={'secrets': {'client_id': 'bakeoff-d55102fa-client', 'client_secret': 'bakeoff-cli...OCP6Rte6aKQciLgXKfZio39gyviT4erPyyNmhi', 'norole': 'XuGLIzcM0ufuQxrBH0kMPJP2oD0iHI3eLSHLhgw2P7byFHYcNZpexmwnDX8JXJN8'})
+p1 = <httpx.Client object at 0x7f5b862204d0>
+
+    def test_practitioner_searches_only_consented_patients(run, p1):
+        r = expect_allow(p1, "GET", f"/fhir/Patient?_id={run.id('patient-self')}")
+        assert ids(r) == {f"Patient/{run.id('patient-self')}"}
+>       expect_deny(p1, "GET", f"/fhir/Patient?_id={run.id('patient-self')},{run.id('patient-other')}")
+
+tests/test_06_search_leak.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f5b862204d0>, method = 'GET'
+url = '/fhir/Patient?_id=bakeoff-d55102fa-patient-self,bakeoff-d55102fa-patient-other'
+kw = {}
+v = Verdict(allowed_by=['as-practitioner-search-consented-patients'], errors=[], dump={'request': {'remote-addr': '172.23....ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Patient?_id=bakeoff-d55102fa-patient-self,bakeoff-d55102fa-patient-other: 200 {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":2,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-d55102fa-patient-self,bakeoff-d55102fa-patient-other&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-d55102fa-patient-self,bakeoff-d55102fa-patient-other&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-d55102fa-patient-self","resourceType":"Patient","meta":{; decision: user=bakeoff-d55102fa-p1 allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+aidbox.py:172: AssertionError
+________________________ test_matrix[p2-search_patient] ________________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-d55102fa', data={'secrets': {'client_id': 'bakeoff-d55102fa-client', 'client_secret': 'bakeoff-cli...OCP6Rte6aKQciLgXKfZio39gyviT4erPyyNmhi', 'norole': 'XuGLIzcM0ufuQxrBH0kMPJP2oD0iHI3eLSHLhgw2P7byFHYcNZpexmwnDX8JXJN8'})
+who = 'p2', op = 'search_patient', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f13999ae210>, method = 'GET'
+url = '/fhir/Patient?_id=bakeoff-d55102fa-patient-self', kw = {}
+v = Verdict(allowed_by=['as-practitioner-search-consented-patients'], errors=[], dump={'request': {'remote-addr': '172.23....ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Patient?_id=bakeoff-d55102fa-patient-self: 200 {"resourceType":"Bundle","type":"searchset","meta":{"versionId":"0"},"total":1,"link":[{"relation":"first","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-d55102fa-patient-self&_page=1"},{"relation":"self","url":"http://localhost:8280/fhir/Patient?_id=bakeoff-d55102fa-patient-self&_page=1"}],"entry":[{"resource":{"name":[{"given":["Self"],"family":"Bakeoff"}],"id":"bakeoff-d55102fa-patient-self","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T20:03:23.978451Z","versionId":"96698; decision: user=bakeoff-d55102fa-p2 allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+aidbox.py:172: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.py::test_practitioner_searches_only_consented_patients
+FAILED tests/test_08_matrix.py::test_matrix[p2-search_patient] - AssertionErr...
+========================= 2 failed, 65 passed in 1.08s =========================

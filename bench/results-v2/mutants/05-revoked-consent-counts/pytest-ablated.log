@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+................F..................................................      [100%]
+=================================== FAILURES ===================================
+_________________________ test_revoked_consent_denies __________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-57c970f0', data={'secrets': {'client_id': 'bakeoff-57c970f0-client', 'client_secret': 'bakeoff-cli...Soh8S3OuafYRg8N3G4Hs9jNpQIJO7QytvSiJJm', 'norole': '6azJIYtxS7bBDjuP5C55jDoVEW5AX08yTJSKdnZGhKWXXbYrnfmBhLFqr18vuufq'})
+p1 = <httpx.Client object at 0x7f8c000a63f0>
+
+    def test_revoked_consent_denies(run, p1):
+>       expect_deny(p1, "GET", f"/fhir/Patient/{run.id('patient-other')}")
+
+tests/test_02_practitioner_consent.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f8c000a63f0>, method = 'GET'
+url = '/fhir/Patient/bakeoff-57c970f0-patient-other', kw = {}
+v = Verdict(allowed_by=['practitioner-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'i...bservations', 'policy-id': 'as-patient-search-own-observations', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+r = <Response [200 OK]>
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+        r = c.request(method, url, **kw)
+>       assert r.status_code == 403, f"{method} {url}: {r.status_code} {r.text[:500]}; decision: {v}"
+               ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: GET /fhir/Patient/bakeoff-57c970f0-patient-other: 200 {"name":[{"given":["Other"],"family":"Bakeoff"}],"id":"bakeoff-57c970f0-patient-other","resourceType":"Patient","meta":{"lastUpdated":"2026-11-08T19:42:17.030148Z","versionId":"85076","extension":[{"url":"ex:createdAt","valueInstant":"2026-11-08T19:42:17.030148Z"}]}}; decision: user=bakeoff-57c970f0-p1 allowed_by=['practitioner-policy'] errors=[]
+
+aidbox.py:172: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.py::test_revoked_consent_denies - A...
+========================= 1 failed, 66 passed in 1.10s =========================

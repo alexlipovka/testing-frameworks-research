@@ -1,0 +1,70 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+......................F..................F.........................      [100%]
+=================================== FAILURES ===================================
+______________ test_practitioner_searches_only_consented_patients ______________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-329e4a3d', data={'secrets': {'client_id': 'bakeoff-329e4a3d-client', 'client_secret': 'bakeoff-cli...1g4StLz6gKkMWveDug48pvzb5m7xYncfg3HsLc', 'norole': 'S0Bc4ESFuEexnPWxFLEc4lWLeBqr6dOJTaoNLb87lk9JQx1DCtQsZxG8kOdDnnLn'})
+p1 = <httpx.Client object at 0x7f5ac03fcc80>
+
+    def test_practitioner_searches_only_consented_patients(run, p1):
+        r = expect_allow(p1, "GET", f"/fhir/Patient?_id={run.id('patient-self')}")
+        assert ids(r) == {f"Patient/{run.id('patient-self')}"}
+>       expect_deny(p1, "GET", f"/fhir/Patient?_id={run.id('patient-self')},{run.id('patient-other')}")
+
+tests/test_06_search_leak.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f5ac03fcc80>, method = 'GET'
+url = '/fhir/Patient?_id=bakeoff-329e4a3d-patient-self,bakeoff-329e4a3d-patient-other'
+kw = {}
+v = Verdict(allowed_by=['as-practitioner-search-consented-patients'], errors=[], dump={'request': {'remote-addr': '172.23....ad-own-encounter', 'policy-id': 'as-patient-read-own-encounter', 'reason': 'wrong role', 'expected-role': 'patient'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient?_id=bakeoff-329e4a3d-patient-self,bakeoff-329e4a3d-patient-other: user=bakeoff-329e4a3d-p1 allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+aidbox.py:174: AssertionError
+________________________ test_matrix[p2-search_patient] ________________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-329e4a3d', data={'secrets': {'client_id': 'bakeoff-329e4a3d-client', 'client_secret': 'bakeoff-cli...1g4StLz6gKkMWveDug48pvzb5m7xYncfg3HsLc', 'norole': 'S0Bc4ESFuEexnPWxFLEc4lWLeBqr6dOJTaoNLb87lk9JQx1DCtQsZxG8kOdDnnLn'})
+who = 'p2', op = 'search_patient', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f3e85189f40>, method = 'GET'
+url = '/fhir/Patient?_id=bakeoff-329e4a3d-patient-self', kw = {}
+v = Verdict(allowed_by=['as-practitioner-search-consented-patients'], errors=[], dump={'request': {'remote-addr': '172.23....policy-id': 'bakeoff-329e4a3d-throwing-policy', 'reason': 'wrong role', 'expected-role': 'bakeoff-329e4a3d-thrower'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient?_id=bakeoff-329e4a3d-patient-self: user=bakeoff-329e4a3d-p2 allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.py::test_practitioner_searches_only_consented_patients
+FAILED tests/test_08_matrix.py::test_matrix[p2-search_patient] - AssertionErr...
+========================= 2 failed, 65 passed in 1.13s =========================

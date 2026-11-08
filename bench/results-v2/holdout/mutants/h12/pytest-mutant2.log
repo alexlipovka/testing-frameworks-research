@@ -1,0 +1,154 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+........F....F........F...............................F...........F      [100%]
+=================================== FAILURES ===================================
+________________________ test_patient_reads_own_record _________________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-90c12c25', data={'secrets': {'client_id': 'bakeoff-90c12c25-client', 'client_secret': 'bakeoff-cli...uxDaHiI4tYVcYMUWjSijU2pji8nBZSqt0d71UE', 'norole': 'OgfadkOmgcwafeCIX907oAUw2WOnUX5g6P7c6jYvAgl7nCao4TnEWI7uQ9eYVSjW'})
+pat_self = <httpx.Client object at 0x7f45877a9f10>
+
+    def test_patient_reads_own_record(run, pat_self):
+>       r = expect_allow(pat_self, "GET", f"/fhir/Patient/{run.id('patient-self')}", by="patient-role-policy")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_01_patient_own_record.py:6: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f45877a9f10>, method = 'GET'
+url = '/fhir/Patient/bakeoff-90c12c25-patient-self', by = 'patient-role-policy'
+send = True, kw = {}
+v = Verdict(allowed_by=['patient-role-policy'], errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid i...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-90c12c25-patient-self: user=bakeoff-90c12c25-pat-self allowed_by=['patient-role-policy'] errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-90c12c25-patient-self"'}]
+
+aidbox.py:161: AssertionError
+____________________ test_patient_cannot_read_other_record _____________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-90c12c25', data={'secrets': {'client_id': 'bakeoff-90c12c25-client', 'client_secret': 'bakeoff-cli...uxDaHiI4tYVcYMUWjSijU2pji8nBZSqt0d71UE', 'norole': 'OgfadkOmgcwafeCIX907oAUw2WOnUX5g6P7c6jYvAgl7nCao4TnEWI7uQ9eYVSjW'})
+pat_self = <httpx.Client object at 0x7f45877a9f10>
+
+    def test_patient_cannot_read_other_record(run, pat_self):
+>       expect_deny(pat_self, "GET", f"/fhir/Patient/{run.id('patient-other')}")
+
+tests/test_01_patient_own_record.py:11: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f45877a9f10>, method = 'GET'
+url = '/fhir/Patient/bakeoff-90c12c25-patient-other', kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type ...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient/bakeoff-90c12c25-patient-other: user=bakeoff-90c12c25-pat-self allowed_by=[] errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-90c12c25-patient-other"'}]
+
+aidbox.py:174: AssertionError
+______________________ test_matrix[pat-self-read_patient] ______________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-90c12c25', data={'secrets': {'client_id': 'bakeoff-90c12c25-client', 'client_secret': 'bakeoff-cli...uxDaHiI4tYVcYMUWjSijU2pji8nBZSqt0d71UE', 'norole': 'OgfadkOmgcwafeCIX907oAUw2WOnUX5g6P7c6jYvAgl7nCao4TnEWI7uQ9eYVSjW'})
+who = 'pat-self', op = 'read_patient', policy = 'patient-role-policy'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+            expect_deny(run.clients[who], method, url, **kw)
+        else:
+>           expect_allow(run.clients[who], method, url, by=policy, **kw)
+
+tests/test_08_matrix.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f45877a9f10>, method = 'GET'
+url = '/fhir/Patient/bakeoff-90c12c25-patient-self', by = 'patient-role-policy'
+send = True, kw = {}
+v = Verdict(allowed_by=['patient-role-policy'], errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid i...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-90c12c25-patient-self: user=bakeoff-90c12c25-pat-self allowed_by=['patient-role-policy'] errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-90c12c25-patient-self"'}]
+
+aidbox.py:161: AssertionError
+___________ test_baseline_policies_do_not_throw_on_patient_requests ____________
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-90c12c25', data={'secrets': {'client_id': 'bakeoff-90c12c25-client', 'client_secret': 'bakeoff-cli...uxDaHiI4tYVcYMUWjSijU2pji8nBZSqt0d71UE', 'norole': 'OgfadkOmgcwafeCIX907oAUw2WOnUX5g6P7c6jYvAgl7nCao4TnEWI7uQ9eYVSjW'})
+pat_self = <httpx.Client object at 0x7f43336d88f0>
+
+    def test_baseline_policies_do_not_throw_on_patient_requests(run, pat_self):
+        for url in (f"/fhir/Patient/{run.id('patient-self')}",
+                    f"/fhir/Encounter/{run.id('enc-match')}",
+                    f"/fhir/Observation?subject=Patient/{run.id('patient-self')}"):
+>           expect_allow(pat_self, "GET", url, send=False)
+
+tests/test_03_policy_error.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f43336d88f0>, method = 'GET'
+url = '/fhir/Patient/bakeoff-90c12c25-patient-self', by = None, send = False
+kw = {}
+v = Verdict(allowed_by=['patient-role-policy'], errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid i...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Patient/bakeoff-90c12c25-patient-self: user=bakeoff-90c12c25-pat-self allowed_by=['patient-role-policy'] errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-90c12c25-patient-self"'}]
+
+aidbox.py:161: AssertionError
+______________ test_same_fixture_name_from_another_run_is_denied _______________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-90c12c25', data={'secrets': {'client_id': 'bakeoff-90c12c25-client', 'client_secret': 'bakeoff-cli...uxDaHiI4tYVcYMUWjSijU2pji8nBZSqt0d71UE', 'norole': 'OgfadkOmgcwafeCIX907oAUw2WOnUX5g6P7c6jYvAgl7nCao4TnEWI7uQ9eYVSjW'})
+admin = <httpx.Client object at 0x7f4587496c60>
+pat_self = <httpx.Client object at 0x7f45877a9f10>
+
+    def test_same_fixture_name_from_another_run_is_denied(run, admin, pat_self):
+        foreign = "bakeoff-otherrun-patient-self"
+        assert admin.put(f"/fhir/Patient/{foreign}", json={"resourceType": "Patient", "id": foreign}).is_success
+>       expect_deny(pat_self, "GET", f"/fhir/Patient/{foreign}")
+
+tests/test_14_isolation.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f45877a9f10>, method = 'GET'
+url = '/fhir/Patient/bakeoff-otherrun-patient-self', kw = {}
+v = Verdict(allowed_by=[], errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type ...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Patient/bakeoff-otherrun-patient-self: user=bakeoff-90c12c25-pat-self allowed_by=[] errors=[{'id': 'as-patient-read-own-encounter', 'error': 'ERROR: invalid input syntax for type uuid: "bakeoff-otherrun-patient-self"'}]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.py::test_patient_reads_own_record - A...
+FAILED tests/test_01_patient_own_record.py::test_patient_cannot_read_other_record
+FAILED tests/test_08_matrix.py::test_matrix[pat-self-read_patient] - Assertio...
+FAILED tests/test_03_policy_error.py::test_baseline_policies_do_not_throw_on_patient_requests
+FAILED tests/test_14_isolation.py::test_same_fixture_name_from_another_run_is_denied
+========================= 5 failed, 62 passed in 1.16s =========================

@@ -1,0 +1,131 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+.....F................F......F..........F..........................      [100%]
+=================================== FAILURES ===================================
+___________________ test_receptionist_cannot_write_patients ____________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-cc5650a9', data={'secrets': {'client_id': 'bakeoff-cc5650a9-client', 'client_secret': 'bakeoff-cli...pAGPli1SPRFA7iofHJKhj0o9xcrjhUTlOloSaG', 'norole': 'FsJ7JrY4x1CfimMtlbzwQ6M1LmnZfzuSTn3uHKO9muYdK3l7ewAeXEzsXYCFUCw9'})
+rec = <httpx.Client object at 0x7ffbf1f85a30>
+admin = <httpx.Client object at 0x7ffbf2760b90>
+
+    def test_receptionist_cannot_write_patients(run, rec, admin):
+        pid = run.id("patient-self")
+        renamed = {"resourceType": "Patient", "id": pid, "name": [{"family": "Hacked"}]}
+>       expect_deny(rec, "PUT", f"/fhir/Patient/{pid}", json=renamed)
+
+tests/test_04_receptionist.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7ffbf1f85a30>, method = 'PUT'
+url = '/fhir/Patient/bakeoff-cc5650a9-patient-self'
+kw = {'json': {'id': 'bakeoff-cc5650a9-patient-self', 'name': [{'family': 'Hacked'}], 'resourceType': 'Patient'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for PUT /fhir/Patient/bakeoff-cc5650a9-patient-self: user=bakeoff-cc5650a9-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:174: AssertionError
+___________________________ test_merge_patch_denied ____________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-cc5650a9', data={'secrets': {'client_id': 'bakeoff-cc5650a9-client', 'client_secret': 'bakeoff-cli...pAGPli1SPRFA7iofHJKhj0o9xcrjhUTlOloSaG', 'norole': 'FsJ7JrY4x1CfimMtlbzwQ6M1LmnZfzuSTn3uHKO9muYdK3l7ewAeXEzsXYCFUCw9'})
+rec = <httpx.Client object at 0x7f4384b164b0>
+admin = <httpx.Client object at 0x7f4384e549e0>
+
+    def test_merge_patch_denied(run, rec, admin):
+>       expect_deny(rec, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                    headers={"Content-Type": "application/merge-patch+json"},
+                    content=json.dumps({"name": [{"family": "Hacked"}]}))
+
+tests/test_07_bypass.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f4384b164b0>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-cc5650a9-patient-self'
+kw = {'content': '{"name": [{"family": "Hacked"}]}', 'headers': {'Content-Type': 'application/merge-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for PATCH /fhir/Patient/bakeoff-cc5650a9-patient-self: user=bakeoff-cc5650a9-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:174: AssertionError
+____________________________ test_json_patch_denied ____________________________
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-cc5650a9', data={'secrets': {'client_id': 'bakeoff-cc5650a9-client', 'client_secret': 'bakeoff-cli...pAGPli1SPRFA7iofHJKhj0o9xcrjhUTlOloSaG', 'norole': 'FsJ7JrY4x1CfimMtlbzwQ6M1LmnZfzuSTn3uHKO9muYdK3l7ewAeXEzsXYCFUCw9'})
+rec = <httpx.Client object at 0x7ffbf1f85a30>
+p1 = <httpx.Client object at 0x7ffbf24e5040>
+admin = <httpx.Client object at 0x7ffbf2760b90>
+
+    def test_json_patch_denied(run, rec, p1, admin):
+        patch = json.dumps([{"op": "replace", "path": "/name/0/family", "value": "Hacked"}])
+        for c in (rec, p1):
+>           expect_deny(c, "PATCH", f"/fhir/Patient/{run.id('patient-self')}",
+                        headers={"Content-Type": "application/json-patch+json"}, content=patch)
+
+tests/test_07_bypass.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7ffbf1f85a30>, method = 'PATCH'
+url = '/fhir/Patient/bakeoff-cc5650a9-patient-self'
+kw = {'content': '[{"op": "replace", "path": "/name/0/family", "value": "Hacked"}]', 'headers': {'Content-Type': 'application/json-patch+json'}}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...policy-id': 'bakeoff-cc5650a9-throwing-policy', 'reason': 'wrong role', 'expected-role': 'bakeoff-cc5650a9-thrower'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for PATCH /fhir/Patient/bakeoff-cc5650a9-patient-self: user=bakeoff-cc5650a9-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:174: AssertionError
+_______________________ test_matrix[rec-read_encounter] ________________________
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-cc5650a9', data={'secrets': {'client_id': 'bakeoff-cc5650a9-client', 'client_secret': 'bakeoff-cli...pAGPli1SPRFA7iofHJKhj0o9xcrjhUTlOloSaG', 'norole': 'FsJ7JrY4x1CfimMtlbzwQ6M1LmnZfzuSTn3uHKO9muYdK3l7ewAeXEzsXYCFUCw9'})
+who = 'rec', op = 'read_encounter', policy = '-'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+>           expect_deny(run.clients[who], method, url, **kw)
+
+tests/test_08_matrix.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f4384b164b0>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-cc5650a9-enc-match', kw = {}
+v = Verdict(allowed_by=['receptionist-role-policy'], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation'...policy-id': 'bakeoff-cc5650a9-throwing-policy', 'reason': 'wrong role', 'expected-role': 'bakeoff-cc5650a9-thrower'}]})
+
+    def expect_deny(c, method, url, **kw):
+        """No policy allows and none errored (an error is not a deny); the real call is 403."""
+        v = verdict(c, method, url, **kw)
+>       assert not v.allowed and not v.errors, f"expected deny for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET /fhir/Encounter/bakeoff-cc5650a9-enc-match: user=bakeoff-cc5650a9-rec allowed_by=['receptionist-role-policy'] errors=[]
+
+aidbox.py:174: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.py::test_receptionist_cannot_write_patients
+FAILED tests/test_07_bypass.py::test_merge_patch_denied - AssertionError: exp...
+FAILED tests/test_07_bypass.py::test_json_patch_denied - AssertionError: expe...
+FAILED tests/test_08_matrix.py::test_matrix[rec-read_encounter] - AssertionEr...
+========================= 4 failed, 63 passed in 1.12s =========================

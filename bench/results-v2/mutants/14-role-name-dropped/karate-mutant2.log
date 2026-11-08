@@ -1,0 +1,843 @@
+19:54:44.914 [main] INFO  karate.runtime - classpath:karate-config.js processed
+19:54:44.965 [main] INFO  karate.runtime - Parallel execution initialized: threadCount=4, semaphore permits=4
+19:54:45.084 [virtual-53] INFO  karate.runtime - [callSingle] >> executing: classpath:fixtures/setup.feature
+19:54:45.368 [virtual-53] INFO  karate.http - 1 > POST http://localhost:8280/$psql
+19:54:45.386 [virtual-53] INFO  karate.http - 1 < 200 POST http://localhost:8280/$psql (15 ms)
+19:54:45.389 [virtual-53] INFO  karate.http - 2 > POST http://localhost:8280/$psql
+19:54:45.392 [virtual-53] INFO  karate.http - 2 < 200 POST http://localhost:8280/$psql (3 ms)
+19:54:45.405 [virtual-53] INFO  karate.http - 3 > PUT http://localhost:8280/Client/bakeoff-4a5959cd-client
+19:54:45.413 [virtual-53] INFO  karate.http - 3 < 201 PUT http://localhost:8280/Client/bakeoff-4a5959cd-client (7 ms)
+19:54:45.414 [virtual-53] INFO  karate.http - 4 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:45.419 [virtual-53] INFO  karate.http - 4 < 201 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:45.420 [virtual-53] INFO  karate.http - 5 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other
+19:54:45.425 [virtual-53] INFO  karate.http - 5 < 201 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other (3 ms)
+19:54:45.426 [virtual-53] INFO  karate.http - 6 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked
+19:54:45.431 [virtual-53] INFO  karate.http - 6 < 201 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked (4 ms)
+19:54:45.432 [virtual-53] INFO  karate.http - 7 > PUT http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match
+19:54:45.437 [virtual-53] INFO  karate.http - 7 < 201 PUT http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match (5 ms)
+19:54:45.438 [virtual-53] INFO  karate.http - 8 > PUT http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch
+19:54:45.443 [virtual-53] INFO  karate.http - 8 < 201 PUT http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch (4 ms)
+19:54:45.445 [virtual-53] INFO  karate.http - 9 > PUT http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-obs-match
+19:54:45.450 [virtual-53] INFO  karate.http - 9 < 201 PUT http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-obs-match (5 ms)
+19:54:45.452 [virtual-53] INFO  karate.http - 10 > PUT http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-obs-mismatch
+19:54:45.457 [virtual-53] INFO  karate.http - 10 < 201 PUT http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-obs-mismatch (4 ms)
+19:54:45.458 [virtual-53] INFO  karate.http - 11 > PUT http://localhost:8280/fhir/Condition/bakeoff-4a5959cd-cond-match
+19:54:45.463 [virtual-53] INFO  karate.http - 11 < 201 PUT http://localhost:8280/fhir/Condition/bakeoff-4a5959cd-cond-match (5 ms)
+19:54:45.464 [virtual-53] INFO  karate.http - 12 > PUT http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match
+19:54:45.470 [virtual-53] INFO  karate.http - 12 < 201 PUT http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match (4 ms)
+19:54:45.472 [virtual-53] INFO  karate.http - 13 > PUT http://localhost:8280/User/bakeoff-4a5959cd-pat-self
+19:54:45.543 [virtual-53] INFO  karate.http - 13 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-pat-self (71 ms)
+19:54:45.545 [virtual-53] INFO  karate.http - 14 > PUT http://localhost:8280/Role/bakeoff-4a5959cd-pat-self-role
+19:54:45.552 [virtual-53] INFO  karate.http - 14 < 201 PUT http://localhost:8280/Role/bakeoff-4a5959cd-pat-self-role (7 ms)
+19:54:45.554 [virtual-53] INFO  karate.http - 15 > PUT http://localhost:8280/User/bakeoff-4a5959cd-p1
+19:54:45.626 [virtual-53] INFO  karate.http - 15 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-p1 (72 ms)
+19:54:45.628 [virtual-53] INFO  karate.http - 16 > PUT http://localhost:8280/Role/bakeoff-4a5959cd-p1-role
+19:54:45.634 [virtual-53] INFO  karate.http - 16 < 201 PUT http://localhost:8280/Role/bakeoff-4a5959cd-p1-role (6 ms)
+19:54:45.636 [virtual-53] INFO  karate.http - 17 > PUT http://localhost:8280/User/bakeoff-4a5959cd-p2
+19:54:45.706 [virtual-53] INFO  karate.http - 17 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-p2 (69 ms)
+19:54:45.707 [virtual-53] INFO  karate.http - 18 > PUT http://localhost:8280/Role/bakeoff-4a5959cd-p2-role
+19:54:45.715 [virtual-53] INFO  karate.http - 18 < 201 PUT http://localhost:8280/Role/bakeoff-4a5959cd-p2-role (7 ms)
+19:54:45.717 [virtual-53] INFO  karate.http - 19 > PUT http://localhost:8280/User/bakeoff-4a5959cd-rec
+19:54:45.785 [virtual-53] INFO  karate.http - 19 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-rec (68 ms)
+19:54:45.786 [virtual-53] INFO  karate.http - 20 > PUT http://localhost:8280/Role/bakeoff-4a5959cd-rec-role
+19:54:45.792 [virtual-53] INFO  karate.http - 20 < 201 PUT http://localhost:8280/Role/bakeoff-4a5959cd-rec-role (6 ms)
+19:54:45.793 [virtual-53] INFO  karate.http - 21 > PUT http://localhost:8280/User/bakeoff-4a5959cd-norole
+19:54:45.861 [virtual-53] INFO  karate.http - 21 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-norole (68 ms)
+19:54:45.863 [virtual-53] INFO  karate.http - 22 > PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p1-self
+19:54:45.868 [virtual-53] INFO  karate.http - 22 < 201 PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p1-self (5 ms)
+19:54:45.870 [virtual-53] INFO  karate.http - 23 > PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p2-other
+19:54:45.875 [virtual-53] INFO  karate.http - 23 < 201 PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p2-other (5 ms)
+19:54:45.877 [virtual-53] INFO  karate.http - 24 > PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p1-other-revoked
+19:54:45.882 [virtual-53] INFO  karate.http - 24 < 201 PUT http://localhost:8280/fhir/Consent/bakeoff-4a5959cd-consent-p1-other-revoked (4 ms)
+19:54:45.891 [virtual-53] INFO  karate.http - 25 > POST http://localhost:8280/auth/token
+19:54:45.964 [virtual-53] INFO  karate.http - 25 < 200 POST http://localhost:8280/auth/token (70 ms)
+19:54:45.966 [virtual-53] INFO  karate.http - 26 > POST http://localhost:8280/auth/token
+19:54:46.035 [virtual-53] INFO  karate.http - 26 < 200 POST http://localhost:8280/auth/token (69 ms)
+19:54:46.036 [virtual-53] INFO  karate.http - 27 > POST http://localhost:8280/auth/token
+19:54:46.104 [virtual-53] INFO  karate.http - 27 < 200 POST http://localhost:8280/auth/token (67 ms)
+19:54:46.105 [virtual-53] INFO  karate.http - 28 > POST http://localhost:8280/auth/token
+19:54:46.174 [virtual-53] INFO  karate.http - 28 < 200 POST http://localhost:8280/auth/token (68 ms)
+19:54:46.175 [virtual-53] INFO  karate.http - 29 > POST http://localhost:8280/auth/token
+19:54:46.242 [virtual-53] INFO  karate.http - 29 < 200 POST http://localhost:8280/auth/token (67 ms)
+19:54:46.243 [virtual-53] INFO  karate.scenario - run bakeoff-4a5959cd open, tx 91870
+19:54:46.245 [virtual-53] INFO  karate.runtime - [callSingle] << executed in 1158ms: classpath:fixtures/setup.feature
+19:54:46.246 [virtual-50] INFO  karate.runtime - [callSingle] lock acquired after 1161ms, memory cache hit: classpath:fixtures/setup.feature
+19:54:46.248 [virtual-68] INFO  karate.runtime - [callSingle] lock acquired after 1162ms, memory cache hit: classpath:fixtures/setup.feature
+19:54:46.249 [virtual-52] INFO  karate.runtime - [callSingle] lock acquired after 1163ms, memory cache hit: classpath:fixtures/setup.feature
+19:54:46.251 [virtual-53] INFO  karate.http - 1 > PUT http://localhost:8280/User/bakeoff-4a5959cd-crash-user
+19:54:46.258 [virtual-68] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.267 [virtual-68] INFO  karate.http - 1 < 201 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (7 ms)
+19:54:46.274 [virtual-52] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy
+19:54:46.274 [virtual-50] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.285 [virtual-50] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (7 ms)
+19:54:46.286 [virtual-68] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.287 [virtual-52] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy (8 ms)
+19:54:46.292 [virtual-68] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (5 ms)
+19:54:46.301 [virtual-52] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other
+19:54:46.302 [virtual-50] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.306 [virtual-68] INFO  karate.http - 3 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.308 [virtual-52] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other (5 ms)
+19:54:46.309 [virtual-50] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (5 ms)
+19:54:46.312 [virtual-68] INFO  karate.http - 3 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (6 ms)
+19:54:46.319 [virtual-68] INFO  karate.http - 4 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.322 [virtual-53] INFO  karate.http - 1 < 201 PUT http://localhost:8280/User/bakeoff-4a5959cd-crash-user (70 ms)
+19:54:46.327 [virtual-91] INFO  karate.http - 1 > POST http://localhost:8280/fhir
+19:54:46.327 [virtual-68] INFO  karate.http - 4 < 200 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (8 ms)
+19:54:46.327 [virtual-70] INFO  karate.http - 1 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked
+19:54:46.325 [virtual-53] INFO  karate.http - 2 > PUT http://localhost:8280/AccessPolicy/bakeoff-4a5959cd-throws
+19:54:46.330 [virtual-68] INFO  karate.http - 5 > DELETE http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.333 [virtual-70] INFO  karate.http - 1 < 422 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked (5 ms)
+19:54:46.336 [virtual-70] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked
+19:54:46.337 [virtual-91] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir (10 ms)
+19:54:46.338 [virtual-53] INFO  karate.http - 2 < 201 PUT http://localhost:8280/AccessPolicy/bakeoff-4a5959cd-throws (10 ms)
+19:54:46.340 [virtual-68] INFO  karate.http - 5 < 200 DELETE http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (8 ms)
+19:54:46.342 [virtual-68] INFO  karate.http - 6 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud
+19:54:46.342 [virtual-70] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked (5 ms)
+19:54:46.343 [virtual-53] INFO  karate.http - 3 > POST http://localhost:8280/auth/token
+19:54:46.348 [virtual-68] INFO  karate.http - 6 < 410 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-crud (3 ms)
+19:54:46.354 [virtual-93] INFO  karate.http - 1 > POST http://localhost:8280/fhir
+19:54:46.358 [virtual-91] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation/01a1bcba-44bc-7525-875a-edfacffbf9e1
+19:54:46.360 [virtual-94] INFO  karate.http - 1 > POST http://localhost:8280/fhir
+19:54:46.362 [virtual-91] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Observation/01a1bcba-44bc-7525-875a-edfacffbf9e1 (3 ms)
+19:54:46.363 [virtual-93] INFO  karate.http - 1 < 400 POST http://localhost:8280/fhir (8 ms)
+19:54:46.369 [virtual-93] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-tx-patient
+19:54:46.372 [virtual-93] INFO  karate.http - 2 < 404 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-tx-patient (3 ms)
+19:54:46.373 [virtual-94] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir (12 ms)
+19:54:46.375 [virtual-37] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.377 [virtual-94] INFO  karate.http - 2 > POST http://localhost:8280/fhir
+19:54:46.382 [virtual-40] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?__debug=policy
+19:54:46.390 [virtual-94] INFO  karate.http - 2 < 200 POST http://localhost:8280/fhir (13 ms)
+19:54:46.392 [virtual-37] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (7 ms)
+19:54:46.394 [virtual-40] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?__debug=policy (7 ms)
+19:54:46.406 [virtual-40] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient
+19:54:46.406 [virtual-37] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.416 [virtual-40] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient (7 ms)
+19:54:46.417 [virtual-37] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (8 ms)
+---------------------------------------------------------
+feature: features/10-crud-patch.feature
+scenarios:  2 | passed:  2 | passed | time: 1.3390
+=========================================================
+19:54:46.433 [virtual-43] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:46.434 [virtual-94] INFO  karate.http - 3 > GET http://localhost:8280/fhir/Patient?identifier=urn%3Abakeoff%7Cbakeoff-4a5959cd-tx-patient
+19:54:46.439 [virtual-53] INFO  karate.http - 3 < 200 POST http://localhost:8280/auth/token (95 ms)
+19:54:46.439 [virtual-94] INFO  karate.http - 3 < 200 GET http://localhost:8280/fhir/Patient?identifier=urn%3Abakeoff%7Cbakeoff-4a5959cd-tx-patient (4 ms)
+19:54:46.441 [virtual-43] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (6 ms)
+19:54:46.439 [virtual-46] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&__debug=policy
+19:54:46.444 [virtual-43] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:46.447 [virtual-46] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&__debug=policy (4 ms)
+19:54:46.452 [virtual-53] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.457 [virtual-54] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.459 [virtual-43] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (10 ms)
+19:54:46.460 [virtual-46] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self
+19:54:46.464 [virtual-54] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (5 ms)
+19:54:46.471 [virtual-53] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:46.478 [virtual-54] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.478 [virtual-55] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:46.482 [virtual-46] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self (21 ms)
+19:54:46.483 [virtual-54] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:46.486 [virtual-53] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+---------------------------------------------------------
+feature: features/13-transaction.feature
+19:54:46.491 [virtual-55] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (7 ms)
+scenarios:  3 | passed:  3 | passed | time: 1.4330
+=========================================================
+19:54:46.492 [virtual-56] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match?__debug=policy
+19:54:46.493 [virtual-53] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (6 ms)
+19:54:46.501 [virtual-56] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match?__debug=policy (4 ms)
+19:54:46.505 [virtual-55] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:46.509 [virtual-61] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match?__debug=policy
+19:54:46.510 [virtual-56] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match
+19:54:46.511 [virtual-55] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (6 ms)
+19:54:46.517 [virtual-61] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match?__debug=policy (4 ms)
+19:54:46.519 [virtual-64] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.520 [virtual-56] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match (10 ms)
+19:54:46.524 [virtual-61] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match
+19:54:46.528 [virtual-69] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Patient?__debug=policy
+19:54:46.528 [virtual-64] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (6 ms)
+19:54:46.529 [virtual-61] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match (5 ms)
+19:54:46.535 [virtual-64] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.537 [virtual-71] INFO  karate.http - 1 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.539 [virtual-69] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Patient?__debug=policy (8 ms)
+19:54:46.539 [virtual-73] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.540 [virtual-64] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (4 ms)
+19:54:46.551 [virtual-69] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Patient
+19:54:46.553 [virtual-73] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (11 ms)
+19:54:46.553 [virtual-69] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Patient (2 ms)
+19:54:46.552 [virtual-71] INFO  karate.http - 1 < 200 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (4 ms)
+19:54:46.557 [virtual-74] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.563 [virtual-78] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy
+19:54:46.565 [virtual-71] INFO  karate.http - 2 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.567 [virtual-74] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (8 ms)
+19:54:46.569 [virtual-71] INFO  karate.http - 2 < 403 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (1 ms)
+19:54:46.568 [virtual-84] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match?__debug=policy
+19:54:46.574 [virtual-78] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy (7 ms)
+19:54:46.577 [virtual-74] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+---------------------------------------------------------
+feature: features/03-sql-policy-throws.feature
+scenarios:  3 | passed:  0 | 3 failed | time: 1.4950
+=========================================================
+19:54:46.581 [virtual-74] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (4 ms)
+19:54:46.582 [virtual-84] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match?__debug=policy (9 ms)
+19:54:46.583 [virtual-78] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other
+19:54:46.587 [virtual-78] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other (3 ms)
+19:54:46.591 [virtual-89] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch?__debug=policy
+19:54:46.591 [virtual-84] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match
+19:54:46.599 [virtual-89] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch?__debug=policy (6 ms)
+19:54:46.603 [virtual-89] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch
+19:54:46.607 [virtual-89] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-mismatch (2 ms)
+19:54:46.616 [virtual-90] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-enc-match?__debug=policy
+19:54:46.616 [virtual-95] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.618 [virtual-92] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match?__debug=policy
+19:54:46.620 [virtual-84] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Encounter/bakeoff-4a5959cd-enc-match (25 ms)
+19:54:46.629 [virtual-92] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match?__debug=policy (10 ms)
+19:54:46.631 [virtual-92] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match
+19:54:46.633 [virtual-92] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Appointment/bakeoff-4a5959cd-appt-match (1 ms)
+19:54:46.632 [virtual-90] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-enc-match?__debug=policy (11 ms)
+19:54:46.633 [virtual-96] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:46.638 [virtual-95] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (19 ms)
+19:54:46.642 [virtual-90] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-enc-match
+19:54:46.643 [virtual-95] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.646 [virtual-96] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (10 ms)
+19:54:46.652 [virtual-90] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation/bakeoff-4a5959cd-enc-match (5 ms)
+19:54:46.656 [virtual-97] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.667 [virtual-39] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Patient
+19:54:46.670 [virtual-96] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:46.673 [virtual-39] INFO  karate.http - 1 < 422 POST http://localhost:8280/fhir/Patient (6 ms)
+19:54:46.675 [virtual-96] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Appointment (4 ms)
+19:54:46.673 [virtual-97] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (12 ms)
+19:54:46.681 [virtual-95] INFO  karate.http - 2 < 422 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (34 ms)
+19:54:46.682 [virtual-97] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.693 [virtual-98] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+---------------------------------------------------------
+feature: features/04-receptionist-read-not-write.feature
+scenarios:  7 | passed:  7 | passed | time: 1.5760
+=========================================================
+19:54:46.706 [virtual-98] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:46.708 [virtual-98] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.709 [virtual-97] INFO  karate.http - 2 < 422 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (27 ms)
+19:54:46.711 [virtual-98] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (2 ms)
+19:54:46.708 [virtual-100] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.719 [virtual-99] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.721 [virtual-102] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+---------------------------------------------------------
+feature: features/01-patient-own-record.feature
+scenarios:  5 | passed:  3 | 2 failed | time: 1.6510
+=========================================================
+19:54:46.722 [virtual-101] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.728 [virtual-99] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (7 ms)
+19:54:46.727 [virtual-100] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (10 ms)
+19:54:46.730 [virtual-101] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (6 ms)
+19:54:46.732 [virtual-101] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.732 [virtual-102] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (6 ms)
+19:54:46.735 [virtual-101] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (3 ms)
+19:54:46.736 [virtual-100] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.737 [virtual-99] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.738 [virtual-102] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.740 [virtual-99] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (2 ms)
+19:54:46.742 [virtual-100] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (4 ms)
+19:54:46.742 [virtual-102] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (3 ms)
+19:54:46.747 [virtual-104] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.752 [virtual-104] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (4 ms)
+19:54:46.756 [virtual-104] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.758 [virtual-103] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy
+19:54:46.760 [virtual-105] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.761 [virtual-104] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (3 ms)
+19:54:46.768 [virtual-103] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate?__debug=policy (9 ms)
+19:54:46.773 [virtual-103] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$populate
+19:54:46.790 [virtual-105] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (15 ms)
+19:54:46.789 [virtual-106] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.793 [virtual-103] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$populate (18 ms)
+19:54:46.791 [virtual-107] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.799 [virtual-105] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.805 [virtual-106] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (7 ms)
+19:54:46.810 [virtual-107] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (9 ms)
+19:54:46.811 [virtual-45] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Observation
+19:54:46.815 [virtual-105] INFO  karate.http - 2 < 422 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (14 ms)
+19:54:46.817 [virtual-106] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.820 [virtual-45] INFO  karate.http - 1 < 422 POST http://localhost:8280/fhir/Observation (5 ms)
+19:54:46.821 [virtual-107] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.824 [virtual-106] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (6 ms)
+19:54:46.828 [virtual-107] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (6 ms)
+19:54:46.834 [virtual-111] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.836 [virtual-109] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+---------------------------------------------------------
+feature: features/05-no-role-denied.feature
+scenarios:  9 | passed:  6 | 3 failed | time: 1.7350
+=========================================================
+19:54:46.846 [virtual-109] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (6 ms)
+19:54:46.846 [virtual-111] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (7 ms)
+19:54:46.847 [virtual-58] INFO  karate.http - 1 > POST http://localhost:8280/fhir?__debug=policy
+19:54:46.849 [virtual-113] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.852 [virtual-109] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.854 [virtual-111] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.858 [virtual-58] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir?__debug=policy (4 ms)
+19:54:46.858 [virtual-111] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (3 ms)
+19:54:46.860 [virtual-113] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (6 ms)
+19:54:46.862 [virtual-109] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (5 ms)
+19:54:46.865 [virtual-58] INFO  karate.http - 2 > POST http://localhost:8280/fhir
+19:54:46.865 [virtual-113] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.870 [virtual-58] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir (3 ms)
+19:54:46.870 [virtual-59] INFO  karate.http - 1 > POST http://localhost:8280/fhir?__debug=policy
+19:54:46.872 [virtual-113] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (5 ms)
+19:54:46.877 [virtual-115] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.880 [virtual-59] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir?__debug=policy (6 ms)
+19:54:46.884 [virtual-115] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (6 ms)
+19:54:46.884 [virtual-59] INFO  karate.http - 2 > POST http://localhost:8280/fhir
+19:54:46.888 [virtual-116] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy
+19:54:46.889 [virtual-62] INFO  karate.http - 1 > POST http://localhost:8280/fhir?__debug=policy
+19:54:46.889 [virtual-59] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir (3 ms)
+19:54:46.891 [virtual-115] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.893 [virtual-116] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract?__debug=policy (4 ms)
+19:54:46.896 [virtual-62] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir?__debug=policy (4 ms)
+19:54:46.896 [virtual-115] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (4 ms)
+19:54:46.899 [virtual-116] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Questionnaire/glucose/$extract
+19:54:46.900 [virtual-62] INFO  karate.http - 2 > POST http://localhost:8280/fhir
+19:54:46.902 [virtual-116] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Questionnaire/glucose/$extract (2 ms)
+19:54:46.902 [virtual-65] INFO  karate.http - 1 > POST http://localhost:8280/fhir?__debug=policy
+19:54:46.903 [virtual-62] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir (2 ms)
+19:54:46.906 [virtual-44] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Patient
+19:54:46.910 [virtual-65] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir?__debug=policy (6 ms)
+19:54:46.914 [virtual-65] INFO  karate.http - 2 > POST http://localhost:8280/fhir
+19:54:46.916 [virtual-75] INFO  karate.http - 1 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.917 [virtual-72] INFO  karate.http - 1 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.917 [virtual-44] INFO  karate.http - 1 < 422 POST http://localhost:8280/fhir/Patient (10 ms)
+19:54:46.918 [virtual-65] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir (2 ms)
+19:54:46.926 [virtual-77] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.929 [virtual-76] INFO  karate.http - 1 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+---------------------------------------------------------
+feature: features/11-validation.feature
+19:54:46.930 [virtual-72] INFO  karate.http - 1 < 200 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (10 ms)
+scenarios:  3 | passed:  3 | passed | time: 1.9120
+=========================================================
+19:54:46.932 [virtual-75] INFO  karate.http - 1 < 200 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (13 ms)
+19:54:46.932 [virtual-77] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (5 ms)
+19:54:46.936 [virtual-72] INFO  karate.http - 2 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.937 [virtual-75] INFO  karate.http - 2 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.938 [virtual-76] INFO  karate.http - 1 < 200 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (7 ms)
+19:54:46.939 [virtual-72] INFO  karate.http - 2 < 403 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:46.942 [virtual-75] INFO  karate.http - 2 < 403 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (5 ms)
+19:54:46.943 [virtual-76] INFO  karate.http - 2 > PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.944 [virtual-83] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.952 [virtual-85] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy
+19:54:46.952 [virtual-86] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy
+19:54:46.947 [virtual-76] INFO  karate.http - 2 < 403 PATCH http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:46.957 [virtual-83] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:46.964 [virtual-83] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.965 [virtual-87] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.968 [virtual-86] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy (14 ms)
+19:54:46.969 [virtual-85] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other?__debug=policy (13 ms)
+19:54:46.974 [virtual-86] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other
+19:54:46.974 [virtual-85] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other
+19:54:46.975 [virtual-83] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (11 ms)
+19:54:46.978 [virtual-87] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (11 ms)
+19:54:46.983 [virtual-87] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:46.984 [virtual-86] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other (10 ms)
+19:54:46.987 [virtual-88] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked?__debug=policy
+19:54:46.988 [virtual-85] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-other (12 ms)
+19:54:46.991 [virtual-87] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (8 ms)
+19:54:46.997 [virtual-41] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:46.998 [virtual-88] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked?__debug=policy (7 ms)
+19:54:47.006 [virtual-88] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked
+19:54:47.013 [virtual-41] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:47.014 [virtual-42] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+---------------------------------------------------------
+feature: features/07-bypass-attempts.feature
+scenarios:  8 | passed:  8 | passed | time: 1.9480
+=========================================================
+19:54:47.018 [virtual-88] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-unlinked (12 ms)
+19:54:47.022 [virtual-41] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.026 [virtual-42] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (10 ms)
+19:54:47.028 [virtual-47] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.031 [virtual-42] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.034 [virtual-41] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (12 ms)
+19:54:47.040 [virtual-48] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.043 [virtual-47] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:47.046 [virtual-49] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?family%3Aexact=Bakeoff&_count=1000
+19:54:47.049 [virtual-42] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (17 ms)
+19:54:47.050 [virtual-47] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.054 [virtual-48] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (12 ms)
+19:54:47.060 [virtual-48] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.063 [virtual-49] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?family%3Aexact=Bakeoff&_count=1000 (16 ms)
+19:54:47.066 [virtual-47] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (14 ms)
+19:54:47.067 [virtual-57] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.070 [virtual-48] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (8 ms)
+---------------------------------------------------------
+feature: features/02-practitioner-consent.feature
+scenarios:  5 | passed:  0 | 5 failed | time: 2.0100
+=========================================================
+19:54:47.077 [virtual-57] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (7 ms)
+19:54:47.079 [virtual-60] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.079 [virtual-57] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.082 [virtual-63] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.086 [virtual-57] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (6 ms)
+19:54:47.090 [virtual-66] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.089 [virtual-60] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (9 ms)
+19:54:47.093 [virtual-63] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (10 ms)
+19:54:47.097 [virtual-63] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.098 [virtual-60] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.100 [virtual-57] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+---------------------------------------------------------
+19:54:47.101 [virtual-66] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (8 ms)
+feature: features/09-sdc.feature
+scenarios: 15 | passed: 15 | passed | time: 1.8930
+=========================================================
+19:54:47.101 [virtual-63] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (4 ms)
+19:54:47.104 [virtual-60] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (4 ms)
+19:54:47.106 [virtual-66] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.108 [virtual-63] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.109 [virtual-57] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (5 ms)
+19:54:47.112 [virtual-57] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.113 [virtual-60] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.114 [virtual-66] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (7 ms)
+19:54:47.118 [virtual-57] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (6 ms)
+19:54:47.119 [virtual-63] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (9 ms)
+19:54:47.119 [virtual-66] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.121 [virtual-60] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (5 ms)
+19:54:47.125 [virtual-63] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.126 [virtual-66] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (5 ms)
+19:54:47.126 [virtual-60] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.130 [virtual-57] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.131 [virtual-63] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (4 ms)
+19:54:47.133 [virtual-66] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.136 [virtual-63] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.137 [virtual-60] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (7 ms)
+19:54:47.138 [virtual-66] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (5 ms)
+19:54:47.139 [virtual-57] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (6 ms)
+19:54:47.142 [virtual-57] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.146 [virtual-57] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (4 ms)
+19:54:47.148 [virtual-60] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.149 [virtual-63] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (9 ms)
+19:54:47.150 [virtual-66] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.154 [virtual-63] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.156 [virtual-66] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (5 ms)
+19:54:47.156 [virtual-57] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:47.157 [virtual-60] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (6 ms)
+19:54:47.157 [virtual-63] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (2 ms)
+19:54:47.165 [virtual-57] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (8 ms)
+19:54:47.163 [virtual-66] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.165 [virtual-60] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.168 [virtual-63] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:47.168 [virtual-66] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:47.169 [virtual-57] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:47.169 [virtual-60] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:47.173 [virtual-57] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Appointment (3 ms)
+19:54:47.179 [virtual-63] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (8 ms)
+19:54:47.180 [virtual-66] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:47.180 [virtual-60] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:47.184 [virtual-63] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:47.187 [virtual-63] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Appointment (2 ms)
+19:54:47.186 [virtual-66] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (5 ms)
+19:54:47.188 [virtual-67] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.189 [virtual-60] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (6 ms)
+19:54:47.194 [virtual-60] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:47.194 [virtual-66] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:47.197 [virtual-60] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Appointment (1 ms)
+19:54:47.198 [virtual-67] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (4 ms)
+19:54:47.201 [virtual-79] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Encounter?_id=bakeoff-4a5959cd-enc-match&_include=Encounter%3Asubject
+19:54:47.202 [virtual-66] INFO  karate.http - 2 < 201 POST http://localhost:8280/fhir/Appointment (6 ms)
+19:54:47.203 [virtual-67] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.203 [virtual-80] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject
+19:54:47.207 [virtual-67] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (3 ms)
+19:54:47.208 [virtual-79] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Encounter?_id=bakeoff-4a5959cd-enc-match&_include=Encounter%3Asubject (6 ms)
+19:54:47.209 [virtual-81] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject%3APatient._id=bakeoff-4a5959cd-patient-other
+19:54:47.210 [virtual-80] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject (6 ms)
+19:54:47.214 [virtual-81] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject%3APatient._id=bakeoff-4a5959cd-patient-other (3 ms)
+19:54:47.215 [virtual-82] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Encounter?subject%3APatient.name=Other&_id=bakeoff-4a5959cd-enc-match%2Cbakeoff-4a5959cd-enc-mismatch
+19:54:47.219 [virtual-67] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.220 [virtual-82] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Encounter?subject%3APatient.name=Other&_id=bakeoff-4a5959cd-enc-match%2Cbakeoff-4a5959cd-enc-mismatch (4 ms)
+19:54:47.224 [virtual-67] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (4 ms)
+19:54:47.226 [virtual-67] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.230 [virtual-67] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (3 ms)
+19:54:47.234 [virtual-67] INFO  karate.http - 1 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.236 [virtual-108] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.239 [virtual-67] INFO  karate.http - 1 < 200 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (4 ms)
+19:54:47.240 [virtual-110] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.244 [virtual-108] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&__debug=policy (6 ms)
+19:54:47.246 [virtual-110] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=bakeoff-4a5959cd-patient-self&__debug=policy (5 ms)
+19:54:47.247 [virtual-67] INFO  karate.http - 2 > PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.251 [virtual-67] INFO  karate.http - 2 < 403 PUT http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (1 ms)
+19:54:47.252 [virtual-108] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self
+19:54:47.252 [virtual-110] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=bakeoff-4a5959cd-patient-self
+19:54:47.257 [virtual-110] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Observation?subject=bakeoff-4a5959cd-patient-self (4 ms)
+19:54:47.259 [virtual-67] INFO  karate.http - 1 > POST http://localhost:8280/fhir/Appointment?__debug=policy
+19:54:47.262 [virtual-108] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self (9 ms)
+---------------------------------------------------------
+feature: features/12-search-include-chain.feature
+scenarios:  4 | passed:  4 | passed | time: 2.2460
+=========================================================
+19:54:47.267 [virtual-67] INFO  karate.http - 1 < 200 POST http://localhost:8280/fhir/Appointment?__debug=policy (4 ms)
+19:54:47.269 [virtual-112] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-other&__debug=policy
+19:54:47.272 [virtual-114] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?__debug=policy
+19:54:47.274 [virtual-67] INFO  karate.http - 2 > POST http://localhost:8280/fhir/Appointment
+19:54:47.276 [virtual-112] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-other&__debug=policy (6 ms)
+19:54:47.276 [virtual-67] INFO  karate.http - 2 < 403 POST http://localhost:8280/fhir/Appointment (2 ms)
+19:54:47.278 [virtual-117] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&subject=Patient%2Fbakeoff-4a5959cd-patient-other&__debug=policy
+19:54:47.281 [virtual-112] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-other
+19:54:47.283 [virtual-114] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?__debug=policy (5 ms)
+19:54:47.285 [virtual-112] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-other (4 ms)
+19:54:47.288 [virtual-114] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation
+19:54:47.293 [virtual-117] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&subject=Patient%2Fbakeoff-4a5959cd-patient-other&__debug=policy (12 ms)
+19:54:47.295 [virtual-118] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_include=Observation%3Asubject&__debug=policy
+19:54:47.296 [virtual-114] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation (6 ms)
+19:54:47.302 [virtual-117] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&subject=Patient%2Fbakeoff-4a5959cd-patient-other
+19:54:47.303 [virtual-119] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_revinclude=Provenance%3Atarget&__debug=policy
+19:54:47.306 [virtual-118] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_include=Observation%3Asubject&__debug=policy (6 ms)
+19:54:47.309 [virtual-117] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&subject=Patient%2Fbakeoff-4a5959cd-patient-other (5 ms)
+19:54:47.311 [virtual-118] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_include=Observation%3Asubject
+19:54:47.313 [virtual-120] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy
+19:54:47.316 [virtual-119] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_revinclude=Provenance%3Atarget&__debug=policy (11 ms)
+19:54:47.317 [virtual-118] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_include=Observation%3Asubject (4 ms)
+19:54:47.322 [virtual-119] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_revinclude=Provenance%3Atarget
+19:54:47.324 [virtual-121] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other&__debug=policy
+19:54:47.326 [virtual-119] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Observation?subject=Patient%2Fbakeoff-4a5959cd-patient-self&_revinclude=Provenance%3Atarget (4 ms)
+19:54:47.327 [virtual-120] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&__debug=policy (9 ms)
+19:54:47.329 [virtual-122] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-other&__debug=policy
+19:54:47.333 [virtual-120] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self
+19:54:47.334 [virtual-121] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other&__debug=policy (7 ms)
+19:54:47.338 [virtual-123] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?__debug=policy
+19:54:47.339 [virtual-120] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self (5 ms)
+19:54:47.339 [virtual-121] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other
+19:54:47.340 [virtual-122] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-other&__debug=policy (7 ms)
+19:54:47.345 [virtual-121] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other (6 ms)
+19:54:47.346 [virtual-122] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-other
+19:54:47.347 [virtual-124] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject&__debug=policy
+19:54:47.349 [virtual-123] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?__debug=policy (8 ms)
+19:54:47.352 [virtual-122] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-other (6 ms)
+19:54:47.353 [virtual-125] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject&__debug=policy
+19:54:47.354 [virtual-123] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient
+19:54:47.358 [virtual-124] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject&__debug=policy (6 ms)
+19:54:47.360 [virtual-123] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient (4 ms)
+19:54:47.364 [virtual-126] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_include=Patient%3Ageneral-practitioner&__debug=policy
+19:54:47.364 [virtual-124] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject
+19:54:47.368 [virtual-124] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject (2 ms)
+19:54:47.370 [virtual-127] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other&__debug=policy
+19:54:47.369 [virtual-125] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject&__debug=policy (10 ms)
+19:54:47.373 [virtual-126] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_include=Patient%3Ageneral-practitioner&__debug=policy (5 ms)
+19:54:47.377 [virtual-38] INFO  karate.http - 1 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy
+19:54:47.378 [virtual-125] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject
+19:54:47.383 [virtual-126] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_include=Patient%3Ageneral-practitioner
+19:54:47.384 [virtual-125] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_revinclude=Observation%3Asubject (4 ms)
+19:54:47.386 [virtual-127] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other&__debug=policy (10 ms)
+19:54:47.388 [virtual-127] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other
+19:54:47.389 [virtual-126] INFO  karate.http - 2 < 403 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self&_include=Patient%3Ageneral-practitioner (6 ms)
+19:54:47.390 [virtual-38] INFO  karate.http - 1 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self?__debug=policy (6 ms)
+19:54:47.393 [virtual-127] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient?_id=bakeoff-4a5959cd-patient-self%2Cbakeoff-4a5959cd-patient-other (4 ms)
+19:54:47.395 [virtual-38] INFO  karate.http - 2 > GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self
+19:54:47.399 [virtual-38] INFO  karate.http - 2 < 200 GET http://localhost:8280/fhir/Patient/bakeoff-4a5959cd-patient-self (2 ms)
+---------------------------------------------------------
+feature: features/14-run-isolation.feature
+scenarios:  7 | passed:  7 | passed | time: 2.3950
+=========================================================
+---------------------------------------------------------
+feature: features/08-matrix.feature
+scenarios:  5 | passed:  1 | 4 failed | time: 2.2710
+=========================================================
+---------------------------------------------------------
+feature: features/06-search-leak.feature
+scenarios: 15 | passed: 11 | 4 failed | time: 2.3850
+=========================================================
+
+failed features:
+  /repo/suites/karate/features/05-no-role-denied.feature
+    - norole GET #("/fhir/Patient/" + id("patient-self")): denied by every policy
+      /repo/suites/karate/features/05-no-role-denied.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"norole","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - norole GET /fhir/Patient: denied by every policy
+      /repo/suites/karate/features/05-no-role-denied.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"norole","request":"GET /fhir/Patient","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - norole GET /fhir/Patient: denied by every policy
+      /repo/suites/karate/features/05-no-role-denied.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"norole","request":"GET /fhir/Patient","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+  /repo/suites/karate/features/03-sql-policy-throws.feature
+    - baseline: a patient request evaluates every policy without a crash
+      /repo/suites/karate/features/03-sql-policy-throws.feature:8
+      * match r.verdict contains { allowedBy: ['patient-role-policy'], crashed: [], status: 200 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy] (MAP:MAP)
+        {"who":"pat-self","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["patient-role-policy","as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":["patient-role-policy"],"crashed":[],"status":200}
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 2:1 (LIST:LIST)
+          ["patient-role-policy","as-receptionist-read-patients"]
+          ["patient-role-policy"]
+      
+    - a plain deny has no error either
+      /repo/suites/karate/features/03-sql-policy-throws.feature:12
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"pat-self","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-other","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - a throwing SQL policy is reported with its error, though the status is the same 403
+      /repo/suites/karate/features/03-sql-policy-throws.feature:33
+      * match r.verdict contains { allowedBy: [], status: 403, crashed: [{ id: '#(id("throws"))', error: '#string' }] }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"crash-user","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["as-receptionist-read-patients"],"crashed":[{"id":"bakeoff-4a5959cd-throws","error":"ERROR: division by zero"}],"status":200}
+        {"allowedBy":[],"crashed":[{"id":"bakeoff-4a5959cd-throws","error":"#string"}],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+  /repo/suites/karate/features/08-matrix.feature
+    - pat-self
+      /repo/suites/karate/features/08-matrix.feature:33
+      * match wrong == []
+      match failed: EQUALS
+        $ | not equal | actual array length is not equal to expected - 2:0 (LIST:LIST)
+        ["read: want [\"patient-role-policy\"], got [\"patient-role-policy\",\"as-receptionist-read-patients\"] status 200","search: want [], got [\"as-receptionist-read-patients\"] status 200"]
+        []
+      
+    - p1
+      /repo/suites/karate/features/08-matrix.feature:33
+      * match wrong == []
+      match failed: EQUALS
+        $ | not equal | actual array length is not equal to expected - 2:0 (LIST:LIST)
+        ["read: want [\"practitioner-policy\"], got [\"practitioner-policy\",\"as-receptionist-read-patients\"] status 200","search: want [\"as-practitioner-search-consented-patients\"], got [\"as-practitioner-search-consented-patients\",\"as-receptionist-read-patients\"] status 200"]
+        []
+      
+    - p2
+      /repo/suites/karate/features/08-matrix.feature:33
+      * match wrong == []
+      match failed: EQUALS
+        $ | not equal | actual array length is not equal to expected - 2:0 (LIST:LIST)
+        ["read: want [], got [\"as-receptionist-read-patients\"] status 200","search: want [], got [\"as-receptionist-read-patients\"] status 200"]
+        []
+      
+    - norole
+      /repo/suites/karate/features/08-matrix.feature:33
+      * match wrong == []
+      match failed: EQUALS
+        $ | not equal | actual array length is not equal to expected - 2:0 (LIST:LIST)
+        ["read: want [], got [\"as-receptionist-read-patients\"] status 200","search: want [], got [\"as-receptionist-read-patients\"] status 200"]
+        []
+      
+  /repo/suites/karate/features/02-practitioner-consent.feature
+    - p1 reads patient-self: active Consent allows
+      /repo/suites/karate/features/02-practitioner-consent.feature:5
+      * match r.verdict contains { allowedBy: ['practitioner-policy'], crashed: [], status: 200 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["practitioner-policy","as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":["practitioner-policy"],"crashed":[],"status":200}
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 2:1 (LIST:LIST)
+          ["practitioner-policy","as-receptionist-read-patients"]
+          ["practitioner-policy"]
+      
+    - p2 reads patient-other: active Consent allows
+      /repo/suites/karate/features/02-practitioner-consent.feature:5
+      * match r.verdict contains { allowedBy: ['practitioner-policy'], crashed: [], status: 200 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy] (MAP:MAP)
+        {"who":"p2","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-other","allowedBy":["practitioner-policy","as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":["practitioner-policy"],"crashed":[],"status":200}
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 2:1 (LIST:LIST)
+          ["practitioner-policy","as-receptionist-read-patients"]
+          ["practitioner-policy"]
+      
+    - p1 reads patient-other: revoked Consent denies
+      /repo/suites/karate/features/02-practitioner-consent.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-other","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - p2 reads patient-self: no Consent denies
+      /repo/suites/karate/features/02-practitioner-consent.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p2","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - p1 reads patient-unlinked: no Consent denies
+      /repo/suites/karate/features/02-practitioner-consent.feature:5
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-unlinked","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+  /repo/suites/karate/features/01-patient-own-record.feature
+    - pat-self reads own Patient: allowed by patient-role-policy
+      /repo/suites/karate/features/01-patient-own-record.feature:5
+      * match r.verdict contains { allowedBy: ['patient-role-policy'], crashed: [], status: 200 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy] (MAP:MAP)
+        {"who":"pat-self","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-self","allowedBy":["patient-role-policy","as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":["patient-role-policy"],"crashed":[],"status":200}
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 2:1 (LIST:LIST)
+          ["patient-role-policy","as-receptionist-read-patients"]
+          ["patient-role-policy"]
+      
+    - pat-self reads another Patient: denied by every policy
+      /repo/suites/karate/features/01-patient-own-record.feature:10
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"pat-self","request":"GET /fhir/Patient/bakeoff-4a5959cd-patient-other","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+  /repo/suites/karate/features/06-search-leak.feature
+    - p1 searches Patient by a consented _id: allowed, that Patient only
+      /repo/suites/karate/features/06-search-leak.feature:35
+      * match r.verdict contains { allowedBy: ['as-practitioner-search-consented-patients'], crashed: [], status: 200 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient","allowedBy":["as-practitioner-search-consented-patients","as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":["as-practitioner-search-consented-patients"],"crashed":[],"status":200}
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 2:1 (LIST:LIST)
+          ["as-practitioner-search-consented-patients","as-receptionist-read-patients"]
+          ["as-practitioner-search-consented-patients"]
+      
+    - p1 searches Patient with one unconsented id among them: denied
+      /repo/suites/karate/features/06-search-leak.feature:40
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - p1 searches Patient with only a revoked Consent: denied
+      /repo/suites/karate/features/06-search-leak.feature:40
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+    - p1 searches Patient with no _id: denied
+      /repo/suites/karate/features/06-search-leak.feature:40
+      * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
+      match failed: CONTAINS
+        $ | actual does not contain expected | all key-values did not match, expected has un-matched keys - [allowedBy, status] (MAP:MAP)
+        {"who":"p1","request":"GET /fhir/Patient","allowedBy":["as-receptionist-read-patients"],"crashed":[],"status":200}
+        {"allowedBy":[],"crashed":[],"status":403}
+      
+          $.status | not equal (NUMBER:NUMBER)
+          200
+          403
+      
+          $.allowedBy | not equal | actual array length is not equal to expected - 1:0 (LIST:LIST)
+          ["as-receptionist-read-patients"]
+          []
+      
+
+============================================================
+elapsed:   2.50s | threads:   4 | efficiency: 2.63
+features:   14 | passed:    8 | 6 failed
+scenarios:  91 | passed:   70 | 21 failed
+------------------------------------------------------------
+Karate 2.1.4 | HTML report:
+file:///repo/suites/karate/target/karate-reports/karate-summary.html
+====================================================================
+19:54:48.421 [main] INFO  karate.runtime - classpath:karate-config.js processed
+19:54:48.796 [main] INFO  karate.http - 1 > POST http://localhost:8280/%24psql
+19:54:48.819 [main] INFO  karate.http - 1 < 200 POST http://localhost:8280/%24psql (21 ms)
+19:54:48.830 [main] INFO  karate.scenario - run bakeoff-4a5959cd torn down

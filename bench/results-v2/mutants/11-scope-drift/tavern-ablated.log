@@ -1,0 +1,533 @@
+bringing up nodes...
+bringing up nodes...
+
+..F............................F...F..F.F.F.F....F....F................. [ 75%]
+..........F..........F.                                                  [100%]
+=================================== FAILURES ===================================
+___ /suite/tests/test_04_receptionist.tavern.yaml::rec cannot write Patient ____
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status_code: 403 = '???'
+
+Source test stage (line 31):
+  - name: PUT status
+    request: {<<: *put, params: {}}
+    response: &forbidden {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'PUT status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Observation] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status_code: 403 = '???'
+  who = 'rec'
+  base = 'http://localhost:8280'
+  path = 'fhir/Observation'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  family: Bakeoff = '???'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-daf6fdcc'
+
+Source test stage (line 31):
+  - &unchanged
+    name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Patient unchanged' failed:
+    - List item(s) not present in response: [{'family': 'Bakeoff'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 List item(s) not present in response: [{'family': 'Bakeoff'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert {'name': [{'f...6.348023Z'}]}} == {'name': [{'f...: 'Bakeoff'}]}
+  
+  Differing items:
+  {'name': [{'family': 'Changed'}]} != {'name': [{'family': 'Bakeoff'}]}
+  Left contains 3 more items:
+  {'id': 'bakeoff-daf6fdcc-patient-self',
+   'meta': {'extension': [{'url': 'ex:createdAt',
+                           'valueInstant': '2026-11-08T19:51:36.348023Z'}],...
+  
+  ...Full output truncated, use '-vv' to show
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert [{'family': 'Changed'}] == [{'family': 'Bakeoff'}]
+  
+  At index 0 diff: {'family': 'Changed'} != {'family': 'Bakeoff'}
+  Use -v to get more diff
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 127, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 471, in check_keys_match_recursive
+    check_keys_match_recursive(
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 590, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(msg) from e
+tavern._core.exceptions.KeyMismatchError: List item(s) not present in response: [{'family': 'Bakeoff'}]
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  run_id = 'bakeoff-daf6fdcc'
+  base = 'http://localhost:8280'
+  family: Bakeoff = '???'
+
+Source test stage (line 61):
+  - name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Patient unchanged' failed:
+    - List item(s) not present in response: [{'family': 'Bakeoff'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 List item(s) not present in response: [{'family': 'Bakeoff'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert {'name': [{'f...6.348023Z'}]}} == {'name': [{'f...: 'Bakeoff'}]}
+  
+  Differing items:
+  {'name': [{'family': 'Changed'}]} != {'name': [{'family': 'Bakeoff'}]}
+  Left contains 3 more items:
+  {'id': 'bakeoff-daf6fdcc-patient-self',
+   'meta': {'extension': [{'url': 'ex:createdAt',
+                           'valueInstant': '2026-11-08T19:51:36.348023Z'}],...
+  
+  ...Full output truncated, use '-vv' to show
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert [{'family': 'Changed'}] == [{'family': 'Bakeoff'}]
+  
+  At index 0 diff: {'family': 'Changed'} != {'family': 'Bakeoff'}
+  Use -v to get more diff
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 127, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 471, in check_keys_match_recursive
+    check_keys_match_recursive(
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 590, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(msg) from e
+tavern._core.exceptions.KeyMismatchError: List item(s) not present in response: [{'family': 'Bakeoff'}]
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  family: Bakeoff = '???'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-daf6fdcc'
+
+Source test stage (line 31):
+  - &unchanged
+    name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Patient unchanged' failed:
+    - List item(s) not present in response: [{'family': 'Bakeoff'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 List item(s) not present in response: [{'family': 'Bakeoff'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert {'name': [{'f...6.348023Z'}]}} == {'name': [{'f...: 'Bakeoff'}]}
+  
+  Differing items:
+  {'name': [{'family': 'Changed'}]} != {'name': [{'family': 'Bakeoff'}]}
+  Left contains 3 more items:
+  {'id': 'bakeoff-daf6fdcc-patient-self',
+   'meta': {'extension': [{'url': 'ex:createdAt',
+                           'valueInstant': '2026-11-08T19:51:36.348023Z'}],...
+  
+  ...Full output truncated, use '-vv' to show
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert [{'family': 'Changed'}] == [{'family': 'Bakeoff'}]
+  
+  At index 0 diff: {'family': 'Changed'} != {'family': 'Bakeoff'}
+  Use -v to get more diff
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 127, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 471, in check_keys_match_recursive
+    check_keys_match_recursive(
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 590, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(msg) from e
+tavern._core.exceptions.KeyMismatchError: List item(s) not present in response: [{'family': 'Bakeoff'}]
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status_code: 403 = '???'
+
+Source test stage (line 58):
+  - name: status
+    request: {<<: *patch, params: {}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[rec-transaction] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  family: Bakeoff = '???'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-daf6fdcc'
+
+Source test stage (line 31):
+  - &unchanged
+    name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Patient unchanged' failed:
+    - List item(s) not present in response: [{'family': 'Bakeoff'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 List item(s) not present in response: [{'family': 'Bakeoff'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert {'name': [{'f...6.348023Z'}]}} == {'name': [{'f...: 'Bakeoff'}]}
+  
+  Differing items:
+  {'name': [{'family': 'Merged'}]} != {'name': [{'family': 'Bakeoff'}]}
+  Left contains 3 more items:
+  {'id': 'bakeoff-daf6fdcc-patient-self',
+   'meta': {'extension': [{'url': 'ex:createdAt',
+                           'valueInstant': '2026-11-08T19:51:36.348023Z'}],...
+  
+  ...Full output truncated, use '-vv' to show
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert [{'family': 'Merged'}] == [{'family': 'Bakeoff'}]
+  
+  At index 0 diff: {'family': 'Merged'} != {'family': 'Bakeoff'}
+  Use -v to get more diff
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 127, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 471, in check_keys_match_recursive
+    check_keys_match_recursive(
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 590, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(msg) from e
+tavern._core.exceptions.KeyMismatchError: List item(s) not present in response: [{'family': 'Bakeoff'}]
+__ /suite/tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[p1-batch] __
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  family: Bakeoff = '???'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-daf6fdcc'
+
+Source test stage (line 31):
+  - &unchanged
+    name: Patient unchanged
+    request: {url: "{base}/fhir/Patient/{run_id}-patient-self", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      json: {name: [{family: Bakeoff}]}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Patient unchanged' failed:
+    - List item(s) not present in response: [{'family': 'Bakeoff'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 List item(s) not present in response: [{'family': 'Bakeoff'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert {'name': [{'f...6.348023Z'}]}} == {'name': [{'f...: 'Bakeoff'}]}
+  
+  Differing items:
+  {'name': [{'family': 'Merged'}]} != {'name': [{'family': 'Bakeoff'}]}
+  Left contains 3 more items:
+  {'id': 'bakeoff-daf6fdcc-patient-self',
+   'meta': {'extension': [{'url': 'ex:createdAt',
+                           'valueInstant': '2026-11-08T19:51:36.348023Z'}],...
+  
+  ...Full output truncated, use '-vv' to show
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 423, in check_keys_match_recursive
+    assert actual_val == expected_val  # noqa
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert [{'family': 'Merged'}] == [{'family': 'Bakeoff'}]
+  
+  At index 0 diff: {'family': 'Merged'} != {'family': 'Bakeoff'}
+  Use -v to get more diff
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 127, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 471, in check_keys_match_recursive
+    check_keys_match_recursive(
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/dict_util.py", line 590, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(msg) from e
+tavern._core.exceptions.KeyMismatchError: List item(s) not present in response: [{'family': 'Bakeoff'}]
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-daf6fdcc-enc-match-deny--403] _
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  op = 'Encounter/bakeoff-daf6fdcc-enc-match'
+  status = '403'
+  who = 'rec'
+  base = 'http://localhost:8280'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: rec
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Encounter/bakeoff-daf6fdcc-enc-match
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_12_search.tavern.yaml::search with includes and chains[Observation?_id=bakeoff-daf6fdcc-obs-match,bakeoff-daf6fdcc-obs-mismatch&subject:Patient.name=Self-['Observation/bakeoff-daf6fdcc-obs-match']] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  base = 'http://localhost:8280'
+  query = 'Observation?_id=bakeoff-daf6fdcc-obs-match,bakeoff-daf6fdcc-obs-mismatch&subject:Patient.name=Self'
+  expected = '['Observation/bakeoff-daf6fdcc-obs-match']'
+
+Source test stage (line 15):
+  - name: bundle holds exactly the expected resources
+    request: {url: "{base}/fhir/{query}", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:bundle_ids, extra_kwargs: {expected: !force_format_include "{expected}"}}
+
+Formatted stage:
+  name: bundle holds exactly the expected resources
+  request:
+    headers:
+      Authorization: Basic cm9vdDpzZWNyZXQ=
+    url: http://localhost:8280/fhir/Observation?_id=bakeoff-daf6fdcc-obs-match,bakeoff-daf6fdcc-obs-mismatch&subject:Patient.name=Self
+  response:
+    status_code: 200
+    verify_response_with:
+      extra_kwargs:
+        expected:
+        - Observation/bakeoff-daf6fdcc-obs-match
+      function: helpers:bundle_ids
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'bundle holds exactly the expected resources' failed:
+    - Error calling validate function '<function bundle_ids at 0x7f1a6ef0bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 57, in bundle_ids
+            assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+        AssertionError: bundle has [], expected ['Observation/bakeoff-daf6fdcc-obs-match']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function bundle_ids at 0x7f1a6ef0bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 57, in bundle_ids
+        assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+               ^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: bundle has [], expected ['Observation/bakeoff-daf6fdcc-obs-match']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 57, in bundle_ids
+    assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: bundle has [], expected ['Observation/bakeoff-daf6fdcc-obs-match']
+_ /suite/tests/test_14_run_isolation.tavern.yaml::fixture search finds only this run's rows _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  run_id = 'bakeoff-daf6fdcc'
+  admin_auth = 'Basic cm9vdDpzZWNyZXQ='
+  base = 'http://localhost:8280'
+
+Source test stage (line 18):
+  - name: Bakeoff patients all belong to this run
+    request: {url: "{base}/fhir/Patient?family:exact=Bakeoff", headers: {Authorization: "{admin_auth}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:bundle_ids
+        extra_kwargs:
+          expected: ["Patient/{run_id}-patient-self", "Patient/{run_id}-patient-other", "Patient/{run_id}-patient-unlinked"]
+
+Formatted stage:
+  name: Bakeoff patients all belong to this run
+  request:
+    headers:
+      Authorization: Basic cm9vdDpzZWNyZXQ=
+    url: http://localhost:8280/fhir/Patient?family:exact=Bakeoff
+  response:
+    status_code: 200
+    verify_response_with:
+      extra_kwargs:
+        expected:
+        - Patient/bakeoff-daf6fdcc-patient-self
+        - Patient/bakeoff-daf6fdcc-patient-other
+        - Patient/bakeoff-daf6fdcc-patient-unlinked
+      function: helpers:bundle_ids
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'Bakeoff patients all belong to this run' failed:
+    - Error calling validate function '<function bundle_ids at 0x7ff3c2c97c40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 57, in bundle_ids
+            assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+        AssertionError: bundle has ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-unlinked'], expected ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-self', 'Patient/bakeoff-daf6fdcc-patient-unlinked']
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function bundle_ids at 0x7ff3c2c97c40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 57, in bundle_ids
+        assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+               ^^^^^^^^^^^^^^^^^^^^^^^
+    AssertionError: bundle has ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-unlinked'], expected ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-self', 'Patient/bakeoff-daf6fdcc-patient-unlinked']
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 57, in bundle_ids
+    assert got == sorted(expected), f"bundle has {got}, expected {sorted(expected)}"
+           ^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: bundle has ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-unlinked'], expected ['Patient/bakeoff-daf6fdcc-patient-other', 'Patient/bakeoff-daf6fdcc-patient-self', 'Patient/bakeoff-daf6fdcc-patient-unlinked']
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.tavern.yaml::rec cannot write Patient - For...
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[rec-fhir/Observation]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-transaction]
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[pat-self-batch]
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[rec-transaction]
+FAILED tests/test_07_bypass.tavern.yaml::Bundle bypass is denied[p1-batch] - ...
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-daf6fdcc-enc-match-deny--403]
+FAILED tests/test_12_search.tavern.yaml::search with includes and chains[Observation?_id=bakeoff-daf6fdcc-obs-match,bakeoff-daf6fdcc-obs-mismatch&subject:Patient.name=Self-['Observation/bakeoff-daf6fdcc-obs-match']]
+FAILED tests/test_14_run_isolation.tavern.yaml::fixture search finds only this run's rows
+11 failed, 84 passed in 3.24s

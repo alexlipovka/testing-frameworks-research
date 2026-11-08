@@ -1,4 +1,4 @@
-"""results/mutants.csv -> results/mutant-matrix.csv and a Markdown table. Killed: a test
+"""mutants_report.py RESULTS: mutants.csv -> mutant-matrix.csv and a Markdown table. Killed: a test
 fails in both mutant runs and never failed at baseline (a known flake). Decision-only:
 killed, but the decision-ablated copy shows no such failure."""
 import collections
@@ -6,7 +6,7 @@ import csv
 import re
 import sys
 
-OUT = "results"
+OUT = sys.argv[1]
 SUITES = ["hurl", "karate", "pytest", "playwright", "tavern"]
 runs = collections.defaultdict(dict)
 for r in csv.DictReader(open(f"{OUT}/mutants.csv")):
@@ -16,7 +16,9 @@ for r in csv.DictReader(open(f"{OUT}/mutants.csv")):
 
 flaky = collections.defaultdict(set)
 for (m, s), rr in runs.items():
-    flaky[s] |= rr["baseline"][1]
+    for run, (_, tests) in rr.items():
+        if run.startswith("baseline"):
+            flaky[s] |= tests
 
 rows = []
 for (m, s), rr in sorted(runs.items()):
@@ -24,8 +26,10 @@ for (m, s), rr in sorted(runs.items()):
     kill = (t1 & t2) - flaky[s]
     status_kill = ta - flaky[s]
     notes = []
-    if rr["baseline"][0]:
-        notes.append(f"baseline red: {';'.join(sorted(rr['baseline'][1]))}")
+    red = [run for run, (e, _) in rr.items() if run.startswith("baseline") and e]
+    if red:
+        tests = set().union(*(rr[run][1] for run in red))
+        notes.append(f"baseline red {len(red)}x: {';'.join(sorted(tests))}")
     if t1 - flaky[s] != t2 - flaky[s]:
         notes.append(f"mutant runs differ: {';'.join(sorted((t1 ^ t2) - flaky[s]))}")
     if (t1 | t2 | ta) & flaky[s]:

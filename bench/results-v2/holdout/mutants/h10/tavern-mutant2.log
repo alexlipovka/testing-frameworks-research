@@ -1,0 +1,127 @@
+bringing up nodes...
+bringing up nodes...
+
+.....F................................................F................. [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  patient = 'patient-other'
+  __debug: policy = '???'
+  expect = 'deny'
+  base = 'http://localhost:8280'
+  who = 'p1'
+  run_id = 'bakeoff-b0e4a26d'
+
+Source test stage (line 12):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/Patient/{run_id}-{patient}"
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+    response:
+      status_code: 200
+      verify_response_with:
+        function: helpers:decision
+        extra_kwargs: {expect: "{expect}", policy: practitioner-policy}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fc4d03a3b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 33, in decision
+            assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+                   ^^^^^^^^^^^^^^^^^^
+        AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p1 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-other?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner2"'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fc4d03a3b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 33, in decision
+        assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+               ^^^^^^^^^^^^^^^^^^
+    AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p1 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-other?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner2"'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 33, in decision
+    assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p1 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-other?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner2"'}]
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-b0e4a26d-patient-self-deny--403] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  op = 'Patient/bakeoff-b0e4a26d-patient-self'
+  base = 'http://localhost:8280'
+  policy = ''
+  __debug: policy = '???'
+  who = 'p2'
+  expect = 'deny'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}", policy: "{policy}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7f973189fb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 33, in decision
+            assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+                   ^^^^^^^^^^^^^^^^^^
+        AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p2 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-self?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner1"'}]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f973189fb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 33, in decision
+        assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+               ^^^^^^^^^^^^^^^^^^
+    AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p2 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-self?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner1"'}]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 33, in decision
+    assert not _crashes(pols), f"expected {expect}, a policy crashed: {_report(response)}"
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: expected deny, a policy crashed: user=bakeoff-b0e4a26d-p2 GET http://localhost:8280/fhir/Patient/bakeoff-b0e4a26d-patient-self?__debug=policy: granted=[] crashed=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "practitioner1"'}]
+=========================== short test summary info ============================
+FAILED tests/test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-b0e4a26d-patient-self-deny--403]
+2 failed, 93 passed in 3.29s

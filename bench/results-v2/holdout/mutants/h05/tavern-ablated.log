@@ -1,0 +1,64 @@
+bringing up nodes...
+bringing up nodes...
+
+.............................F.........................F................ [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-1138f0dd-patient-self,bakeoff-1138f0dd-patient-other] _
+[gw1] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  base = 'http://localhost:8280'
+  status_code: 403 = '???'
+  path = 'fhir/Patient?_id=bakeoff-1138f0dd-patient-self,bakeoff-1138f0dd-patient-other'
+  who = 'p1'
+
+Source test stage (line 52):
+  - name: status
+    request:
+      url: "{base}/{path}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: 403}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-1138f0dd-patient-self-deny--403] _
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  status = '403'
+  who = 'p2'
+  op = 'Patient?_id=bakeoff-1138f0dd-patient-self'
+  base = 'http://localhost:8280'
+
+Source test stage (line 37):
+  - name: status
+    request:
+      url: "{base}/fhir/{op}"
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response: {status_code: !int "{status}"}
+
+Formatted stage:
+  name: status
+  request:
+    headers:
+      $ext:
+        extra_kwargs:
+          who: p2
+        function: helpers:auth
+    url: http://localhost:8280/fhir/Patient?_id=bakeoff-1138f0dd-patient-self
+  response:
+    status_code: 403
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'status' failed:
+    - Status code was 200, expected 403
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:64 Status code was 200, expected 403
+=========================== short test summary info ============================
+FAILED tests/test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-1138f0dd-patient-self,bakeoff-1138f0dd-patient-other]
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-1138f0dd-patient-self-deny--403]
+2 failed, 93 passed in 3.22s

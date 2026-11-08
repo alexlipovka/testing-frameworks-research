@@ -1,0 +1,241 @@
+mutant,suite,run,exit,failed_tests
+h01,hurl,baseline,0,
+h01,hurl,mutant1,0,
+h01,hurl,mutant2,0,
+h01,hurl,ablated,0,
+h01,karate,baseline,0,
+h01,karate,mutant1,0,
+h01,karate,mutant2,0,
+h01,karate,ablated,0,
+h01,pytest,baseline,0,
+h01,pytest,mutant1,0,
+h01,pytest,mutant2,0,
+h01,pytest,ablated,0,
+h01,playwright,baseline,0,
+h01,playwright,mutant1,0,
+h01,playwright,mutant2,0,
+h01,playwright,ablated,0,
+h01,tavern,baseline,0,
+h01,tavern,mutant1,0,
+h01,tavern,mutant2,0,
+h01,tavern,ablated,0,
+h02,hurl,baseline,0,
+h02,hurl,mutant1,0,
+h02,hurl,mutant2,0,
+h02,hurl,ablated,0,
+h02,karate,baseline,0,
+h02,karate,mutant1,0,
+h02,karate,mutant2,0,
+h02,karate,ablated,0,
+h02,pytest,baseline,0,
+h02,pytest,mutant1,0,
+h02,pytest,mutant2,0,
+h02,pytest,ablated,0,
+h02,playwright,baseline,0,
+h02,playwright,mutant1,0,
+h02,playwright,mutant2,0,
+h02,playwright,ablated,0,
+h02,tavern,baseline,0,
+h02,tavern,mutant1,0,
+h02,tavern,mutant2,0,
+h02,tavern,ablated,0,
+h03,hurl,baseline,0,
+h03,hurl,mutant1,0,
+h03,hurl,mutant2,0,
+h03,hurl,ablated,0,
+h03,karate,baseline,0,
+h03,karate,mutant1,0,
+h03,karate,mutant2,0,
+h03,karate,ablated,0,
+h03,pytest,baseline,0,
+h03,pytest,mutant1,0,
+h03,pytest,mutant2,0,
+h03,pytest,ablated,0,
+h03,playwright,baseline,0,
+h03,playwright,mutant1,0,
+h03,playwright,mutant2,0,
+h03,playwright,ablated,0,
+h03,tavern,baseline,0,
+h03,tavern,mutant1,0,
+h03,tavern,mutant2,0,
+h03,tavern,ablated,0,
+h04,hurl,baseline,0,
+h04,hurl,mutant1,4,cases/02-practitioner-consent.hurl
+h04,hurl,mutant2,4,cases/02-practitioner-consent.hurl
+h04,hurl,ablated,4,cases/02-practitioner-consent.hurl
+h04,karate,baseline,0,
+h04,karate,mutant1,1,features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies
+h04,karate,mutant2,1,features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies
+h04,karate,ablated,1,features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies
+h04,pytest,baseline,0,
+h04,pytest,mutant1,1,tests.test_02_practitioner_consent::test_revoked_consent_denies
+h04,pytest,mutant2,1,tests.test_02_practitioner_consent::test_revoked_consent_denies
+h04,pytest,ablated,1,tests.test_02_practitioner_consent::test_revoked_consent_denies
+h04,playwright,baseline,0,
+h04,playwright,mutant1,1,02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked
+h04,playwright,mutant2,1,02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked
+h04,playwright,ablated,1,02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked
+h04,tavern,baseline,0,
+h04,tavern,mutant1,1,tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+h04,tavern,mutant2,1,tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+h04,tavern,ablated,1,tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403]
+h05,hurl,baseline,0,
+h05,hurl,mutant1,4,cases/06-search-leak.hurl;matrix/.gen/p2.hurl
+h05,hurl,mutant2,4,cases/06-search-leak.hurl;matrix/.gen/p2.hurl
+h05,hurl,ablated,4,cases/06-search-leak.hurl;matrix/.gen/p2.hurl
+h05,karate,baseline,0,
+h05,karate,mutant1,1,features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::p2
+h05,karate,mutant2,1,features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::p2
+h05,karate,ablated,1,features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::p2
+h05,pytest,baseline,0,
+h05,pytest,mutant1,1,tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[p2-search_patient]
+h05,pytest,mutant2,1,tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[p2-search_patient]
+h05,pytest,ablated,1,tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[p2-search_patient]
+h05,playwright,baseline,0,
+h05,playwright,mutant1,1,06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny
+h05,playwright,mutant2,1,06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny
+h05,playwright,ablated,1,06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny
+h05,tavern,baseline,0,
+h05,tavern,mutant1,1,tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-7aef3502-patient-self,bakeoff-7aef3502-patient-other];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-7aef3502-patient-self-deny--403]
+h05,tavern,mutant2,1,tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-0381fc75-patient-self,bakeoff-0381fc75-patient-other];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-0381fc75-patient-self-deny--403]
+h05,tavern,ablated,1,tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-1138f0dd-patient-self,bakeoff-1138f0dd-patient-other];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-1138f0dd-patient-self-deny--403]
+h06,hurl,baseline,0,
+h06,hurl,mutant1,4,cases/09-sdc.hurl
+h06,hurl,mutant2,4,cases/09-sdc.hurl
+h06,hurl,ablated,4,cases/09-sdc.hurl
+h06,karate,baseline,0,
+h06,karate,mutant1,1,features.09-sdc::p1 $extract, QR subject patient-self, patientId patient-self: consented, allowed
+h06,karate,mutant2,1,features.09-sdc::p1 $extract, QR subject patient-self, patientId patient-self: consented, allowed
+h06,karate,ablated,1,features.09-sdc::p1 $extract, QR subject patient-self, patientId patient-self: consented, allowed
+h06,pytest,baseline,0,
+h06,pytest,mutant1,1,tests.test_09_sdc::test_consented_practitioner_passes_the_gate
+h06,pytest,mutant2,1,tests.test_09_sdc::test_consented_practitioner_passes_the_gate
+h06,pytest,ablated,0,
+h06,playwright,baseline,0,
+h06,playwright,mutant1,1,09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient;09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented
+h06,playwright,mutant2,1,09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient;09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented
+h06,playwright,ablated,1,09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient;09-sdc.spec.ts::9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented
+h06,tavern,baseline,0,
+h06,tavern,mutant1,1,tests.test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p1-$extract-patient-self];tests.test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p2-$extract-patient-other]
+h06,tavern,mutant2,1,tests.test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p1-$extract-patient-self];tests.test_09_sdc.tavern.yaml::SDC gate allows the consented practitioner[p2-$extract-patient-other]
+h06,tavern,ablated,0,
+h07,hurl,baseline,0,
+h07,hurl,mutant1,4,matrix/.gen/rec.hurl
+h07,hurl,mutant2,4,matrix/.gen/rec.hurl
+h07,hurl,ablated,4,matrix/.gen/rec.hurl
+h07,karate,baseline,0,
+h07,karate,mutant1,0,
+h07,karate,mutant2,0,
+h07,karate,ablated,0,
+h07,pytest,baseline,0,
+h07,pytest,mutant1,1,tests.test_08_matrix::test_matrix[rec-read_encounter]
+h07,pytest,mutant2,1,tests.test_08_matrix::test_matrix[rec-read_encounter]
+h07,pytest,ablated,1,tests.test_08_matrix::test_matrix[rec-read_encounter]
+h07,playwright,baseline,0,
+h07,playwright,mutant1,0,
+h07,playwright,mutant2,0,
+h07,playwright,ablated,0,
+h07,tavern,baseline,0,
+h07,tavern,mutant1,1,tests.test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-930b0ad7-enc-match-deny--403]
+h07,tavern,mutant2,1,tests.test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-0218d00d-enc-match-deny--403]
+h07,tavern,ablated,1,tests.test_08_matrix.tavern.yaml::access matrix[rec-Encounter/bakeoff-204e21d0-enc-match-deny--403]
+h08,hurl,baseline,0,
+h08,hurl,mutant1,4,cases/01-patient-own-record.hurl;cases/02-practitioner-consent.hurl;cases/05-norole-denied.hurl;cases/06-search-leak.hurl;matrix/.gen/norole.hurl;matrix/.gen/p1.hurl;matrix/.gen/p2.hurl;matrix/.gen/pat-self.hurl
+h08,hurl,mutant2,4,cases/01-patient-own-record.hurl;cases/02-practitioner-consent.hurl;cases/05-norole-denied.hurl;cases/06-search-leak.hurl;matrix/.gen/norole.hurl;matrix/.gen/p1.hurl;matrix/.gen/p2.hurl;matrix/.gen/pat-self.hurl
+h08,hurl,ablated,4,cases/01-patient-own-record.hurl;cases/02-practitioner-consent.hurl;cases/05-norole-denied.hurl;cases/06-search-leak.hurl;matrix/.gen/norole.hurl;matrix/.gen/p2.hurl;matrix/.gen/pat-self.hurl
+h08,karate,baseline,0,
+h08,karate,mutant1,1,features.01-patient-own-record::pat-self reads another Patient: denied by every policy;features.01-patient-own-record::pat-self reads own Patient: allowed by patient-role-policy;features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies;features.02-practitioner-consent::p1 reads patient-self: active Consent allows;features.02-practitioner-consent::p1 reads patient-unlinked: no Consent denies;features.02-practitioner-consent::p2 reads patient-other: active Consent allows;features.02-practitioner-consent::p2 reads patient-self: no Consent denies;features.03-sql-policy-throws::a plain deny has no error either;features.03-sql-policy-throws::a throwing SQL policy is reported with its error, though the status is the same 403;features.03-sql-policy-throws::baseline: a patient request evaluates every policy without a crash;features.05-no-role-denied::norole GET #("/fhir/Patient/" + id("patient-self")): denied by every policy;features.05-no-role-denied::norole GET /fhir/Patient: denied by every policy;features.06-search-leak::p1 searches Patient by a consented _id: allowed, that Patient only;features.06-search-leak::p1 searches Patient with no _id: denied;features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::norole;features.08-matrix::p1;features.08-matrix::p2;features.08-matrix::pat-self
+h08,karate,mutant2,1,features.01-patient-own-record::pat-self reads another Patient: denied by every policy;features.01-patient-own-record::pat-self reads own Patient: allowed by patient-role-policy;features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies;features.02-practitioner-consent::p1 reads patient-self: active Consent allows;features.02-practitioner-consent::p1 reads patient-unlinked: no Consent denies;features.02-practitioner-consent::p2 reads patient-other: active Consent allows;features.02-practitioner-consent::p2 reads patient-self: no Consent denies;features.03-sql-policy-throws::a plain deny has no error either;features.03-sql-policy-throws::a throwing SQL policy is reported with its error, though the status is the same 403;features.03-sql-policy-throws::baseline: a patient request evaluates every policy without a crash;features.05-no-role-denied::norole GET #("/fhir/Patient/" + id("patient-self")): denied by every policy;features.05-no-role-denied::norole GET /fhir/Patient: denied by every policy;features.06-search-leak::p1 searches Patient by a consented _id: allowed, that Patient only;features.06-search-leak::p1 searches Patient with no _id: denied;features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::norole;features.08-matrix::p1;features.08-matrix::p2;features.08-matrix::pat-self
+h08,karate,ablated,1,features.01-patient-own-record::pat-self reads another Patient: denied by every policy;features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies;features.02-practitioner-consent::p1 reads patient-unlinked: no Consent denies;features.02-practitioner-consent::p2 reads patient-self: no Consent denies;features.03-sql-policy-throws::a plain deny has no error either;features.03-sql-policy-throws::a throwing SQL policy is reported with its error, though the status is the same 403;features.05-no-role-denied::norole GET #("/fhir/Patient/" + id("patient-self")): denied by every policy;features.05-no-role-denied::norole GET /fhir/Patient: denied by every policy;features.06-search-leak::p1 searches Patient with no _id: denied;features.06-search-leak::p1 searches Patient with one unconsented id among them: denied;features.06-search-leak::p1 searches Patient with only a revoked Consent: denied;features.08-matrix::norole;features.08-matrix::p2;features.08-matrix::pat-self
+h08,pytest,baseline,0,
+h08,pytest,mutant1,1,tests.test_01_patient_own_record::test_patient_cannot_read_other_record;tests.test_02_practitioner_consent::test_no_consent_denies;tests.test_02_practitioner_consent::test_revoked_consent_denies;tests.test_03_policy_error::test_throwing_sql_policy_is_an_error;tests.test_05_norole::test_norole_denied[GET /fhir/Patient/{patient-self}];tests.test_05_norole::test_norole_denied[GET /fhir/Patient?_id={patient-self}];tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[norole-read_patient];tests.test_08_matrix::test_matrix[norole-search_patient];tests.test_08_matrix::test_matrix[p2-read_patient];tests.test_08_matrix::test_matrix[p2-search_patient];tests.test_08_matrix::test_matrix[pat-self-search_patient];tests.test_14_isolation::test_same_fixture_name_from_another_run_is_denied
+h08,pytest,mutant2,1,tests.test_01_patient_own_record::test_patient_cannot_read_other_record;tests.test_02_practitioner_consent::test_no_consent_denies;tests.test_02_practitioner_consent::test_revoked_consent_denies;tests.test_03_policy_error::test_throwing_sql_policy_is_an_error;tests.test_05_norole::test_norole_denied[GET /fhir/Patient/{patient-self}];tests.test_05_norole::test_norole_denied[GET /fhir/Patient?_id={patient-self}];tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[norole-read_patient];tests.test_08_matrix::test_matrix[norole-search_patient];tests.test_08_matrix::test_matrix[p2-read_patient];tests.test_08_matrix::test_matrix[p2-search_patient];tests.test_08_matrix::test_matrix[pat-self-search_patient];tests.test_14_isolation::test_same_fixture_name_from_another_run_is_denied
+h08,pytest,ablated,1,tests.test_01_patient_own_record::test_patient_cannot_read_other_record;tests.test_02_practitioner_consent::test_no_consent_denies;tests.test_02_practitioner_consent::test_revoked_consent_denies;tests.test_03_policy_error::test_throwing_sql_policy_is_an_error;tests.test_05_norole::test_norole_denied[GET /fhir/Patient/{patient-self}];tests.test_05_norole::test_norole_denied[GET /fhir/Patient?_id={patient-self}];tests.test_06_search_leak::test_practitioner_searches_only_consented_patients;tests.test_08_matrix::test_matrix[norole-read_patient];tests.test_08_matrix::test_matrix[norole-search_patient];tests.test_08_matrix::test_matrix[p2-read_patient];tests.test_08_matrix::test_matrix[p2-search_patient];tests.test_08_matrix::test_matrix[pat-self-search_patient];tests.test_14_isolation::test_same_fixture_name_from_another_run_is_denied
+h08,playwright,baseline,0,
+h08,playwright,mutant1,1,01-patient-own-record.spec.ts::1. patient reads own record (matcho) › deny: another patient's record;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1;05-norole.spec.ts::5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations;06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny
+h08,playwright,mutant2,1,01-patient-own-record.spec.ts::1. patient reads own record (matcho) › deny: another patient's record;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1;05-norole.spec.ts::5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations;06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny
+h08,playwright,ablated,1,01-patient-own-record.spec.ts::1. patient reads own record (matcho) › deny: another patient's record;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1;05-norole.spec.ts::5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations;06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › norole search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny
+h08,tavern,baseline,0,
+h08,tavern,mutant1,1,tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403];tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403];tests.test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error;tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-d46a8865-patient-self];tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-d46a8865-patient-self];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-d46a8865-patient-self,bakeoff-d46a8865-patient-other];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-d46a8865-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-d46a8865-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-d46a8865-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-d46a8865-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-d46a8865-patient-self-deny--403]
+h08,tavern,mutant2,1,tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403];tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403];tests.test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error;tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-02422ec2-patient-self];tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-02422ec2-patient-self];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-02422ec2-patient-self,bakeoff-02422ec2-patient-other];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-02422ec2-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-02422ec2-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-02422ec2-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-02422ec2-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-02422ec2-patient-self-deny--403]
+h08,tavern,ablated,1,tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403];tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403];tests.test_03_sql_policy_error.tavern.yaml::throwing SQL policy is reported as an error;tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient/bakeoff-295d60d0-patient-self];tests.test_05_norole.tavern.yaml::norole is denied[GET-fhir/Patient?_id=bakeoff-295d60d0-patient-self];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient?_id=bakeoff-295d60d0-patient-self,bakeoff-295d60d0-patient-other];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[p1-fhir/Patient];tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Patient];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient/bakeoff-295d60d0-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[norole-Patient?_id=bakeoff-295d60d0-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-295d60d0-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient?_id=bakeoff-295d60d0-patient-self-deny--403];tests.test_08_matrix.tavern.yaml::access matrix[pat-self-Patient?_id=bakeoff-295d60d0-patient-self-deny--403]
+h09,hurl,baseline,0,
+h09,hurl,mutant1,0,
+h09,hurl,mutant2,0,
+h09,hurl,ablated,0,
+h09,karate,baseline,0,
+h09,karate,mutant1,1,features.06-search-leak::pat-self search with a second subject: denied
+h09,karate,mutant2,1,features.06-search-leak::pat-self search with a second subject: denied
+h09,karate,ablated,0,
+h09,pytest,baseline,0,
+h09,pytest,mutant1,1,tests.test_06_search_leak::test_patient_out_of_scope_searches_denied
+h09,pytest,mutant2,1,tests.test_06_search_leak::test_patient_out_of_scope_searches_denied
+h09,pytest,ablated,0,
+h09,playwright,baseline,0,
+h09,playwright,mutant1,1,06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: patient smuggles a second subject
+h09,playwright,mutant2,1,06-search-leak.spec.ts::6. searches return nothing outside the caller's scope › deny: patient smuggles a second subject
+h09,playwright,ablated,0,
+h09,tavern,baseline,0,
+h09,tavern,mutant1,1,tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-40b6cf01-patient-self&subject=Patient/bakeoff-40b6cf01-patient-other]
+h09,tavern,mutant2,1,tests.test_06_search_leak.tavern.yaml::out-of-scope search is denied[pat-self-fhir/Observation?subject=Patient/bakeoff-ea35f9bb-patient-self&subject=Patient/bakeoff-ea35f9bb-patient-other]
+h09,tavern,ablated,0,
+h10,hurl,baseline,0,
+h10,hurl,mutant1,4,cases/02-practitioner-consent.hurl;matrix/.gen/p2.hurl
+h10,hurl,mutant2,4,cases/02-practitioner-consent.hurl;matrix/.gen/p2.hurl
+h10,hurl,ablated,0,
+h10,karate,baseline,0,
+h10,karate,mutant1,1,features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies;features.02-practitioner-consent::p2 reads patient-self: no Consent denies;features.08-matrix::p2
+h10,karate,mutant2,1,features.02-practitioner-consent::p1 reads patient-other: revoked Consent denies;features.02-practitioner-consent::p2 reads patient-self: no Consent denies;features.08-matrix::p2
+h10,karate,ablated,0,
+h10,pytest,baseline,0,
+h10,pytest,mutant1,1,tests.test_02_practitioner_consent::test_no_consent_denies;tests.test_02_practitioner_consent::test_revoked_consent_denies;tests.test_08_matrix::test_matrix[p2-read_patient]
+h10,pytest,mutant2,1,tests.test_02_practitioner_consent::test_no_consent_denies;tests.test_02_practitioner_consent::test_revoked_consent_denies;tests.test_08_matrix::test_matrix[p2-read_patient]
+h10,pytest,ablated,0,
+h10,playwright,baseline,0,
+h10,playwright,mutant1,1,02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny
+h10,playwright,mutant2,1,02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked;02-practitioner-consent.spec.ts::2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny
+h10,playwright,ablated,0,
+h10,tavern,baseline,0,
+h10,tavern,mutant1,1,tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-045193f6-patient-self-deny--403]
+h10,tavern,mutant2,1,tests.test_02_practitioner_consent.tavern.yaml::practitioner reads Patient via Consent[p1-patient-other-deny-403];tests.test_08_matrix.tavern.yaml::access matrix[p2-Patient/bakeoff-b0e4a26d-patient-self-deny--403]
+h10,tavern,ablated,0,
+h11,hurl,baseline,0,
+h11,hurl,mutant1,0,
+h11,hurl,mutant2,0,
+h11,hurl,ablated,0,
+h11,karate,baseline,0,
+h11,karate,mutant1,1,features.09-sdc::p1 $extract, QR subject patient-self, patientId patient-other: forged answer, denied;features.09-sdc::p2 $extract, QR subject patient-other, patientId patient-self: forged answer to a consented QR, denied
+h11,karate,mutant2,1,features.09-sdc::p1 $extract, QR subject patient-self, patientId patient-other: forged answer, denied;features.09-sdc::p2 $extract, QR subject patient-other, patientId patient-self: forged answer to a consented QR, denied
+h11,karate,ablated,0,
+h11,pytest,baseline,0,
+h11,pytest,mutant1,1,tests.test_09_sdc::test_forged_answer_denied
+h11,pytest,mutant2,1,tests.test_09_sdc::test_forged_answer_denied
+h11,pytest,ablated,0,
+h11,playwright,baseline,0,
+h11,playwright,mutant1,1,09-sdc.spec.ts::9. SDC $populate / $extract under each role › deny: forged patientId answer pointing at another patient
+h11,playwright,mutant2,1,09-sdc.spec.ts::9. SDC $populate / $extract under each role › deny: forged patientId answer pointing at another patient
+h11,playwright,ablated,0,
+h11,tavern,baseline,0,
+h11,tavern,mutant1,1,tests.test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other];tests.test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self]
+h11,tavern,mutant2,1,tests.test_09_sdc.tavern.yaml::SDC gate denies everyone else[p1-$extract-patient-self-patient-other];tests.test_09_sdc.tavern.yaml::SDC gate denies everyone else[p2-$extract-patient-other-patient-self]
+h11,tavern,ablated,0,
+h12,hurl,baseline,0,
+h12,hurl,mutant1,4,cases/01-patient-own-record.hurl;matrix/.gen/pat-self.hurl
+h12,hurl,mutant2,4,cases/01-patient-own-record.hurl;matrix/.gen/pat-self.hurl
+h12,hurl,ablated,0,
+h12,karate,baseline,0,
+h12,karate,mutant1,1,features.01-patient-own-record::pat-self reads another Patient: denied by every policy;features.01-patient-own-record::pat-self reads own Patient: allowed by patient-role-policy;features.03-sql-policy-throws::a plain deny has no error either;features.03-sql-policy-throws::baseline: a patient request evaluates every policy without a crash;features.07-bypass-attempts::pat-self patches a Patient with JSON Patch: denied;features.08-matrix::pat-self
+h12,karate,mutant2,1,features.01-patient-own-record::pat-self reads another Patient: denied by every policy;features.01-patient-own-record::pat-self reads own Patient: allowed by patient-role-policy;features.03-sql-policy-throws::a plain deny has no error either;features.03-sql-policy-throws::baseline: a patient request evaluates every policy without a crash;features.07-bypass-attempts::pat-self patches a Patient with JSON Patch: denied;features.08-matrix::pat-self
+h12,karate,ablated,0,
+h12,pytest,baseline,0,
+h12,pytest,mutant1,1,tests.test_01_patient_own_record::test_patient_cannot_read_other_record;tests.test_01_patient_own_record::test_patient_reads_own_record;tests.test_03_policy_error::test_baseline_policies_do_not_throw_on_patient_requests;tests.test_08_matrix::test_matrix[pat-self-read_patient];tests.test_14_isolation::test_same_fixture_name_from_another_run_is_denied
+h12,pytest,mutant2,1,tests.test_01_patient_own_record::test_patient_cannot_read_other_record;tests.test_01_patient_own_record::test_patient_reads_own_record;tests.test_03_policy_error::test_baseline_policies_do_not_throw_on_patient_requests;tests.test_08_matrix::test_matrix[pat-self-read_patient];tests.test_14_isolation::test_same_fixture_name_from_another_run_is_denied
+h12,pytest,ablated,0,
+h12,playwright,baseline,0,
+h12,playwright,mutant1,1,01-patient-own-record.spec.ts::1. patient reads own record (matcho) › allow: own Patient;01-patient-own-record.spec.ts::1. patient reads own record (matcho) › deny: another patient's record;03-sql-policy-error.spec.ts::3. a SQL policy that throws is an error, not a plain deny › no policy crashes on patient requests, allowed or denied;07-bypass.spec.ts::7. bypass attempts › deny: patient JSON-Patches own record;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self read: allow via patient-role-policy;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self update: deny
+h12,playwright,mutant2,1,01-patient-own-record.spec.ts::1. patient reads own record (matcho) › allow: own Patient;01-patient-own-record.spec.ts::1. patient reads own record (matcho) › deny: another patient's record;03-sql-policy-error.spec.ts::3. a SQL policy that throws is an error, not a plain deny › no policy crashes on patient requests, allowed or denied;07-bypass.spec.ts::7. bypass attempts › deny: patient JSON-Patches own record;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self read: allow via patient-role-policy;08-matrix.spec.ts::8. matrix: 5 identities × 4 operations on patient-self › pat-self update: deny
+h12,playwright,ablated,0,
+h12,tavern,baseline,0,
+h12,tavern,mutant1,1,tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403];tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-self-allow-200];tests.test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Patient/bakeoff-e642a8ae-patient-self];tests.test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]];tests.test_08_matrix.tavern.yaml::access matrix[pat-self-Patient/bakeoff-e642a8ae-patient-self-allow-patient-role-policy-200]
+h12,tavern,mutant2,1,tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-other-deny-403];tests.test_01_patient_own_record.tavern.yaml::pat-self reads Patient[patient-self-allow-200];tests.test_03_sql_policy_error.tavern.yaml::no baseline policy crashes for pat-self[fhir/Patient/bakeoff-ad8ed89a-patient-self];tests.test_07_bypass.tavern.yaml::PATCH bypass is denied[pat-self-application/json-patch+json-[{'op': 'replace', 'path': '/name/0/family', 'value': 'Patched'}]];tests.test_08_matrix.tavern.yaml::access matrix[pat-self-Patient/bakeoff-ad8ed89a-patient-self-allow-patient-role-policy-200]
+h12,tavern,ablated,0,

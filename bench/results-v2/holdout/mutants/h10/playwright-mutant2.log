@@ -1,0 +1,229 @@
+
+Running 77 tests using 4 workers
+
+  ✓   3 tests/01-patient-own-record.spec.ts:12:3 › 1. patient reads own record (matcho) › allow: own Encounter (67ms)
+  ✓   2 tests/01-patient-own-record.spec.ts:8:3 › 1. patient reads own record (matcho) › deny: another patient's record (70ms)
+  ✓   1 tests/01-patient-own-record.spec.ts:16:3 › 1. patient reads own record (matcho) › deny: another patient's Encounter (85ms)
+  ✓   4 tests/01-patient-own-record.spec.ts:4:3 › 1. patient reads own record (matcho) › allow: own Patient (74ms)
+  ✓   5 tests/01-patient-own-record.spec.ts:20:3 › 1. patient reads own record (matcho) › deny: an Encounter id under another resource type (50ms)
+  ✓   6 tests/02-practitioner-consent.spec.ts:4:3 › 2. practitioner via Consent (SQL) › allow: p1 reads a patient with an active Consent (50ms)
+  ✓   7 tests/02-practitioner-consent.spec.ts:8:3 › 2. practitioner via Consent (SQL) › allow: p2 reads a patient with an active Consent (52ms)
+  ✘   8 tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked (34ms)
+  ✘  10 tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 (30ms)
+  ✓  11 tests/03-sql-policy-error.spec.ts:4:3 › 3. a SQL policy that throws is an error, not a plain deny › a crashing SQL policy shows up in the debug dump although the client only sees 403 (36ms)
+  ✓   9 tests/02-practitioner-consent.spec.ts:20:3 › 2. practitioner via Consent (SQL) › deny: nobody is consented to the unlinked patient (67ms)
+  ✓  12 tests/04-receptionist.spec.ts:8:3 › 4. receptionist reads but does not write Patients › allow: search Patients (62ms)
+  ✓  13 tests/04-receptionist.spec.ts:12:3 › 4. receptionist reads but does not write Patients › allow: Appointments are the receptionist's to manage (45ms)
+  ✓  14 tests/04-receptionist.spec.ts:16:3 › 4. receptionist reads but does not write Patients › deny: PUT a Patient (33ms)
+  ✓  15 tests/04-receptionist.spec.ts:25:3 › 4. receptionist reads but does not write Patients › deny: POST a Patient (49ms)
+  ✓  16 tests/04-receptionist.spec.ts:29:3 › 4. receptionist reads but does not write Patients › deny: JSON Patch a Patient (48ms)
+  ✓  18 tests/05-norole.spec.ts:23:3 › 5. an identity without a role is denied everywhere › allow (control): admin can do the same reads (14ms)
+  ✓  19 tests/06-search-leak.spec.ts:6:3 › 6. searches return nothing outside the caller's scope › allow: patient searches own Observations and gets only them (102ms)
+  ✓  20 tests/06-search-leak.spec.ts:14:3 › 6. searches return nothing outside the caller's scope › deny: patient searches another patient's Observations (27ms)
+  ✓  17 tests/05-norole.spec.ts:19:3 › 5. an identity without a role is denied everywhere › deny: reads, searches, writes and SDC operations (238ms)
+  ✓  21 tests/06-search-leak.spec.ts:18:3 › 6. searches return nothing outside the caller's scope › deny: patient smuggles a second subject (33ms)
+  ✓  22 tests/06-search-leak.spec.ts:24:3 › 6. searches return nothing outside the caller's scope › deny: patient searches all Observations (29ms)
+  ✓  23 tests/06-search-leak.spec.ts:28:3 › 6. searches return nothing outside the caller's scope › deny: patient adds an _include (35ms)
+  ✓  24 tests/06-search-leak.spec.ts:32:3 › 6. searches return nothing outside the caller's scope › allow: practitioner searches consented patients and gets only them (36ms)
+  ✓  25 tests/06-search-leak.spec.ts:37:3 › 6. searches return nothing outside the caller's scope › deny: practitioner searches a consented and an unconsented patient (58ms)
+  ✓  26 tests/06-search-leak.spec.ts:41:3 › 6. searches return nothing outside the caller's scope › deny: practitioner adds a _revinclude (74ms)
+  ✓  28 tests/06-search-leak.spec.ts:45:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Observations in through _revinclude (31ms)
+  ✓  30 tests/06-search-leak.spec.ts:49:3 › 6. searches return nothing outside the caller's scope › deny: receptionist pulls Patients in through an Appointment _include (33ms)
+  ✓  31 tests/07-bypass.spec.ts:6:3 › 7. bypass attempts › deny: patient reads another patient's record inside a transaction Bundle (34ms)
+  ✓  32 tests/07-bypass.spec.ts:14:3 › 7. bypass attempts › deny: even a request the patient may make on its own is refused inside a Bundle (37ms)
+  ✓  29 tests/04-receptionist.spec.ts:4:3 › 4. receptionist reads but does not write Patients › allow: read a Patient by id (75ms)
+  ✓  27 tests/03-sql-policy-error.spec.ts:18:3 › 3. a SQL policy that throws is an error, not a plain deny › no policy crashes on patient requests, allowed or denied (162ms)
+  ✓  33 tests/07-bypass.spec.ts:22:3 › 7. bypass attempts › deny: receptionist writes a Patient inside a transaction Bundle (56ms)
+  ✓  34 tests/07-bypass.spec.ts:34:3 › 7. bypass attempts › deny: receptionist JSON-Patches a Patient (60ms)
+  ✓  36 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self read: allow via patient-role-policy (31ms)
+  ✓  35 tests/07-bypass.spec.ts:43:3 › 7. bypass attempts › deny: receptionist merge-patches a Patient (50ms)
+  ✓  37 tests/07-bypass.spec.ts:52:3 › 7. bypass attempts › deny: patient JSON-Patches own record (40ms)
+  ✓  39 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self search: deny (29ms)
+  ✓  38 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self update: deny (25ms)
+  ✓  40 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › pat-self create-appointment: deny (38ms)
+  ✓  43 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 update: deny (25ms)
+  ✓  42 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 search: allow via as-practitioner-search-consented-patients (27ms)
+  ✓  41 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 read: allow via practitioner-policy (36ms)
+  ✓  46 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 search: deny (33ms)
+  ✘  45 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny (58ms)
+  ✓  44 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p1 create-appointment: deny (73ms)
+  ✘  47 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny (62ms)
+  ✓  48 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 create-appointment: deny (60ms)
+  ✓  49 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec search: allow via as-receptionist-read-patients (39ms)
+  ✓  50 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec create-appointment: allow via receptionist-role-policy (29ms)
+  ✓  52 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole search: deny (38ms)
+  ✓  51 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole read: deny (59ms)
+  ✓  53 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole update: deny (36ms)
+  ✓  54 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › norole create-appointment: deny (39ms)
+  ✓  55 tests/09-sdc.spec.ts:44:3 › 9. SDC $populate / $extract under each role › allow: p1 populates for a consented patient (43ms)
+  ✓  56 tests/09-sdc.spec.ts:48:3 › 9. SDC $populate / $extract under each role › allow: p2 populates for a consented patient (65ms)
+  ✓  57 tests/09-sdc.spec.ts:52:3 › 9. SDC $populate / $extract under each role › deny: $populate for an unconsented patient (81ms)
+  ✓  59 tests/09-sdc.spec.ts:62:3 › 9. SDC $populate / $extract under each role › allow: p1 extracts a QR whose subject and patientId match a consented patient (29ms)
+  ✓  58 tests/09-sdc.spec.ts:58:3 › 9. SDC $populate / $extract under each role › deny: $populate by patient, receptionist and no-role (84ms)
+  ✓  60 tests/09-sdc.spec.ts:67:3 › 9. SDC $populate / $extract under each role › deny: forged patientId answer pointing at another patient (25ms)
+  ✓  61 tests/09-sdc.spec.ts:71:3 › 9. SDC $populate / $extract under each role › deny: QR subject is a patient the practitioner is not consented to (31ms)
+  ✓  62 tests/09-sdc.spec.ts:76:3 › 9. SDC $populate / $extract under each role › allow: the same QR is fine for the practitioner who is consented (33ms)
+  ✓  64 tests/10-crud-patch.spec.ts:3:1 › 10. CRUD + JSON Patch (60ms)
+  ✓  63 tests/09-sdc.spec.ts:81:3 › 9. SDC $populate / $extract under each role › deny: $extract by patient, receptionist and no-role (103ms)
+  ✓  65 tests/11-validation.spec.ts:4:3 › 11. validation errors come back as OperationOutcome › wrong type for a known element (19ms)
+  ✓  67 tests/11-validation.spec.ts:19:3 › 11. validation errors come back as OperationOutcome › missing required element (14ms)
+  ✓  66 tests/11-validation.spec.ts:13:3 › 11. validation errors come back as OperationOutcome › unknown element (14ms)
+  ✓  68 tests/12-search.spec.ts:10:3 › 12. search: _include, _revinclude, chaining › _include brings the subject Patient (29ms)
+  ✓  69 tests/12-search.spec.ts:18:3 › 12. search: _include, _revinclude, chaining › _revinclude brings the Encounters pointing at the Patient (27ms)
+  ✓  72 tests/12-search.spec.ts:24:3 › 12. search: _include, _revinclude, chaining › chained parameter filters by the referenced Patient (14ms)
+  ✓  73 tests/13-transaction.spec.ts:4:3 › 13. transaction Bundle semantics › entries commit together and urn:uuid references are resolved (33ms)
+  ✓  74 tests/13-transaction.spec.ts:41:3 › 13. transaction Bundle semantics › one failing entry rolls back the whole transaction (24ms)
+  ✓  75 tests/14-run-isolation.spec.ts:18:3 › 14. run_id isolation › a server-generated id is still inside the run, so teardown removes it (19ms)
+  ✓  76 tests/14-run-isolation.spec.ts:5:3 › 14. run_id isolation › every fixture carries the run_id and was written after the stamp (18ms)
+  ✓  70 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec read: allow via as-receptionist-read-patients (91ms)
+  ✓  71 tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › rec update: deny (83ms)
+  ✓  77 tests/14-run-isolation.spec.ts:24:3 › 14. run_id isolation › identities only see this run: the tokens resolve to run-prefixed users (67ms)
+
+
+  1) tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked 
+
+    Error: decision on p1 GET /fhir/Patient/bakeoff-3a15f815-patient-other
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+      Object {
+    -   "errors": Array [],
+    +   "errors": Array [
+    +     Object {
+    +       "error": "ERROR: invalid input syntax for type bigint: \"practitioner2\"",
+    +       "id": "practitioner-policy",
+    +     },
+    +   ],
+        "granted": Array [],
+      }
+
+       at ../lib/test.ts:92
+
+      90 |     await use(async (who, req) => {
+      91 |       const v = await verdict(who, req);
+    > 92 |       expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: [], errors: [] });
+         |                                                      ^
+      93 |       const res = await send(await as(who), req);
+      94 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBe(403);
+      95 |       return res;
+        at /suite/lib/test.ts:92:54
+        at /suite/tests/02-practitioner-consent.spec.ts:13:5
+
+    Error Context: test-results/02-practitioner-consent-2--e7be5-nt-whose-Consent-is-revoked/error-context.md
+
+  2) tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 
+
+    Error: decision on p2 GET /fhir/Patient/bakeoff-3a15f815-patient-self
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+      Object {
+    -   "errors": Array [],
+    +   "errors": Array [
+    +     Object {
+    +       "error": "ERROR: invalid input syntax for type bigint: \"practitioner1\"",
+    +       "id": "practitioner-policy",
+    +     },
+    +   ],
+        "granted": Array [],
+      }
+
+       at ../lib/test.ts:92
+
+      90 |     await use(async (who, req) => {
+      91 |       const v = await verdict(who, req);
+    > 92 |       expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: [], errors: [] });
+         |                                                      ^
+      93 |       const res = await send(await as(who), req);
+      94 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBe(403);
+      95 |       return res;
+        at /suite/lib/test.ts:92:54
+        at /suite/tests/02-practitioner-consent.spec.ts:17:5
+
+    Error Context: test-results/02-practitioner-consent-2--6292e-atient-consented-only-to-p1/error-context.md
+
+  3) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny 
+
+    Error: decision on p2 GET /fhir/Patient/bakeoff-3a15f815-patient-self
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+      Object {
+    -   "errors": Array [],
+    +   "errors": Array [
+    +     Object {
+    +       "error": "ERROR: invalid input syntax for type bigint: \"practitioner1\"",
+    +       "id": "practitioner-policy",
+    +     },
+    +   ],
+        "granted": Array [],
+      }
+
+       at ../lib/test.ts:92
+
+      90 |     await use(async (who, req) => {
+      91 |       const v = await verdict(who, req);
+    > 92 |       expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: [], errors: [] });
+         |                                                      ^
+      93 |       const res = await send(await as(who), req);
+      94 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBe(403);
+      95 |       return res;
+        at /suite/lib/test.ts:92:54
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-e12a4-n-patient-self-p2-read-deny/error-context.md
+
+  4) tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny 
+
+    Error: decision on p2 PUT /fhir/Patient/bakeoff-3a15f815-patient-self
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+      Object {
+    -   "errors": Array [],
+    +   "errors": Array [
+    +     Object {
+    +       "error": "ERROR: invalid input syntax for type bigint: \"practitioner1\"",
+    +       "id": "practitioner-policy",
+    +     },
+    +   ],
+        "granted": Array [],
+      }
+
+       at ../lib/test.ts:92
+
+      90 |     await use(async (who, req) => {
+      91 |       const v = await verdict(who, req);
+    > 92 |       expect(v, `decision on ${describe(who, req)}`).toEqual({ granted: [], errors: [] });
+         |                                                      ^
+      93 |       const res = await send(await as(who), req);
+      94 |       expect(res.status(), `${describe(who, req)}: ${await res.text()}; decision ${JSON.stringify(v)}`).toBe(403);
+      95 |       return res;
+        at /suite/lib/test.ts:92:54
+        at /suite/tests/08-matrix.spec.ts:38:14
+
+    Error Context: test-results/08-matrix-8-matrix-5-ident-fc050-patient-self-p2-update-deny/error-context.md
+
+  4 failed
+    tests/02-practitioner-consent.spec.ts:12:3 › 2. practitioner via Consent (SQL) › deny: p1 on a patient whose Consent is revoked 
+    tests/02-practitioner-consent.spec.ts:16:3 › 2. practitioner via Consent (SQL) › deny: p2 on a patient consented only to p1 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 read: deny 
+    tests/08-matrix.spec.ts:35:7 › 8. matrix: 5 identities × 4 operations on patient-self › p2 update: deny 
+  73 passed (3.9s)
+npm notice
+npm notice New minor version of npm available! 11.6.2 -> 11.21.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.2
+npm notice To update run: npm install -g npm@11.21.2
+npm notice
