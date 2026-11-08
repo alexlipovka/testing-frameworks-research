@@ -2,9 +2,7 @@ Feature: 2. Practitioner sees a Patient through an active Consent (SQL); a revok
 
 Scenario Outline: <who> reads <patient>: <verdict>
   * def r = call read('classpath:lib/ap.feature') { who: '<who>', method: 'GET', path: '#("/fhir/Patient/" + id("<patient>"))' }
-  * match r.allowedBy == <allowedBy>
-  * match r.crashed == []
-  * match r.status == <status>
+  * match r.verdict contains { allowedBy: <allowedBy>, crashed: [], status: <status> }
 
   Examples:
     | who | patient          | verdict                   | allowedBy               | status |

@@ -7,26 +7,20 @@ Background:
 
 Scenario: rec reads a Patient by id
   * def r = call ap { who: 'rec', method: 'GET', path: '#("/fhir/Patient/" + self)' }
-  * match r.allowedBy == ['as-receptionist-read-patients']
-  * match r.crashed == []
-  * match r.status == 200
+  * match r.verdict contains { allowedBy: ['as-receptionist-read-patients'], crashed: [], status: 200 }
 
 Scenario: rec searches Patients
   * def r = call ap { who: 'rec', method: 'GET', path: '/fhir/Patient', params: { _id: '#(self)' } }
-  * match r.allowedBy == ['as-receptionist-read-patients']
-  * match r.status == 200
+  * match r.verdict contains { allowedBy: ['as-receptionist-read-patients'], crashed: [], status: 200 }
   * match r.response.entry[*].resource.id == ['#(self)']
 
 Scenario: rec reads an Appointment (receptionist-role-policy)
   * def r = call ap { who: 'rec', method: 'GET', path: '#("/fhir/Appointment/" + id("appt-match"))' }
-  * match r.allowedBy == ['receptionist-role-policy']
-  * match r.status == 200
+  * match r.verdict contains { allowedBy: ['receptionist-role-policy'], crashed: [], status: 200 }
 
 Scenario Outline: rec <method> on Patient is denied
   * def r = call ap { who: 'rec', method: '<method>', path: '<path>', body: <body> }
-  * match r.allowedBy == []
-  * match r.crashed == []
-  * match r.status == 403
+  * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
 
   Examples:
     | method | path                            | body                                                      |

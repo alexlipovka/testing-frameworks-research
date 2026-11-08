@@ -30,5 +30,6 @@ case "${1:-}" in
   twice) shift; "$0" "$@" && "$0" "$@"; exit ;;
 esac
 
+[ ! -f .vars.json ] || { echo 'a run is open (.vars.json): ./run.sh teardown first' >&2; exit 1; }
 trap teardown EXIT
 karate -t '~@ignore' -T "${THREADS:-4}" -f html,junit:xml "$@" features

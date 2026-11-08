@@ -22,7 +22,9 @@ Scenario:
   * def debug = send({ __debug: 'policy' })
   * if (debug.status != 200 || !debug.body.policies) karate.fail('no policy dump for ' + method + ' ' + path + ': ' + debug.status + ' ' + JSON.stringify(debug.body))
   * def allowedBy = karate.filter(debug.body.policies, p => p['eval-result'] === true).map(p => p['policy-id'])
-  * def crashed = karate.filter(debug.body.policies, p => p.error != null).map(p => ({ id: p['policy-id'], error: p.error }))
+  * def crashed = karate.filter(debug.body.policies, p => !!p.error).map(p => ({ id: p['policy-id'], error: p.error }))
   * def real = send({})
   * def status = real.status
   * def response = real.body
+  # Carries identity and request so that a failed match prints the whole decision.
+  * def verdict = ({ who: who, request: method + ' ' + path, allowedBy: allowedBy, crashed: crashed, status: status })

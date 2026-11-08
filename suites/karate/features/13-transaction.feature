@@ -11,7 +11,7 @@ Scenario: urn:uuid references are resolved and every entry commits
     """
     tx([
       { fullUrl: 'urn:uuid:5f1b7e5a-0000-4000-8000-000000000001',
-        resource: { resourceType: 'Patient', name: [{ family: 'Bakeoff', given: ['Tx'] }] },
+        resource: { resourceType: 'Patient', name: [{ family: 'BakeoffTx', given: ['Tx'] }] },
         request: { method: 'POST', url: 'Patient' } },
       { resource: { resourceType: 'Observation', status: 'final', code: { text: 'tx' },
                     subject: { reference: 'urn:uuid:5f1b7e5a-0000-4000-8000-000000000001' } },

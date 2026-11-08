@@ -8,9 +8,7 @@ Background:
 Scenario Outline: <who> wraps <what> in a transaction Bundle: denied
   * def bundle = { resourceType: 'Bundle', type: 'transaction', entry: [<entry>] }
   * def r = call ap { who: '<who>', method: 'POST', path: '/fhir', body: '#(bundle)' }
-  * match r.allowedBy == []
-  * match r.crashed == []
-  * match r.status == 403
+  * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
 
   Examples:
     | who      | what                        | entry                                                                                                   |
@@ -21,9 +19,7 @@ Scenario Outline: <who> wraps <what> in a transaction Bundle: denied
 
 Scenario Outline: <who> patches a Patient with <kind>: denied
   * def r = call ap { who: '<who>', method: 'PATCH', path: '#("/fhir/Patient/" + self)', body: <body> }
-  * match r.allowedBy == []
-  * match r.crashed == []
-  * match r.status == 403
+  * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
 
   Examples:
     | who      | kind        | body                                                       |

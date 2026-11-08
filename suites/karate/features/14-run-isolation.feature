@@ -20,7 +20,7 @@ Scenario Outline: the <who> token belongs to this run's user
 Scenario: every Bakeoff Patient on the server is this run's
   Given path '/fhir/Patient'
   And header Authorization = adminAuth
-  And params { family: 'Bakeoff', _count: 1000 }
+  And params { 'family:exact': 'Bakeoff', _count: 1000 }
   When method get
   Then status 200
   And match each response.entry[*].resource.id == '#regex ' + runId + '-.+'

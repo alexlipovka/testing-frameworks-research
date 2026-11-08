@@ -2,9 +2,7 @@ Feature: 5. An identity with no role is denied everywhere
 
 Scenario Outline: norole <method> <path>: denied by every policy
   * def r = call read('classpath:lib/ap.feature') { who: 'norole', method: '<method>', path: '<path>', params: <params>, body: <body> }
-  * match r.allowedBy == []
-  * match r.crashed == []
-  * match r.status == 403
+  * match r.verdict contains { allowedBy: [], crashed: [], status: 403 }
 
   Examples:
     | method | path                                          | params                                             | body                                                  |

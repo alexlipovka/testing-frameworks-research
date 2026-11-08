@@ -23,8 +23,7 @@ Background:
 
 Scenario Outline: <who> $populate for <patient>: <verdict>
   * def r = call ap { who: '<who>', method: 'POST', path: '/fhir/Questionnaire/glucose/$populate', body: '#(populate("<patient>"))' }
-  * match r.allowedBy == <allowedBy>
-  * match r.crashed == []
+  * match r.verdict contains { allowedBy: <allowedBy>, crashed: [] }
   * match r.status <op> 403
 
   Examples:
@@ -39,8 +38,7 @@ Scenario Outline: <who> $populate for <patient>: <verdict>
 
 Scenario Outline: <who> $extract, QR subject <subject>, patientId <answer>: <verdict>
   * def r = call ap { who: '<who>', method: 'POST', path: '/fhir/Questionnaire/glucose/$extract', body: '#(extract("<subject>", "<answer>"))' }
-  * match r.allowedBy == <allowedBy>
-  * match r.crashed == []
+  * match r.verdict contains { allowedBy: <allowedBy>, crashed: [] }
   * match r.status <op> 403
 
   Examples:
