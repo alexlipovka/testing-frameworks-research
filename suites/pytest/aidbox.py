@@ -2,6 +2,7 @@
 import json
 import os
 import secrets
+import time
 from dataclasses import dataclass, field
 
 import httpx
@@ -9,6 +10,7 @@ import httpx
 AIDBOX_URL = os.environ.get("AIDBOX_URL", "http://localhost:8280")
 FIXTURES = os.environ.get("FIXTURES_JSON", "/fixtures.json")
 OPEN_RUN = "reports/open-run.json"
+interrupted = False
 ADMIN = ("root", "secret")
 
 
@@ -84,6 +86,9 @@ class Run:
 
     def teardown(self):
         if self.tx_id is not None:
+            # A request the interrupt cut off can still commit on the server; rolling back first would miss it.
+            if interrupted:
+                time.sleep(1)
             psql(self.admin, self.data["sql"]["rollback"].replace("{{tx_id}}", str(self.tx_id)))
             os.remove(OPEN_RUN)
         self.close()

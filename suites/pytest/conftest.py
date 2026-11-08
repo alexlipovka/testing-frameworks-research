@@ -2,10 +2,12 @@ import signal
 
 import pytest
 
+import aidbox
 from aidbox import Run
 
 
 def _interrupt(*_):
+    aidbox.interrupted = True
     raise KeyboardInterrupt
 
 
