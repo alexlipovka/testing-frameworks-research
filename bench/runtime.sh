@@ -5,7 +5,7 @@
 set -eu
 REPO=$(cd "$(dirname "$0")/.." && pwd)
 . "$REPO/bench/lib.sh"
-OUT=$REPO/bench/results/runtime
+OUT=$RESULTS/runtime
 HF=$REPO/bench/.tools/hyperfine
 HF_URL=https://github.com/sharkdp/hyperfine/releases/download/v1.19.0/hyperfine-v1.19.0-x86_64-unknown-linux-musl.tar.gz
 HF_SHA=825287143f397774093539ca2458854ab3735c0e8a1aaf075c22edce7d261556

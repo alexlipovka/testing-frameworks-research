@@ -45,8 +45,20 @@ assert_no_open_run() {
 }
 
 # Cold Aidbox. A restart re-applies the upstream allow-all policies, hence the revert.
+# Boot fetches packages over the network, so a failed start is retried, then stops the bench.
 restart_aidbox() {
-  docker compose -f "$REPO/sut/compose.yaml" restart aidbox >/dev/null 2>&1
-  until [ "$(docker inspect -f '{{.State.Health.Status}}' bakeoff-sut-aidbox-1)" = healthy ]; do sleep 1; done
-  "$REPO/sut/mutants/revert.sh" >/dev/null
+  for _ in 1 2 3; do
+    docker compose -f "$REPO/sut/compose.yaml" restart aidbox >/dev/null 2>&1
+    i=0
+    while [ "$i" -lt 180 ]; do
+      if [ "$(docker inspect -f '{{.State.Health.Status}}' bakeoff-sut-aidbox-1)" = healthy ]; then
+        "$REPO/sut/mutants/revert.sh" >/dev/null
+        return 0
+      fi
+      sleep 1
+      i=$((i + 1))
+    done
+  done
+  echo "BENCH STOP: Aidbox did not become healthy after 3 restarts" >&2
+  exit 3
 }
