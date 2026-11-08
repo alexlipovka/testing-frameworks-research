@@ -1,0 +1,24 @@
+trial,policy,change,note
+trial-01,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-02,id,partly,lead theory is a lost patient link; status check only named as a less likely variant
+trial-03,id,right,literal { from a malformed placeholder
+trial-04,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-05,area,partly,Encounter read grant broken; says the log cannot separate a SQL error from a false predicate
+trial-06,area,right,receptionist role and PATCH; no policy id in the output
+trial-07,id,right,resource constraint widened or removed
+trial-09,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-11,area,partly,a SQL policy throws; id unknown and the guessed policy is a patient own-record one
+trial-12,id,right,Consent status condition dropped
+trial-13,id,right,resource and method constraints loosened
+trial-14,area,partly,subject match broken or the grant removed; cause not pinned down
+trial-15,id,right,request-method or resource restriction loosened
+trial-16,id,right,Consent status condition dropped
+trial-17,id,right,resource and method constraints loosened
+trial-18,id,right,literal { from a malformed placeholder
+trial-19,id,partly,policy throws and is probably SQL; the brace error is not in the output
+trial-20,id,right,resource-type or URI match broadened
+trial-21,id,right,Consent status condition dropped
+trial-22,area,partly,clean no-match established; subject check is one of several candidates
+trial-23,area,partly,Consent check loosened; status not identified
+trial-24,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-25,id,right,literal { from a malformed placeholder

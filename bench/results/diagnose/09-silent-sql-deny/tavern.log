@@ -1,0 +1,61 @@
+..........................................F............................. [ 77%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_ /suite/tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-dc6c71ec-enc-match-allow-200] _
+Format variables:
+  __debug: policy = '???'
+  who = 'pat-self'
+  op = 'Encounter/bakeoff-dc6c71ec-enc-match'
+  expect = 'allow'
+  base = 'http://localhost:8280'
+
+Source test stage (line 29):
+  - name: policy decision
+    request:
+      url: "{base}/fhir/{op}"
+      params: {__debug: policy}
+      headers: {$ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}}
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: "{expect}"}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fa49d19bc40>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 25, in decision
+            assert granted, "expected allow, no policy granted"
+                   ^^^^^^^
+        AssertionError: expected allow, no policy granted
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fa49d19bc40>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 25, in decision
+        assert granted, "expected allow, no policy granted"
+               ^^^^^^^
+    AssertionError: expected allow, no policy granted
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 25, in decision
+    assert granted, "expected allow, no policy granted"
+           ^^^^^^^
+AssertionError: expected allow, no policy granted
+=========================== short test summary info ============================
+FAILED tests/test_08_matrix.tavern.yaml::access matrix[pat-self-Encounter/bakeoff-dc6c71ec-enc-match-allow-200]
+1 failed, 92 passed in 8.68s
