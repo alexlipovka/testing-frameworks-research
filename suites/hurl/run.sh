@@ -1,7 +1,7 @@
 #!/bin/sh
-# Runs the suite: shared fixture setup, cases/*.hurl and the case 8 matrix, teardown.
+# Runs the suite: shared fixture setup, cases/*.hurl and the generated case 8 matrix, teardown.
 # RUNS=2 (default) is case 15: the second run must be green on the first one's leftovers.
-#   ./run.sh [extra hurl args, e.g. --report-junit out/junit.xml]
+# ./run.sh [hurl args], or ./run.sh teardown to close a run left open by a killed runner (.vars).
 set -eu
 cd "$(dirname "$0")"
 FIX=../../sut/fixtures/run.sh
@@ -12,14 +12,15 @@ hurl() {
     ghcr.io/orange-opensource/hurl:8.1.0 --variable "url=$URL" --variables-file .vars "$@"
 }
 
+if [ "${1:-}" = teardown ]; then exec $FIX teardown; fi
+
+[ ! -f .vars ] || { echo "a run is open (.vars): ./run.sh teardown first" >&2; exit 1; }
+rm -rf matrix/.gen && mkdir matrix/.gen
+awk -v out=matrix/.gen -f matrix/gen.awk matrix/table.txt
 trap '$FIX teardown' EXIT
 for _ in $(seq "${RUNS:-2}"); do
   $FIX setup
-  hurl --test "$@" cases/*.hurl
-  grep -v '^#' matrix/table.txt | while read -r tok read search update enc; do
-    hurl --test --variable "token=$(sed -n "s/^$tok=//p" .vars)" --variable "read_patient=$read" \
-      --variable "search_patient=$search" --variable "update_patient=$update" \
-      --variable "read_encounter=$enc" matrix/matrix.hurl || { echo "matrix row: $tok" >&2; exit 1; }
-  done
+  # long: a failed decision prints the debug dump (user, request, policy ids, SQL errors).
+  hurl --test --error-format long --continue-on-error "$@" cases/*.hurl matrix/.gen/*.hurl
   $FIX teardown
 done

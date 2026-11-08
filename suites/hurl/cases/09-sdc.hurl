@@ -22,19 +22,19 @@ HTTP 200
 jsonpath "$.policies[?(@['eval-result'] == true)].id" == "as-practitioner-sdc-consented-patient"
 
 # Same call for patient-other: revoked Consent.
-POST {{url}}/fhir/Questionnaire/glucose/$populate
-Authorization: Bearer {{p1_token}}
-{"resourceType": "Parameters", "parameter": [
-  {"name": "subject", "valueReference": {"reference": "Patient/{{run_id}}-patient-other"}}]}
-HTTP 403
-
 POST {{url}}/fhir/Questionnaire/glucose/$populate?__debug=policy
 Authorization: Bearer {{p1_token}}
 {"resourceType": "Parameters", "parameter": [
   {"name": "subject", "valueReference": {"reference": "Patient/{{run_id}}-patient-other"}}]}
 HTTP 200
 [Asserts]
-jsonpath "$.policies[?(@['eval-result'] == true)]" not exists
+jsonpath "$.policies[?(@['eval-result'] == true)].id" not exists
+
+POST {{url}}/fhir/Questionnaire/glucose/$populate
+Authorization: Bearer {{p1_token}}
+{"resourceType": "Parameters", "parameter": [
+  {"name": "subject", "valueReference": {"reference": "Patient/{{run_id}}-patient-other"}}]}
+HTTP 403
 
 POST {{url}}/fhir/Questionnaire/glucose/$populate
 Authorization: Bearer {{pat_self_token}}
@@ -91,7 +91,7 @@ Authorization: Bearer {{p1_token}}
   "item": [{"linkId": "patientId", "answer": [{"valueString": "{{run_id}}-patient-other"}]}]}}]}
 HTTP 200
 [Asserts]
-jsonpath "$.policies[?(@['eval-result'] == true)]" not exists
+jsonpath "$.policies[?(@['eval-result'] == true)].id" not exists
 
 # QR subject p1 has no active Consent for.
 POST {{url}}/fhir/Questionnaire/glucose/$extract

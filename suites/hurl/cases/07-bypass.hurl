@@ -6,19 +6,19 @@ Authorization: Bearer {{pat_self_token}}
 HTTP 200
 
 # A read of someone else's Patient smuggled in a transaction.
-POST {{url}}/fhir
-Authorization: Bearer {{pat_self_token}}
-{"resourceType": "Bundle", "type": "transaction", "entry": [
-  {"request": {"method": "GET", "url": "Patient/{{run_id}}-patient-other"}}]}
-HTTP 403
-
 POST {{url}}/fhir?__debug=policy
 Authorization: Bearer {{pat_self_token}}
 {"resourceType": "Bundle", "type": "transaction", "entry": [
   {"request": {"method": "GET", "url": "Patient/{{run_id}}-patient-other"}}]}
 HTTP 200
 [Asserts]
-jsonpath "$.policies[?(@['eval-result'] == true)]" not exists
+jsonpath "$.policies[?(@['eval-result'] == true)].id" not exists
+
+POST {{url}}/fhir
+Authorization: Bearer {{pat_self_token}}
+{"resourceType": "Bundle", "type": "transaction", "entry": [
+  {"request": {"method": "GET", "url": "Patient/{{run_id}}-patient-other"}}]}
+HTTP 403
 
 # A write the receptionist may not do directly, wrapped in a transaction.
 POST {{url}}/fhir
@@ -34,19 +34,19 @@ Content-Type: application/json-patch+json
 [{"op": "replace", "path": "/name/0/family", "value": "Hacked"}]
 HTTP 403
 
-PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self
-Authorization: Bearer {{rec_token}}
-Content-Type: application/merge-patch+json
-{"name": [{"family": "Hacked"}]}
-HTTP 403
-
 PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self?__debug=policy
 Authorization: Bearer {{rec_token}}
 Content-Type: application/merge-patch+json
 {"name": [{"family": "Hacked"}]}
 HTTP 200
 [Asserts]
-jsonpath "$.policies[?(@['eval-result'] == true)]" not exists
+jsonpath "$.policies[?(@['eval-result'] == true)].id" not exists
+
+PATCH {{url}}/fhir/Patient/{{run_id}}-patient-self
+Authorization: Bearer {{rec_token}}
+Content-Type: application/merge-patch+json
+{"name": [{"family": "Hacked"}]}
+HTTP 403
 
 # The allowed side of PATCH: receptionist may patch Appointments.
 PATCH {{url}}/fhir/Appointment/{{run_id}}-appt-match
