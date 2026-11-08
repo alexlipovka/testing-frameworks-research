@@ -1,0 +1,101 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-8.4.2, pluggy-1.7.0
+rootdir: /suite
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.16.0, xdist-3.8.0
+created: 4/4 workers
+4 workers [67 items]
+
+.............F..........F..........................F...............      [100%]
+=================================== FAILURES ===================================
+_______________________ test_patient_reads_own_encounter _______________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-8f4e1f50', data={'secrets': {'client_id': 'bakeoff-8f4e1f50-client', 'client_secret': 'bakeoff-cli...Bx9nR7F2IPPaRroJYCplyk7cMAq05K7kIuLxN4', 'norole': 'mOTW4Zss1nNsilb8hbHf1qAlIb1C9rsbHtAzwS2Gc2zFCAckgnfeLoeRu9wX0Tz4'})
+pat_self = <httpx.Client object at 0x7fd00795b0e0>
+
+    def test_patient_reads_own_encounter(run, pat_self):
+>       expect_allow(pat_self, "GET", f"/fhir/Encounter/{run.id('enc-match')}", by="as-patient-read-own-encounter")
+
+tests/test_01_patient_own_record.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fd00795b0e0>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-8f4e1f50-enc-match'
+by = 'as-patient-read-own-encounter', send = True, kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Encounter/bakeoff-8f4e1f50-enc-match: user=bakeoff-8f4e1f50-pat-self allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+_____________________ test_matrix[pat-self-read_encounter] _____________________
+[gw0] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-8f4e1f50', data={'secrets': {'client_id': 'bakeoff-8f4e1f50-client', 'client_secret': 'bakeoff-cli...Bx9nR7F2IPPaRroJYCplyk7cMAq05K7kIuLxN4', 'norole': 'mOTW4Zss1nNsilb8hbHf1qAlIb1C9rsbHtAzwS2Gc2zFCAckgnfeLoeRu9wX0Tz4'})
+who = 'pat-self', op = 'read_encounter'
+policy = 'as-patient-read-own-encounter'
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{w}-{o}" for w, o, _ in CELLS])
+    def test_matrix(run, who, op, policy):
+        method, url, kw = request(run, op)
+        if policy == "-":
+            expect_deny(run.clients[who], method, url, **kw)
+        else:
+>           expect_allow(run.clients[who], method, url, by=policy, **kw)
+
+tests/test_08_matrix.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7fd00795b0e0>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-8f4e1f50-enc-match'
+by = 'as-patient-read-own-encounter', send = True, kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Encounter/bakeoff-8f4e1f50-enc-match: user=bakeoff-8f4e1f50-pat-self allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+___________ test_baseline_policies_do_not_throw_on_patient_requests ____________
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python3.12
+
+run = Run(run_id='bakeoff-8f4e1f50', data={'secrets': {'client_id': 'bakeoff-8f4e1f50-client', 'client_secret': 'bakeoff-cli...Bx9nR7F2IPPaRroJYCplyk7cMAq05K7kIuLxN4', 'norole': 'mOTW4Zss1nNsilb8hbHf1qAlIb1C9rsbHtAzwS2Gc2zFCAckgnfeLoeRu9wX0Tz4'})
+pat_self = <httpx.Client object at 0x7f3be6270980>
+
+    def test_baseline_policies_do_not_throw_on_patient_requests(run, pat_self):
+        for url in (f"/fhir/Patient/{run.id('patient-self')}",
+                    f"/fhir/Encounter/{run.id('enc-match')}",
+                    f"/fhir/Observation?subject=Patient/{run.id('patient-self')}"):
+>           expect_allow(pat_self, "GET", url, send=False)
+
+tests/test_03_policy_error.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+c = <httpx.Client object at 0x7f3be6270980>, method = 'GET'
+url = '/fhir/Encounter/bakeoff-8f4e1f50-enc-match', by = None, send = False
+kw = {}
+v = Verdict(allowed_by=[], errors=[], dump={'request': {'remote-addr': '172.23.0.7', 'operation': {'id': 'FhirRead', 'reso...ent', 'policy-id': 'as-practitioner-sdc-consented-patient', 'reason': 'wrong role', 'expected-role': 'practitioner'}]})
+
+    def expect_allow(c, method, url, *, by: str | None = None, send: bool = True, **kw):
+        """Policy decision is allow (optionally by policy `by`) with no policy error; then the real call succeeds."""
+        v = verdict(c, method, url, **kw)
+>       assert v.allowed and not v.errors, f"expected allow for {method} {url}: {v}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for GET /fhir/Encounter/bakeoff-8f4e1f50-enc-match: user=bakeoff-8f4e1f50-pat-self allowed_by=[] errors=[]
+
+aidbox.py:161: AssertionError
+---------------- generated xml file: /suite/reports/junit-1.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_01_patient_own_record.py::test_patient_reads_own_encounter
+FAILED tests/test_08_matrix.py::test_matrix[pat-self-read_encounter] - Assert...
+FAILED tests/test_03_policy_error.py::test_baseline_policies_do_not_throw_on_patient_requests
+========================= 3 failed, 64 passed in 1.13s =========================

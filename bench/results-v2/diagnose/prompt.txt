@@ -1,0 +1,7 @@
+You are on call for an API test suite. The system under test is an Aidbox FHIR server whose access is controlled by AccessPolicy resources. The suite was green against the baseline policies. Then exactly one change was made to the AccessPolicy set, and the suite was run again. Its complete console output is in this file:
+
+<path to trial-NN.log>
+
+Rules: read only that one file with the Read tool (in parts if it is long). Do not open any other file, list directories, run commands, or use the network.
+
+Task: name the root cause — which policy (by id, if the output shows it) and what about it most likely changed — as specifically as the output allows. Then quote the 1–3 output lines that were decisive, and give your confidence (low / medium / high). End with a final line exactly in this form: `TOOL_CALLS: <number of tool calls you made>`

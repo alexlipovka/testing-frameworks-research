@@ -1,0 +1,26 @@
+trial,policy,change,note
+trial-01,id,right,resource matching gone from the named receptionist policy
+trial-02,id,right,resource scope widened to Patient
+trial-03,id,right,subject path changed to a column stored rows do not have
+trial-04,id,right,literal { from a broken placeholder in the added policy
+trial-05,id,right,literal { from a broken placeholder in the added policy
+trial-06,id,right,request constraint on method or resource type loosened
+trial-07,id,right,PATCH no longer excluded on the named receptionist policy
+trial-08,id,right,active-Consent condition dropped
+trial-09,id,partly,clean no-match established; ownership match is one of several candidates
+trial-10,id,right,Consent status condition dropped
+trial-11,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-12,id,right,Consent status condition dropped
+trial-13,id,partly,lost grant established; names matcho and lists candidates
+trial-14,id,partly,Consent check loosened; status only one of three candidates
+trial-15,id,right,Consent status condition dropped
+trial-16,id,partly,clean no-match established; ownership match is a best guess
+trial-17,id,right,resource-type restriction loosened
+trial-18,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-19,id,partly,lost grant established; subject comparison is one example among several
+trial-20,id,right,literal { from a broken placeholder in the added policy
+trial-21,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-22,id,right,literal { from a broken placeholder in the added policy
+trial-23,id,right,PATCH wrongly allowed on the named receptionist policy
+trial-24,id,right,method and resource-type restriction loosened
+trial-25,id,right,literal { from a broken placeholder in the added policy

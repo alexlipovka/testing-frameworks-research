@@ -1,0 +1,128 @@
+bringing up nodes...
+bringing up nodes...
+
+.......F.................................F.............................. [ 75%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+___ /suite/tests/test_04_receptionist.tavern.yaml::rec cannot write Patient ____
+[gw3] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  rec_auth = 'Bearer XBUJ8tq9zDYv21tvRWKqtpkJ1EKE1hmsvXgOqyzKjSVBhzse8Uxuv6lIW1RE8cZC'
+  base = 'http://localhost:8280'
+  run_id = 'bakeoff-0ee752b0'
+  op: replace, path: /name/0/family, value: Patched = '???'
+  __debug: policy = '???'
+
+Source test stage (line 45):
+  - name: JSON Patch decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers: {Authorization: "{rec_auth}", Content-Type: application/json-patch+json}
+      json: [{op: replace, path: /name/0/family, value: Patched}]
+    response: *deny
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'JSON Patch decision' failed:
+    - Error calling validate function '<function decision at 0x7f2af0617b00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7f2af0617b00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+_ /suite/tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}] _
+[gw2] linux -- Python 3.12.12 /usr/local/bin/python
+Format variables:
+  __debug: policy = '???'
+  expect: deny = '???'
+  run_id = 'bakeoff-0ee752b0'
+  ctype = 'application/merge-patch+json'
+  patch = '{'name': [{'family': 'Merged'}]}'
+  who = 'rec'
+  base = 'http://localhost:8280'
+
+Source test stage (line 46):
+  - name: policy decision
+    request: &patch
+      url: "{base}/fhir/Patient/{run_id}-patient-self"
+      method: PATCH
+      params: {__debug: policy}
+      headers:
+        $ext: {function: helpers:auth, extra_kwargs: {who: "{who}"}}
+        Content-Type: "{ctype}"
+      json: !force_format_include "{patch}"
+    response:
+      status_code: 200
+      verify_response_with: {function: helpers:decision, extra_kwargs: {expect: deny}}
+
+Missing format vars for stage
+
+Errors:
+E   tavern._core.exceptions.TestFailError: Test 'policy decision' failed:
+    - Error calling validate function '<function decision at 0x7fd954cafb00>':
+        Traceback (most recent call last):
+          File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+            vf(response)
+          File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+            result = func(response, *args, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File "/suite/helpers.py", line 36, in decision
+            assert not granted, f"expected deny: {_report(response)}"
+                   ^^^^^^^^^^^
+        AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+------------------------------ Captured log call -------------------------------
+ERROR    tavern.response:response.py:62 Error calling validate function '<function decision at 0x7fd954cafb00>':
+    Traceback (most recent call last):
+      File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+        vf(response)
+      File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+        result = func(response, *args, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/suite/helpers.py", line 36, in decision
+        assert not granted, f"expected deny: {_report(response)}"
+               ^^^^^^^^^^^
+    AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/tavern/response.py", line 192, in _maybe_run_validate_functions
+    vf(response)
+  File "/usr/local/lib/python3.12/site-packages/tavern/_core/extfunctions.py", line 104, in inner
+    result = func(response, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/suite/helpers.py", line 36, in decision
+    assert not granted, f"expected deny: {_report(response)}"
+           ^^^^^^^^^^^
+AssertionError: expected deny: user=bakeoff-0ee752b0-rec PATCH http://localhost:8280/fhir/Patient/bakeoff-0ee752b0-patient-self?__debug=policy: granted=['as-receptionist-read-patients'] crashed=[]
+=========================== short test summary info ============================
+FAILED tests/test_04_receptionist.tavern.yaml::rec cannot write Patient - For...
+FAILED tests/test_07_bypass.tavern.yaml::PATCH bypass is denied[rec-application/merge-patch+json-{'name': [{'family': 'Merged'}]}]
+2 failed, 93 passed in 3.33s
