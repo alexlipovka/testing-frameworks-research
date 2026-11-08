@@ -1,0 +1,5 @@
+{
+  "as": "pat-self",
+  "method": "GET",
+  "path": "/fhir/Patient/{{run_id}}-patient-self/_history"
+}

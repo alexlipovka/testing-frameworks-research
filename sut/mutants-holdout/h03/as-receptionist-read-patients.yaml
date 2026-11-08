@@ -1,0 +1,19 @@
+id: as-receptionist-read-patients
+resourceType: AccessPolicy
+roleName: receptionist
+description: A receptionist reads and searches Patients to book them. No writes, no includes.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      operation:
+        id:
+          $enum:
+            - FhirRead
+            - FhirSearch
+      request-method: get
+      params:
+        resource/type: Patient
+  - engine: sql
+    sql:
+      query: SELECT coalesce({{query-string}}, '') !~ '(^|&)(_|%5f)(rev)?include'

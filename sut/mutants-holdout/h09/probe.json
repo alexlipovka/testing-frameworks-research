@@ -1,0 +1,5 @@
+{
+  "as": "pat-self",
+  "method": "GET",
+  "path": "/fhir/Observation?subject={{run_id}}-patient-self&subject={{run_id}}-patient-other"
+}

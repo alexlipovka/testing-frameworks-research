@@ -1,0 +1,12 @@
+# Same id as upstream: replaces fhir-emr's `engine: allow` patient policy.
+id: patient-role-policy
+resourceType: AccessPolicy
+roleName: patient
+description: A patient reads their own Patient record by id, and nothing else.
+engine: matcho
+matcho:
+  request-method: get
+  params:
+    resource/type: Patient
+    # A leading dot reads from the request context instead of matching a literal string
+    resource/id: .role.links.patient.id

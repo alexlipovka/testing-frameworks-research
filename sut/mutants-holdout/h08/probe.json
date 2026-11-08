@@ -1,0 +1,5 @@
+{
+  "as": "norole",
+  "method": "GET",
+  "path": "/fhir/Patient/{{run_id}}-patient-other"
+}

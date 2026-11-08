@@ -4,16 +4,19 @@
 #   check.sh lint    offline: every mutant is well formed and differs from the baseline
 #   check.sh live    every mutant's probe gets a different verdict than under the baseline
 #
+# MUTANTS_DIR picks another set of mutants (default: this directory).
+#
 # A verdict is what ?__debug=policy says: allow or deny, plus "+error" if any policy crashed.
 set -eu
 
 DIR=$(cd "$(dirname "$0")" && pwd)
 SUT=$(dirname "$DIR")
+MUTANTS=${MUTANTS_DIR:-$DIR}
 RUN="$SUT/fixtures/run.sh"
 A=${AIDBOX_URL:-http://localhost:8280}
 fail() { echo "FAIL: $*" >&2; exit 1; }
 yaml_id() { sed -n 's/^id: *//p' "$1" | head -n1; }
-mutants() { for m in "$DIR"/*/; do basename "$m"; done; }
+mutants() { for m in "$MUTANTS"/*/; do basename "$m"; done; }
 
 lint() {
   for f in "$SUT"/policies/*.yaml; do
@@ -22,7 +25,7 @@ lint() {
   done
   identities=$(jq -c '[.identities[].name]' "$SUT/fixtures/fixtures.json")
   for m in $(mutants); do
-    d="$DIR/$m"
+    d="$MUTANTS/$m"
     ls "$d"/*.yaml >/dev/null 2>&1 || fail "$m: no policy file"
     for f in "$d"/*.yaml; do
       yq -e '.resourceType == "AccessPolicy"' "$f" >/dev/null || fail "$m: not an AccessPolicy: $f"
@@ -60,7 +63,7 @@ live() {
   "$RUN" setup >/dev/null
   base=
   for m in $(mutants); do
-    base_verdict=$(verdict "$DIR/$m/probe.json")
+    base_verdict=$(verdict "$MUTANTS/$m/probe.json")
     base="$base$m $base_verdict
 "
   done
@@ -71,7 +74,7 @@ live() {
     case $base_verdict in *+error) fail "baseline crashes a policy on $m's probe" ;; esac
     "$DIR/apply.sh" "$m" >/dev/null
     "$RUN" setup >/dev/null
-    mutant_verdict=$(verdict "$DIR/$m/probe.json")
+    mutant_verdict=$(verdict "$MUTANTS/$m/probe.json")
     "$RUN" teardown >/dev/null
     if [ "$mutant_verdict" = "$base_verdict" ]; then
       echo "EQUIVALENT  $m  ($base_verdict either way)"
@@ -86,5 +89,5 @@ live() {
 case ${1:-} in
   lint) lint ;;
   live) live ;;
-  *) sed -n '2,7p' "$0" >&2; exit 2 ;;
+  *) sed -n '2,9p' "$0" >&2; exit 2 ;;
 esac

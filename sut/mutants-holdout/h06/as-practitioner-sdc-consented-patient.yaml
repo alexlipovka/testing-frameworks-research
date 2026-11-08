@@ -1,0 +1,43 @@
+id: as-practitioner-sdc-consented-patient
+resourceType: AccessPolicy
+roleName: practitioner
+description: >
+  $populate / $extract for a Patient with an active Consent naming the practitioner.
+  $extract also needs every patientId answer to equal the QuestionnaireResponse subject.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      request-method: post
+      operation:
+        id:
+          $enum:
+            - POST.app.aidbox.utils.wrap.fhir_Questionnaire___id___dpopulate
+            - POST.app.aidbox.utils.wrap.fhir_Questionnaire___id___dextract
+  # The body is FHIR format: references are "Patient/<id>" strings, unlike the stored rows
+  - engine: sql
+    sql:
+      query: |
+        WITH p AS (SELECT jsonb_array_elements(({{body}}::jsonb)->'parameter') AS p),
+        subject AS (
+          SELECT p->'valueReference'->>'reference' AS ref FROM p WHERE p->>'name' = 'subject'
+          UNION ALL
+          SELECT p#>>'{resource,subject,reference}' FROM p WHERE p->>'name' = 'questionnaire_response'
+        ),
+        answer AS (
+          SELECT a->>'valueString' AS id
+          FROM p
+          JOIN jsonb_array_elements(p#>'{resource,item}') AS i ON true
+          JOIN jsonb_array_elements(i->'answer') AS a ON true
+          WHERE p->>'name' = 'questionnaire_response' AND i->>'linkId' = 'patientId'
+        )
+        SELECT (SELECT count(*) FROM subject) = 1
+          AND EXISTS (
+            SELECT 1
+            FROM subject s
+            JOIN consent c ON 'Patient/' || (c.resource#>>'{patient,id}') = s.ref
+            JOIN jsonb_array_elements(c.resource#>'{provision,actor}') AS actor ON true
+            WHERE c.resource->>'status' = 'active'
+              AND actor#>>'{reference,id}' = {{role.links.practitioner.id}}
+          )
+          AND NOT EXISTS (SELECT 1 FROM answer, subject s WHERE answer.id IS DISTINCT FROM s.ref)

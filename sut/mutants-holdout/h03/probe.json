@@ -1,0 +1,5 @@
+{
+  "as": "rec",
+  "method": "GET",
+  "path": "/fhir/Patient?_id={{run_id}}-patient-self&%5Frevinclude=Appointment:patient"
+}

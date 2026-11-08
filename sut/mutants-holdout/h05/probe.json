@@ -1,0 +1,5 @@
+{
+  "as": "p2",
+  "method": "GET",
+  "path": "/fhir/Patient?_id={{run_id}}-patient-self"
+}

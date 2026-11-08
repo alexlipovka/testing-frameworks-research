@@ -1,0 +1,20 @@
+id: as-patient-search-own-observations
+resourceType: AccessPolicy
+roleName: patient
+description: A patient searches Observations with subject set to exactly their own Patient. No includes.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      operation:
+        id: FhirSearch
+      request-method: get
+      params:
+        resource/type: Observation
+        subject: present?
+  # A repeated subject= arrives as a JSON array and a comma list as one string: neither equals either form
+  - engine: sql
+    sql:
+      query: |
+        SELECT {{params.subject}} IN ({{role.links.patient.id}}, 'Patient/' || {{role.links.patient.id}})
+          AND coalesce({{query-string}}, '') !~* '(^|&)(_|%5f)(rev)?include'

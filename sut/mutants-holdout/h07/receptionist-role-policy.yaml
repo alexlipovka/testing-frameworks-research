@@ -1,0 +1,29 @@
+# Same id as upstream: replaces fhir-emr's `engine: allow` receptionist policy.
+id: receptionist-role-policy
+resourceType: AccessPolicy
+roleName: receptionist
+description: A receptionist manages Appointments. Nothing clinical.
+engine: complex
+and:
+  - engine: matcho
+    matcho:
+      params:
+        resource/type:
+          $enum:
+            - Appointment
+            - Encounter
+      operation:
+        id:
+          $enum:
+            - FhirCreate
+            - FhirRead
+            - FhirSearch
+            - FhirUpdate
+            - FhirPatch
+            - FhirConditionalPatch
+            - FhirDelete
+  # Included resources skip policy checks. Matching the raw query string catches
+  # _revinclude:iterate and %5Frevinclude, which a `_revinclude: nil?` key match misses.
+  - engine: sql
+    sql:
+      query: SELECT coalesce({{query-string}}, '') !~* '(^|&)(_|%5f)(rev)?include'

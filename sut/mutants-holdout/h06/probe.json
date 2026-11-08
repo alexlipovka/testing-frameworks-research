@@ -1,0 +1,31 @@
+{
+  "as": "p1",
+  "method": "POST",
+  "path": "/fhir/Questionnaire/glucose/$extract",
+  "body": {
+    "resourceType": "Parameters",
+    "parameter": [
+      {
+        "name": "questionnaire_response",
+        "resource": {
+          "resourceType": "QuestionnaireResponse",
+          "questionnaire": "glucose",
+          "status": "completed",
+          "subject": {
+            "reference": "Patient/{{run_id}}-patient-self"
+          },
+          "item": [
+            {
+              "linkId": "patientId",
+              "answer": [
+                {
+                  "valueString": "{{run_id}}-patient-self"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
