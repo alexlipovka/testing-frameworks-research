@@ -2,10 +2,10 @@
 # Sourced with REPO set; ROOT may point at another copy of the repo (ablation).
 SUITES="hurl karate pytest playwright tavern"
 ROOT=${ROOT:-$REPO}
+RESULTS=${RESULTS:-$REPO/bench/results-v2}
 
 # suite_cmd SUITE MODE -> shell command for one pass (no runner-level repeat).
-# MODE: par = the suite's native parallel mode, seq = one worker. pytest and
-# Tavern have no safe parallel mode, so par is not defined for them.
+# MODE: par = the suite's native parallel mode, seq = one worker.
 suite_cmd() {
   case "$1:$2" in
     hurl:seq) echo "RUNS=1 $ROOT/suites/hurl/run.sh --jobs 1" ;;
@@ -13,23 +13,24 @@ suite_cmd() {
     karate:seq) echo "THREADS=1 $ROOT/suites/karate/run.sh" ;;
     karate:par) echo "THREADS=4 $ROOT/suites/karate/run.sh" ;;
     pytest:seq) echo "$ROOT/suites/pytest/run.sh" ;;
+    pytest:par) echo "$ROOT/suites/pytest/run.sh -n 4" ;;
     playwright:seq) echo "$ROOT/suites/playwright/run.sh -- --workers=1" ;;
     playwright:par) echo "$ROOT/suites/playwright/run.sh -- --workers=4" ;;
     tavern:seq) echo "$ROOT/suites/tavern/run.sh" ;;
+    tavern:par) echo "$ROOT/suites/tavern/run.sh -n 4" ;;
     *) return 1 ;;
   esac
 }
 
 open_runs() {
   for f in "$ROOT"/sut/fixtures/.vars* "$ROOT"/suites/hurl/.vars "$ROOT"/suites/karate/.vars.json \
-           "$ROOT"/suites/playwright/reports/open-run.json "$ROOT"/suites/tavern/.run/state.json; do
+           "$ROOT"/suites/pytest/reports/open-run.json "$ROOT"/suites/playwright/reports/open-run.json "$ROOT"/suites/tavern/.run/state.json; do
     [ -e "$f" ] && echo "$f"
   done
   return 0
 }
 
-# Rows any run left behind. pytest keeps its tx stamp only in memory, so a state
-# file alone would miss a killed pytest run.
+# Rows any run left behind, which a runner's state file alone would not show.
 residue() {
   q="SELECT count(*) AS n FROM (SELECT id FROM patient UNION ALL SELECT id FROM \"user\" UNION ALL SELECT id FROM client UNION ALL SELECT id FROM consent UNION ALL SELECT id FROM role UNION ALL SELECT id FROM accesspolicy UNION ALL SELECT id FROM encounter UNION ALL SELECT id FROM observation) t WHERE id LIKE 'bakeoff-%'"
   jq -n --arg q "$q" '{query: $q}' | curl -sfu root:secret -H 'content-type: application/json' \
