@@ -3,7 +3,7 @@ from aidbox import expect_deny
 
 
 def test_no_rows_from_other_runs(run, admin):
-    r = admin.get("/fhir/Patient?family=Bakeoff&_count=100")
+    r = admin.get("/fhir/Patient?family:exact=Bakeoff&_count=100")
     assert r.status_code == 200, r.text
     got = {e["resource"]["id"] for e in r.json().get("entry", [])}
     assert got == {run.id(n) for n in ("patient-self", "patient-other", "patient-unlinked")}

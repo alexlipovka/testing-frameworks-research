@@ -1,18 +1,38 @@
+import signal
+
 import pytest
 
 from aidbox import Run
 
 
+def _interrupt(*_):
+    raise KeyboardInterrupt
+
+
+def pytest_configure(config):
+    if hasattr(config, "workerinput"):
+        config.bakeoff_run = Run.attach(config.workerinput["bakeoff_run"])
+    else:
+        # Python as PID 1 ignores SIGTERM, and `docker stop` would then skip the teardown.
+        signal.signal(signal.SIGTERM, _interrupt)
+        config.bakeoff_run = Run.start()
+
+
+@pytest.hookimpl(optionalhook=True)
+def pytest_configure_node(node):
+    # One run for the whole session: a session fixture would open one per xdist worker.
+    node.workerinput["bakeoff_run"] = node.config.bakeoff_run.state()
+
+
+def pytest_unconfigure(config):
+    run = getattr(config, "bakeoff_run", None)
+    if run:
+        run.close() if hasattr(config, "workerinput") else run.teardown()
+
+
 @pytest.fixture(scope="session")
-def run():
-    r = Run.open()
-    try:
-        # Stamp before the first write, so a setup that fails halfway is still torn down
-        r.stamp()
-        r.setup()
-        yield r
-    finally:
-        r.teardown()
+def run(pytestconfig):
+    return pytestconfig.bakeoff_run
 
 
 @pytest.fixture(scope="session")
