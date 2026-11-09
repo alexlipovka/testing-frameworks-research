@@ -18,15 +18,19 @@ ADMIN=${ADMIN:-root:secret}
 fail() { echo "FAIL: $*" >&2; exit 1; }
 yaml_id() { sed -n 's/^id: *//p' "$1" | head -n1; }
 
-for v in "$SUT"/fixtures/.vars*; do
-  [ ! -f "$v" ] || fail "a run is open ($v): fixtures/run.sh teardown first"
+for v in "$SUT"/fixtures/.vars* "$SUT"/../suites/aidbox-sdk/reports/open-run.json; do
+  [ ! -f "$v" ] || fail "a run is open ($v): tear it down first"
 done
 name=${1:-}
 [ -z "$name" ] || [ -d "$MUTANTS/$name" ] || fail "no mutant $name (see $MUTANTS)"
 
 put() {
+  id=$(yaml_id "$1")
   curl -sfu "$ADMIN" -o /dev/null -X PUT -H 'content-type: text/yaml' -H 'accept: application/json' \
-    "$A/AccessPolicy/$(yaml_id "$1")" --data-binary "@$1" || fail "PUT $1"
+    "$A/AccessPolicy/$id" --data-binary "@$1" || fail "PUT $1"
+  # After a rollback removed the row, Aidbox can answer 200 to an unchanged body and store nothing
+  curl -sfu "$ADMIN" -o /dev/null "$A/AccessPolicy/$id" \
+    || fail "AccessPolicy/$id missing after PUT: PUT it once with a changed body, then retry"
 }
 
 # A mutant may add a policy the baseline lacks; the previous mutant's must not linger
