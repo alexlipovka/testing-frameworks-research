@@ -1,0 +1,9 @@
+APP_INIT_CLIENT_ID=root
+APP_INIT_CLIENT_SECRET=secret
+APP_INIT_URL=http://aidbox:8080
+APP_ID=aidbox-sdk-suite
+APP_SECRET=aidbox-sdk-suite-secret
+APP_URL=http://aidbox-sdk-suite:8081
+APP_PORT=8081
+AIO_HOST=0.0.0.0
+AIO_PORT=8081
