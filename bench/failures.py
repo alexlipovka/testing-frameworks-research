@@ -14,6 +14,7 @@ reports = {
     "pytest": ["reports/junit-1.xml"],
     "playwright": ["reports/junit.xml"],
     "tavern": [".run/junit.xml"],
+    "aidbox-sdk": ["reports/junit.xml"],
 }[suite_dir.rstrip("/").split("/")[-1]]
 files = [f for pattern in reports for f in glob.glob(f"{suite_dir}/{pattern}") if os.path.getmtime(f) >= since]
 failed = set()

@@ -7,12 +7,14 @@ import re
 import sys
 
 OUT = sys.argv[1]
-SUITES = ["hurl", "karate", "pytest", "playwright", "tavern"]
+ALL_SUITES = ["hurl", "karate", "pytest", "playwright", "tavern", "aidbox-sdk"]
 runs = collections.defaultdict(dict)
 for r in csv.DictReader(open(f"{OUT}/mutants.csv")):
     # Parametrized test names carry the run_id, which differs per run
     tests = {re.sub(r"bakeoff-[0-9a-f]{8}", "{run}", t) for t in r["failed_tests"].split(";") if t}
     runs[(r["mutant"], r["suite"])][r["run"]] = (int(r["exit"]), tests)
+# A results set may cover only some suites (SUITES in lib.sh); absent ones are not 0/N
+SUITES = [s for s in ALL_SUITES if any(suite == s for _, suite in runs)]
 
 flaky = collections.defaultdict(set)
 for (m, s), rr in runs.items():

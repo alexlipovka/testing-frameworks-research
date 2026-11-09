@@ -1,6 +1,6 @@
 # Shared by the bench scripts: one pass of each suite, per parallelism mode.
 # Sourced with REPO set; ROOT may point at another copy of the repo (ablation).
-SUITES="hurl karate pytest playwright tavern"
+SUITES=${SUITES:-hurl karate pytest playwright tavern aidbox-sdk}
 ROOT=${ROOT:-$REPO}
 RESULTS=${RESULTS:-$REPO/bench/results-v2}
 
@@ -18,13 +18,15 @@ suite_cmd() {
     playwright:par) echo "$ROOT/suites/playwright/run.sh -- --workers=4" ;;
     tavern:seq) echo "$ROOT/suites/tavern/run.sh" ;;
     tavern:par) echo "$ROOT/suites/tavern/run.sh -n 4" ;;
+    aidbox-sdk:seq) echo "$ROOT/suites/aidbox-sdk/run.sh" ;;
     *) return 1 ;;
   esac
 }
 
 open_runs() {
   for f in "$ROOT"/sut/fixtures/.vars* "$ROOT"/suites/hurl/.vars "$ROOT"/suites/karate/.vars.json \
-           "$ROOT"/suites/pytest/reports/open-run.json "$ROOT"/suites/playwright/reports/open-run.json "$ROOT"/suites/tavern/.run/state.json; do
+           "$ROOT"/suites/pytest/reports/open-run.json "$ROOT"/suites/playwright/reports/open-run.json "$ROOT"/suites/tavern/.run/state.json \
+           "$ROOT"/suites/aidbox-sdk/reports/open-run.json; do
     [ -e "$f" ] && echo "$f"
   done
   return 0

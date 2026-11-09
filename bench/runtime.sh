@@ -25,7 +25,8 @@ floor() {
     -n karate "docker run --rm eclipse-temurin:21.0.8_9-jre java -version" \
     -n pytest "docker run --rm bakeoff-pytest --version" \
     -n playwright "docker run --rm bakeoff-playwright:1.65.0 --version" \
-    -n tavern "docker run --rm bakeoff-tavern:3.7.2 --version"
+    -n tavern "docker run --rm bakeoff-tavern:3.7.2 --version" \
+    -n aidbox-sdk "docker run --rm bakeoff-aidbox-sdk --version"
 }
 
 suites() {

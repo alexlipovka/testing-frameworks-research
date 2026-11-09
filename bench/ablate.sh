@@ -8,7 +8,8 @@ DEST=$1
 [ ! -e "$DEST" ] || docker run --rm -v "$(dirname "$DEST"):/p" python:3.12.12-slim rm -rf "/p/$(basename "$DEST")"
 mkdir -p "$DEST"
 rsync -a --exclude .git --exclude '.ablated*' --exclude node_modules --exclude target --exclude reports --exclude .run \
-  --exclude __pycache__ --exclude sut/fhir-emr --exclude sut/build "$REPO/" "$DEST/"
+  --exclude __pycache__ --exclude .venv --exclude .mypy_cache --exclude .ruff_cache \
+  --exclude sut/fhir-emr --exclude sut/build "$REPO/" "$DEST/"
 python3 - "$DEST/suites" <<'PY'
 import re, sys, glob, os
 os.chdir(sys.argv[1])
@@ -44,5 +45,12 @@ patch("playwright", "playwright/tests/*.ts", drop(r'^\s*expect\(v[.,].*\n'))
 # Tavern: the debug-dump verifiers become no-ops
 patch("tavern", "tavern/helpers.py",
       lambda s: re.sub(r'(def (decision|crashed|no_crash)\(.*\):\n(    """.*"""\n)?)', r'\1    return\n', s))
+# aidbox-sdk: decision assertions in the helpers, case 3 and case 6; case 6 keeps its status check
+patch("aidbox-sdk", "aidbox-sdk/tests/access_policy/decision.py",
+      drop(r'^\s*(assert (not )?decision\.allowed|if by:\n\s*assert by in decision\.allowed_by).*\n'))
+patch("aidbox-sdk 03", "aidbox-sdk/tests/access_policy/test_03_policy_error.py",
+      drop(r'^\s*assert (not decision\.allowed|\[error\["id"\] for error in decision\.errors\]).*\n'))
+patch("aidbox-sdk 06", "aidbox-sdk/tests/access_policy/test_06_search_leak.py",
+      lambda s: s.replace("assert status == 200 and not decision.allowed and not decision.errors,", "assert status == 200,"))
 PY
 echo "ablated copy in $DEST"
