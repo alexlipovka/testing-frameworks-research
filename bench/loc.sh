@@ -2,7 +2,7 @@
 # cloc per suite and per case -> $RESULTS/loc-by-file.csv, loc.csv, and loc-added.csv
 # against the first draft (bench/results/loc.csv, git diff from FIRST_DRAFT).
 # Every git-tracked file under suites/<name>/ (runners included) except docs (*.md)
-# and dependency lockfiles (package-lock.json, requirements.txt).
+# and dependency lockfiles (package-lock.json, requirements.txt, pyproject.toml, uv.lock).
 set -eu
 REPO=$(cd "$(dirname "$0")/.." && pwd)
 . "$REPO/bench/lib.sh"
@@ -12,7 +12,7 @@ FIRST_DRAFT=aaa401c
 cd "$REPO"
 mkdir -p "$OUT"
 rel=${OUT#"$REPO"/}
-git ls-files $(printf 'suites/%s ' $SUITES) | grep -vE '\.md$|package-lock\.json$|requirements\.txt$' > "$OUT/.loc-files"
+git ls-files $(printf 'suites/%s ' $SUITES) | grep -vE '\.md$|package-lock\.json$|requirements\.txt$|pyproject\.toml$|uv\.lock$' > "$OUT/.loc-files"
 # cloc has no Hurl definition; matrix/table.txt is Hurl's case 8 data, with # comments too
 docker run --rm -v "$REPO:/r:ro" -w /r $CLOC --quiet --by-file --csv --read-lang-def=bench/hurl.lang \
   --force-lang=Hurl,txt --list-file="$rel/.loc-files" \
@@ -22,7 +22,7 @@ missed=$(sort "$OUT/.loc-files" | comm -23 - "$OUT/.loc-counted")
 [ -z "$missed" ] || echo "not counted by cloc (no code or unknown type):" $missed >&2
 rm "$OUT/.loc-files" "$OUT/.loc-counted"
 git diff --numstat "$FIRST_DRAFT" HEAD -- $(printf 'suites/%s ' $SUITES) \
-  | grep -vE '\.md$|package-lock\.json$|requirements\.txt$' > "$OUT/.loc-numstat"
+  | grep -vE '\.md$|package-lock\.json$|requirements\.txt$|pyproject\.toml$|uv\.lock$' > "$OUT/.loc-numstat"
 python3 - "$OUT" "$REPO/bench/results/loc.csv" <<'PY'
 import csv, os, re, sys, collections
 out, first = sys.argv[1:3]
