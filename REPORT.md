@@ -253,7 +253,7 @@ Raw data: `bench/results-v2/results.md` and the files beside it, including `hold
 | AP cases 1–9 / shared LOC | 840 / 467 | pytest 194 / 203 |
 | LOC per AP case with shared | 124.5 (ratio 3.56 to pytest's 35.0) | 35.0–59.9 |
 | Seq warm | 39.10 s (ratio 24.3 to Hurl's 1.61 s) | best modes 1.61–5.40 s, from sections 1–6 |
-| Seq cold | pending | sequential 2.81–10.46 s |
+| Seq cold | 45.37 s (σ 6.23 s, one run at 62.3 s) | sequential 2.81–10.46 s, from `bench/results-v2/` |
 | Runner floor | 0.81 s | 0.24–1.45 s, same session |
 | Parallel mode | none: the plugin binds a fixed port, and `safe_db` deletes every row after its stamp | all five have one |
 

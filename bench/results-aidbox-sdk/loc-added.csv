@@ -1,0 +1,7 @@
+suite,first_draft_code,best_state_code,code_added_net,git_lines_added,git_lines_removed
+aidbox-sdk,0,1511,1511,1944,0
+hurl,527,569,42,178,123
+karate,609,567,-42,37,79
+playwright,699,695,-4,16,19
+pytest,418,480,62,143,54
+tavern,725,766,41,126,70

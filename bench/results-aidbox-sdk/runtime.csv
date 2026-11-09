@@ -1,0 +1,11 @@
+suite,mode,condition,runs,failed,mean_s,stddev_s,median_s,min_s,max_s
+aidbox-sdk,seq,cold,10,0,45.37,6.23,43.26,41.44,62.32
+aidbox-sdk,seq,warm,10,0,39.10,0.68,38.90,38.18,40.17
+hurl,-,floor,10,0,0.24,0.01,0.24,0.23,0.26
+karate,-,floor,10,0,0.30,0.05,0.29,0.26,0.39
+pytest,-,floor,10,0,1.45,0.09,1.41,1.35,1.61
+playwright,-,floor,10,0,1.23,0.04,1.23,1.17,1.30
+tavern,-,floor,10,0,0.45,0.02,0.45,0.44,0.49
+aidbox-sdk,-,floor,10,0,0.81,0.01,0.82,0.79,0.84
+pytest,par,warm,10,0,4.83,0.20,4.77,4.54,5.14
+pytest,seq,warm,10,0,4.37,0.22,4.36,4.02,4.70
