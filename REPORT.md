@@ -1,6 +1,6 @@
 # Testing framework bake-off: report
 
-Part A is the best-state result, and the recommendation rests on it. Part B is the first-draft report, kept as written.
+Part A is the best-state result, and the recommendation rests on it. Part A section 7 ranks a sixth suite, aidbox-sdk, added after sections 1–6 were written. Part B is the first-draft report, kept as written.
 
 # Part A: best state (v2)
 
@@ -8,19 +8,22 @@ Part A is the best-state result, and the recommendation rests on it. Part B is t
 
 **Recommendation, unchanged: pytest + httpx as the single tool for new API-level and access-policy tests. Keep the existing production suite running, and don't migrate it on this evidence.**
 
-| Rank | Suite | First draft (of 100) | Best state (of 100) |
-|---|---|---|---|
-| 1 | pytest + httpx | 84.5 | **83.5** |
-| 2 (tie) | Karate | 71.0 | **73.0** |
-| 2 (tie) | Playwright API | 80.0 | **73.0** |
-| 4 | Hurl | 60.5 | **64.5** |
-| 5 | Tavern | 51.5 | **52.0** |
+| Rank | Suite | First draft (of 100) | Best state (of 100) | Current (of 100) |
+|---|---|---|---|---|
+| 1 | pytest + httpx | 84.5 | 83.5 | **81.5** |
+| 2 (tie) | Karate | 71.0 | 73.0 | **73.0** |
+| 2 (tie) | Playwright API | 80.0 | 73.0 | **73.0** |
+| 4 | Hurl | 60.5 | 64.5 | **64.5** |
+| 5 | aidbox-sdk | n/a | n/a | **53.0–57.5, provisional** |
+| 6 | Tavern | 51.5 | 52.0 | **52.0** |
+
+"Current" reflects two later changes, both in section 7: pytest's move to `uv` costs one runtime band, and aidbox-sdk joins. aidbox-sdk's score is a range because its time-to-diagnose trials have not been run. Its fifth place also depends on an authorability score that favours it. Sections 1–6 still describe the five-suite best state.
 
 **What changed.** First place did not move, and pytest's lead grew from 4.5 to 10.5 points. The ranking below it did change: Playwright was a clear second and now ties with Karate. The spec's tie-break does not separate them, because both killed 8 of 12 held-out mutants and 15 of 15 original ones.
 
 pytest is first in all 25 best-state variations tried and in all 20,000 random-weight draws. Second place is effectively a coin toss between Karate and Playwright, and it depends on the weights.
 
-The effectiveness measure is held-out mutants. No suite does well on it: the best two kill 9 of 12. Three mutants survive every suite, because no suite sends the requests that reveal them (section 4).
+The effectiveness measure is held-out mutants. No suite does well on it: the best two kill 9 of 12. Three mutants survive all five ranked suites, because none of them sends the requests that reveal them (section 4). The sixth suite, aidbox-sdk, kills one of the three (section 7).
 
 The readability scores and diagnosis grades are the author's and await the user's review.
 
@@ -231,6 +234,66 @@ Use it sequentially at this size. Its parallel mode is safe but slower here.
 - **Scoring.** Bands were set with first-draft data known and are not re-tuned here. Kill bands compress all suites to 1–2. The readability score is one author's judgement. Ecosystem and FHIR scores are desk scores from 2026-11-07.
 
 Raw data: `bench/results-v2/results.md` and the files beside it, including `holdout/`. Ticket comments 12–18 are under `.scratch/`, which is not in git.
+
+## 7. Sixth suite: aidbox-sdk
+
+`suites/aidbox-sdk/` follows how aidbox-python-sdk projects are tested: the SDK's pytest plugin with a stub app, `fhirpy` clients, `r4b` models, `safe_db` rollback and per-test factories with server-assigned ids. It has one deliberate deviation from that practice: a `__debug=policy` decision check on every access-policy assertion, because the reference project's status checks alone cannot see a crashing policy.
+
+**How it was built.** Cases 1–3 were prototyped by hand. A fresh agent wrote the rest, told not to read the held-out mutants, results, this report or `research/`, and its log shows no access to them. It used the pytest suite as its case definitions, so its coverage is not independent of that suite. The agent was stopped before reporting, and its verification was redone afterwards on the final code. The suite was frozen by checksum before the held-out runs and was identical after them. Its Dockerfile changed afterwards, adding bytecode compilation. No test changed and the held-out runs were not repeated.
+
+| Measure | aidbox-sdk | For comparison |
+|---|---|---|
+| Tests | 92 | pytest 67 |
+| Held-out mutants killed | **9/12** | pytest and Tavern 9, Karate and Playwright 8, Hurl 7 |
+| Killed only by a decision assertion | 2 | 2–5 |
+| Killed with decision assertions removed | **7** | 4–5 |
+| Original 15 mutants | 15/15, on one pass outside `mutants.sh`, so with no ablated run | 15/15 |
+| Baselines red in the held-out matrix | 0 of 12 | 0 of 135 in v2 |
+| Total LOC | 1,511 | 480–766 |
+| AP cases 1–9 / shared LOC | 840 / 467 | pytest 194 / 203 |
+| LOC per AP case with shared | 124.5 (ratio 3.56 to pytest's 35.0) | 35.0–59.9 |
+| Seq warm | 39.10 s (ratio 24.3 to Hurl's 1.61 s) | best modes 1.61–5.40 s, from sections 1–6 |
+| Seq cold | pending | sequential 2.81–10.46 s |
+| Runner floor | 0.81 s | 0.24–1.45 s, same session |
+| Parallel mode | none: the plugin binds a fixed port, and `safe_db` deletes every row after its stamp | all five have one |
+
+**Scores under the Part B section 1 rules.**
+
+| Criterion | Weight | Score | Basis |
+|---|---|---|---|
+| AP expressiveness | 25 | 1 | LOC ratio 3.56. Case 8 is parametrized with a decision in every cell, so no penalty applies. |
+| Failure diagnostics | 15 | 2–3.5 | Held-out kill band 2, averaged with a diagnose band of 2–5. **The five diagnosis trials have not been run.** |
+| Runtime & parallelism | 10 | 1 | Ratio 24.3, and no parallel mode. |
+| AI-agent authorability | 15 | 5 | First full run passed 12 of 13 cases, with one fix cycle. See the caveat below. |
+| Readability (awaiting review) | 10 | 3.5 | R1 Locality 4, R2 Indirection 3, R3 Signal 3, R4 Matrix 4. |
+| Fixtures / isolation | 10 | 4 | Native lifecycle, teardown after failure and verified recovery. No parallel mode. |
+| CI & reports | 5 | 4 | Same as pytest: JUnit and exit codes built in, HTML through a plugin. |
+| Ecosystem health | 5 | 3 | Judgement, same as Tavern. pytest and `fhir-py` are healthy, but the SDK is a small vendor project (14 GitHub stars, MIT, active). |
+| FHIR awareness | 5 | 3 | Native FHIR library in the test language, the top of the rubric. |
+| **Score (of 100)** | | **53.0–57.5** | 51.5 only if diagnosis falls below 0.40. Every other suite scored 0.80 or more. |
+
+**The authorability 5 favours this suite.** The measure was designed for writing from the spec. This author had a working prototype, including case 3, and could read the already-debugged pytest suite. At authorability 3 or lower, with diagnosis at band 4, it scores 50.0 or less and drops below Tavern.
+
+**Sensitivity, with six suites and diagnosis at band 4.** pytest is first in all nine weight variations re-run and in all 20,000 random-weight draws. aidbox-sdk is fifth in 85% of draws, sixth in 11% and fourth in 4%. It reaches fourth with authorability weight 30. It is sixth with AP weight 40 or authorability weight 0, and ties Tavern with runtime weight 25. The other rows of section 3 were not re-run.
+
+**What the held-out runs show.**
+
+- It is the only suite to kill h03, through a percent-encoded `%5Frevinclude` test. That needed `yarl`'s `encoded=True` so the raw escape reaches Aidbox, which settles section 4's untested question for this client.
+- h01 and h02 survive all six suites. It also misses h11, which Karate, pytest, Playwright and Tavern catch by decision assertion.
+- Its seven status-level kills include h10 and h12, which leave status unchanged on the requests their author probed. They change status on other requests this suite sends, such as a Consent naming the practitioner as a later actor.
+
+**Costs of following the practice.**
+
+- Per-test data is much slower and longer than shared fixtures.
+- Per-test data can hide bugs. A deny test passes against a broken "any of my records" policy unless the test also creates a record the identity owns. The prototype missed mutant 08 this way, and the suite's author was told to apply that rule to every deny test. Whether every test follows it was not reviewed.
+
+**pytest packaging changed after sections 1–6.** The pytest suite now installs with `uv` and compiles bytecode at build time, with the same package versions as before. Run alternately in one session, the `pip` build took 3.39 s and the `uv` build 4.11 s per run, and 0.98 s against 1.37 s for a no-op start. So `uv` costs about 0.7 s, for reasons not established. The machine was also about 0.45 s slower than when sections 1–6 were measured. Adding the 0.7 s to the 2.94 s in section 2 gives 3.66 s, a ratio of 2.27. The 4.37 s measured directly gives 2.71. Both fall in band 3, so pytest's runtime score drops from 4 to 3 and its total from 83.5 to 81.5. The other suites' runtimes were not re-measured. LOC moved from 478 to 480.
+
+**Tooling found broken along the way.** A mutant applied between a killed run and its teardown lost a policy, and `revert.sh` could then report success with the policy still missing, because Aidbox answered 200 and stored nothing. `sut/mutants/apply.sh` now refuses while an aidbox-sdk run is open and fails if a policy is missing after a `PUT`. Its open-run check does not cover the other five suites' state files.
+
+**Recommendation, unchanged.** pytest + httpx stays first under these weights, and no variation tested changes that. Closeness to SDK practice is not a scored criterion. If that closeness matters more than code size and run time, aidbox-sdk is a credible option: it ties for the most held-out kills and has the strongest status-level checks.
+
+Raw data: `bench/results-aidbox-sdk/`, including `holdout/`, `loc.csv`, `runtime.csv` and `runtime/`.
 
 ---
 
