@@ -1,0 +1,111 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py ........               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ........             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py ........                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py ...F...                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py .........F..........               [ 73%]
+tests/access_policy/test_09_sdc.py ...........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+______________ test_practitioner_searches_only_consented_patients ______________
+
+fhir_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner = Practitioner(resourceType='Practitioner', id='01a1bf36-1a8a-738e-8620-e016ab561924', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+other_practitioner = Practitioner(resourceType='Practitioner', id='01a1bf36-1b29-7fa2-8c38-7b9d778f5b6d', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+own_patient = Patient(resourceType='Patient', id='01a1bf36-1b2e-7dc2-83f2-678bcdc1ce02', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+other_patient = Patient(resourceType='Patient', id='01a1bf36-1b33-7fa6-8e81-5315a046e11b', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_practitioner_searches_only_consented_patients(
+        fhir_client: AsyncFHIRClient,
+        practitioner_client: AsyncFHIRClient,
+        practitioner: r4b.Practitioner,
+        other_practitioner: r4b.Practitioner,
+        own_patient: r4b.Patient,
+        other_patient: r4b.Patient,
+    ) -> None:
+        await save_consent(fhir_client, own_patient, practitioner)
+        await save_consent(fhir_client, other_patient, other_practitioner)
+    
+        bundle = await assert_allowed(practitioner_client, "Patient", params={"_id": own_patient.id})
+        assert collect_ids(bundle) == {f"Patient/{own_patient.id}"}
+    
+>       await assert_denied(
+            practitioner_client, "Patient", params={"_id": f"{own_patient.id},{other_patient.id}"}
+        )
+
+tests/access_policy/test_06_search_leak.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>, path = 'Patient'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+>       assert not decision.allowed and not decision.errors, f"expected deny for {request}: {decision}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET Patient params={'_id': '01a1bf36-1b2e-7dc2-83f2-678bcdc1ce02,01a1bf36-1b33-7fa6-8e81-5315a046e11b'}: user=bakeoff-1df69601 allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+tests/access_policy/decision.py:76: AssertionError
+_____________ test_matrix[unconsented-practitioner-search-patient] _____________
+
+world = World(clients={'patient': <AsyncFHIRClient http://aidbox:8080/fhir>, 'consented-practitioner': <AsyncFHIRClient http:/...ry=None, episodeOfCare=None, reasonReference=None, hospitalization=None, serviceProvider=None, modifierExtension=None))
+who = 'unconsented-practitioner', op = 'search-patient', policy = None
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{who}-{op}" for who, op, _ in CELLS])
+    async def test_matrix(world: World, who: str, op: str, policy: str | None) -> None:
+        path, request = build_operations(world)[op]
+    
+        if policy is None:
+>           await assert_denied(world.clients[who], path, **request)
+
+tests/access_policy/test_08_matrix.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>, path = 'Patient'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+>       assert not decision.allowed and not decision.errors, f"expected deny for {request}: {decision}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET Patient params={'_id': '01a1bf36-4214-7651-8281-3e9e0bdbc31b'}: user=bakeoff-6dcc953b allowed_by=['as-practitioner-search-consented-patients'] errors=[]
+
+tests/access_policy/decision.py:76: AssertionError
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_06_search_leak.py::test_practitioner_searches_only_consented_patients
+FAILED tests/access_policy/test_08_matrix.py::test_matrix[unconsented-practitioner-search-patient]
+======================== 2 failed, 90 passed in 34.72s =========================

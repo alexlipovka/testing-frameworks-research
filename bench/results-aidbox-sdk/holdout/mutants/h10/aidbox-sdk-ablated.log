@@ -1,0 +1,153 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py ........               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ..F.....             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py ........                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py .......                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py ....................               [ 73%]
+tests/access_policy/test_09_sdc.py ...........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+_____________ test_practitioner_named_as_a_later_actor_is_allowed ______________
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Patient/01a1bf42-e570-7429-813a-14b53e8a8e10'
+
+    async def assert_allowed(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+        by: str | None = None,
+        send: bool = True,
+    ) -> Any:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+        if not send:
+            return None
+        try:
+>           return await send_request(client, request)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/access_policy/decision.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/access_policy/decision.py:106: in send_request
+    return await client.execute(
+.venv/lib/python3.12/site-packages/fhirpy/base/lib_async.py:60: in execute
+    return await self._do_request(method, path, data=data, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncFHIRClient http://aidbox:8080/fhir>, method = 'get'
+path = 'Patient/01a1bf42-e570-7429-813a-14b53e8a8e10', data = None
+params = None, extra_headers = None
+
+    async def _do_request(  # noqa: PLR0913
+        self,
+        method: str,
+        path: str,
+        data: Union[dict, None] = None,
+        params: Union[dict, None] = None,
+        extra_headers: Union[dict, None] = None,
+        *,
+        returning_status=False,
+    ) -> Union[Any, tuple[Any, int]]:
+        headers = self._build_request_headers()
+        if extra_headers:
+            headers = {**headers, **extra_headers}
+    
+        url = self._build_request_url(path, params)
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.request(method, url, json=data, **self.aiohttp_config) as r:
+                if 200 <= r.status < 300:  # noqa: PLR2004
+                    raw_data = await r.text()
+                    r_data = json.loads(raw_data, object_hook=AttrDict) if raw_data else None
+                    return (r_data, r.status) if returning_status else r_data
+    
+                if r.status == 401:  # noqa: PLR2004
+                    raise AuthorizationError(await r.text())
+    
+                if r.status == 403:  # noqa: PLR2004
+>                   raise ForbiddenError(await r.text())
+E                   fhirpy.base.exceptions.ForbiddenError: {"resourceType":"OperationOutcome","id":"forbidden","text":{"status":"generated","div":"<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Forbidden</p></div>"},"issue":[{"severity":"fatal","code":"forbidden","diagnostics":"Forbidden"}]}
+
+.venv/lib/python3.12/site-packages/fhirpy/base/lib_async.py:269: ForbiddenError
+
+During handling of the above exception, another exception occurred:
+
+fhir_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner = Practitioner(resourceType='Practitioner', id='01a1bf42-e4c8-7b4c-8237-c51616f5f87f', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+other_practitioner = Practitioner(resourceType='Practitioner', id='01a1bf42-e56b-715d-8d53-fdbf3d70e070', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+own_patient = Patient(resourceType='Patient', id='01a1bf42-e570-7429-813a-14b53e8a8e10', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_practitioner_named_as_a_later_actor_is_allowed(
+        fhir_client: AsyncFHIRClient,
+        practitioner_client: AsyncFHIRClient,
+        practitioner: r4b.Practitioner,
+        other_practitioner: r4b.Practitioner,
+        own_patient: r4b.Patient,
+    ) -> None:
+        consent = build_consent(
+            patient=build_reference(own_patient), actor=build_reference(other_practitioner)
+        )
+        assert consent.provision and consent.provision.actor
+        consent.provision.actor.append(
+            r4b.ConsentProvisionActor(
+                role=consent.provision.actor[0].role, reference=build_reference(practitioner)
+            )
+        )
+        await fhir_client.save(consent)
+    
+>       await assert_allowed(practitioner_client, f"Patient/{own_patient.id}", by="practitioner-policy")
+
+tests/access_policy/test_02_practitioner_consent.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Patient/01a1bf42-e570-7429-813a-14b53e8a8e10'
+
+    async def assert_allowed(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+        by: str | None = None,
+        send: bool = True,
+    ) -> Any:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+        if not send:
+            return None
+        try:
+            return await send_request(client, request)
+        except BaseFHIRError as error:
+>           pytest.fail(f"{request} failed after an allow decision: {error}; decision: {decision}")
+E           Failed: GET Patient/01a1bf42-e570-7429-813a-14b53e8a8e10 params=None failed after an allow decision: {"resourceType":"OperationOutcome","id":"forbidden","text":{"status":"generated","div":"<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Forbidden</p></div>"},"issue":[{"severity":"fatal","code":"forbidden","diagnostics":"Forbidden"}]}; decision: user=bakeoff-562d2bae allowed_by=[] errors=[{'id': 'practitioner-policy', 'error': 'ERROR: invalid input syntax for type bigint: "01a1bf42-e56b-715d-8d53-fdbf3d70e070"'}]
+
+tests/access_policy/decision.py:59: Failed
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_02_practitioner_consent.py::test_practitioner_named_as_a_later_actor_is_allowed
+======================== 1 failed, 91 passed in 35.03s =========================

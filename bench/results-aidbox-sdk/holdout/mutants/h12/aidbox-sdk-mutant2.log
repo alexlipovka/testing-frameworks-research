@@ -1,0 +1,99 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py .....F.F               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ........             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py ........                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py .......                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py ....................               [ 73%]
+tests/access_policy/test_09_sdc.py ...........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+________________ test_own_patient_id_under_wrong_type_is_denied ________________
+
+patient_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+own_patient = Patient(resourceType='Patient', id='01a1bf47-19f5-7372-8b1f-e28e7f109e52', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_own_patient_id_under_wrong_type_is_denied(
+        patient_client: AsyncFHIRClient, own_patient: r4b.Patient
+    ) -> None:
+>       await assert_denied(patient_client, f"Observation/{own_patient.id}")
+
+tests/access_policy/test_01_patient_own_record.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Observation/01a1bf47-19f5-7372-8b1f-e28e7f109e52'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+>       assert not decision.allowed and not decision.errors, f"expected deny for {request}: {decision}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for GET Observation/01a1bf47-19f5-7372-8b1f-e28e7f109e52 params=None: user=bakeoff-d3151482 allowed_by=['as-patient-read-own-encounter'] errors=[]
+
+tests/access_policy/decision.py:76: AssertionError
+_____________________ test_patient_cannot_write_own_record _____________________
+
+fhir_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+patient_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+own_patient = Patient(resourceType='Patient', id='01a1bf47-1bac-7651-8692-748a8b04b1ff', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_patient_cannot_write_own_record(
+        fhir_client: AsyncFHIRClient, patient_client: AsyncFHIRClient, own_patient: r4b.Patient
+    ) -> None:
+        path = f"Patient/{own_patient.id}"
+        renamed = {"resourceType": "Patient", "name": [{"family": "Hacked"}]}
+        patch = [{"op": "replace", "path": "/name/0/family", "value": "Hacked"}]
+    
+>       await assert_denied(patient_client, path, method="put", data=renamed)
+
+tests/access_policy/test_01_patient_own_record.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Patient/01a1bf47-1bac-7651-8692-748a8b04b1ff'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+>       assert not decision.allowed and not decision.errors, f"expected deny for {request}: {decision}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected deny for PUT Patient/01a1bf47-1bac-7651-8692-748a8b04b1ff params=None body={"resourceType": "Patient", "name": [{"family": "Hacked"}]}: user=bakeoff-dbbdc385 allowed_by=['as-patient-read-own-encounter'] errors=[]
+
+tests/access_policy/decision.py:76: AssertionError
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_01_patient_own_record.py::test_own_patient_id_under_wrong_type_is_denied
+FAILED tests/access_policy/test_01_patient_own_record.py::test_patient_cannot_write_own_record
+======================== 2 failed, 90 passed in 35.24s =========================

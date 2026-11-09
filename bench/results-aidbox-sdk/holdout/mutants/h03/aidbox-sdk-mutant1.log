@@ -1,0 +1,50 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py ........               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ........             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py ........                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py ......F                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py ....................               [ 73%]
+tests/access_policy/test_09_sdc.py ...........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+_____________ test_receptionist_percent_encoded_include_is_denied ______________
+
+receptionist_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+own_patient = Patient(resourceType='Patient', id='01a1bf30-a603-7672-8365-761430653786', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+own_observation = Observation(resourceType='Observation', id='01a1bf30-a608-759d-8da0-bdba9837b8c2', id__ext=None, meta=Meta(tag=None, s...=None, code=CodeableConcept(id=None, id__ext=None, text='Bakeoff weight', text__ext=None, coding=None, extension=None))
+
+    async def test_receptionist_percent_encoded_include_is_denied(
+        receptionist_client: AsyncFHIRClient,
+        own_patient: r4b.Patient,
+        own_observation: r4b.Observation,
+    ) -> None:
+        path = f"Patient?_id={own_patient.id}&%5Frevinclude=Observation:subject"
+    
+        status, dump = await request_raw(receptionist_client, "get", path, params={"__debug": "policy"})
+        decision = parse_decision(dump)
+>       assert status == 200 and not decision.allowed and not decision.errors, f"{path}: {decision}"
+E       AssertionError: Patient?_id=01a1bf30-a603-7672-8365-761430653786&%5Frevinclude=Observation:subject: user=bakeoff-bc5c9748 allowed_by=['as-receptionist-read-patients'] errors=[]
+E       assert (200 == 200 and not True)
+E        +  where True = Decision(allowed_by=['as-receptionist-read-patients'], errors=[], user='bakeoff-bc5c9748').allowed
+
+tests/access_policy/test_06_search_leak.py:161: AssertionError
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_06_search_leak.py::test_receptionist_percent_encoded_include_is_denied
+======================== 1 failed, 91 passed in 34.58s =========================

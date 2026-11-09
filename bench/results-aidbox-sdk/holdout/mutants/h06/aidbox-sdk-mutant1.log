@@ -1,0 +1,92 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py ........               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ........             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py ........                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py .......                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py ....................               [ 73%]
+tests/access_policy/test_09_sdc.py F..........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+_________________ test_consented_practitioner_passes_the_gate __________________
+
+fhir_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+other_practitioner_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+practitioner = Practitioner(resourceType='Practitioner', id='01a1bf38-332f-7537-876c-52727e01e309', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+other_practitioner = Practitioner(resourceType='Practitioner', id='01a1bf38-33cf-7946-8815-5c744fd52e3a', id__ext=None, meta=Meta(tag=None,...fier=None, implicitRules=None, implicitRules__ext=None, qualification=None, communication=None, modifierExtension=None)
+own_patient = Patient(resourceType='Patient', id='01a1bf38-3470-767f-84f0-64b02436651a', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+other_patient = Patient(resourceType='Patient', id='01a1bf38-3474-772b-85d9-9f946ac64f75', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_consented_practitioner_passes_the_gate(
+        fhir_client: AsyncFHIRClient,
+        practitioner_client: AsyncFHIRClient,
+        other_practitioner_client: AsyncFHIRClient,
+        practitioner: r4b.Practitioner,
+        other_practitioner: r4b.Practitioner,
+        own_patient: r4b.Patient,
+        other_patient: r4b.Patient,
+    ) -> None:
+        await save_consent(fhir_client, own_patient, practitioner)
+        await save_consent(fhir_client, other_patient, other_practitioner)
+    
+        await assert_allowed(
+            practitioner_client,
+            POPULATE,
+            method="post",
+            data=build_populate_body(own_patient),
+            by=SDC_POLICY,
+            send=False,
+        )
+>       await assert_allowed(
+            practitioner_client,
+            EXTRACT,
+            method="post",
+            data=build_extract_body(own_patient),
+            by=SDC_POLICY,
+            send=False,
+        )
+
+tests/access_policy/test_09_sdc.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Questionnaire/glucose/$extract'
+
+    async def assert_allowed(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+        by: str | None = None,
+        send: bool = True,
+    ) -> Any:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+>       assert decision.allowed and not decision.errors, f"expected allow for {request}: {decision}"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: expected allow for POST Questionnaire/glucose/$extract params=None body={"resourceType": "Parameters", "parameter": [{"name": "questionnaire_response", "resource": {"resourceType": "QuestionnaireResponse", "item": [{"linkId": "patientId", "answer": [{"valueString": "01a1bf38-3470-767f-84f0-64b02436651a"}]}, {"linkId": "glucose-level", "answer": [{"valueDecimal": 5.5}]}, {"linkId": "dateTime", "answer": [{"valueDateTime": "2030-01-01T00:00:00Z"}]}], "status": "complete: user=bakeoff-a0510f51 allowed_by=[] errors=[]
+
+tests/access_policy/decision.py:54: AssertionError
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_09_sdc.py::test_consented_practitioner_passes_the_gate
+======================== 1 failed, 91 passed in 34.69s =========================

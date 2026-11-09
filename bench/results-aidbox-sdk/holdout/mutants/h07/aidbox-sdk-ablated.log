@@ -1,0 +1,111 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.12, pytest-9.0.3, pluggy-1.7.0
+rootdir: /suite
+configfile: pyproject.toml
+testpaths: tests
+plugins: asyncio-1.4.0, aiohttp-1.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 92 items
+
+tests/access_policy/test_01_patient_own_record.py ........               [  8%]
+tests/access_policy/test_02_practitioner_consent.py ........             [ 17%]
+tests/access_policy/test_03_policy_error.py ....                         [ 21%]
+tests/access_policy/test_04_receptionist.py .......F                     [ 30%]
+tests/access_policy/test_05_norole.py .........                          [ 40%]
+tests/access_policy/test_06_search_leak.py .......                       [ 47%]
+tests/access_policy/test_07_bypass.py ....                               [ 52%]
+tests/access_policy/test_08_matrix.py ..............F.....               [ 73%]
+tests/access_policy/test_09_sdc.py ...........                           [ 85%]
+tests/access_policy/test_14_isolation.py ..                              [ 88%]
+tests/test_10_crud.py ....                                               [ 92%]
+tests/test_11_validation.py ..                                           [ 94%]
+tests/test_12_search.py ...                                              [ 97%]
+tests/test_13_transaction.py ..                                          [100%]
+
+=================================== FAILURES ===================================
+___________________ test_receptionist_sees_nothing_clinical ____________________
+
+fhir_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+receptionist_client = <AsyncFHIRClient http://aidbox:8080/fhir>
+own_patient = Patient(resourceType='Patient', id='01a1bf3b-8d31-7603-8d14-7c487ec74f5f', id__ext=None, meta=Meta(tag=None, source=No...eger=None, multipleBirthInteger__ext=None, modifierExtension=None, generalPractitioner=None, managingOrganization=None)
+
+    async def test_receptionist_sees_nothing_clinical(
+        fhir_client: AsyncFHIRClient, receptionist_client: AsyncFHIRClient, own_patient: r4b.Patient
+    ) -> None:
+        reference = build_reference(own_patient)
+        encounter = await fhir_client.save(build_encounter(subject=reference))
+        observation = await fhir_client.save(build_observation(subject=reference))
+    
+>       await assert_denied(receptionist_client, f"Encounter/{encounter.id}")
+
+tests/access_policy/test_04_receptionist.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Encounter/01a1bf3b-8d37-77dd-8371-f968757361d3'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+        try:
+            await send_request(client, request)
+        except ForbiddenError:
+            return
+        except BaseFHIRError as error:
+            pytest.fail(f"expected 403 for {request}, got: {error}; decision: {decision}")
+>       pytest.fail(f"expected 403 for {request}, but it succeeded; decision: {decision}")
+E       Failed: expected 403 for GET Encounter/01a1bf3b-8d37-77dd-8371-f968757361d3 params=None, but it succeeded; decision: user=bakeoff-0366cf5d allowed_by=['receptionist-role-policy'] errors=[]
+
+tests/access_policy/decision.py:79: Failed
+___________________ test_matrix[receptionist-read-encounter] ___________________
+
+world = World(clients={'patient': <AsyncFHIRClient http://aidbox:8080/fhir>, 'consented-practitioner': <AsyncFHIRClient http:/...ry=None, episodeOfCare=None, reasonReference=None, hospitalization=None, serviceProvider=None, modifierExtension=None))
+who = 'receptionist', op = 'read-encounter', policy = None
+
+    @pytest.mark.parametrize("who, op, policy", CELLS, ids=[f"{who}-{op}" for who, op, _ in CELLS])
+    async def test_matrix(world: World, who: str, op: str, policy: str | None) -> None:
+        path, request = build_operations(world)[op]
+    
+        if policy is None:
+>           await assert_denied(world.clients[who], path, **request)
+
+tests/access_policy/test_08_matrix.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <AsyncFHIRClient http://aidbox:8080/fhir>
+path = 'Encounter/01a1bf3b-d00f-7e8a-8a11-8b628af14464'
+
+    async def assert_denied(
+        client: AsyncFHIRClient,
+        path: str,
+        *,
+        method: str = "get",
+        params: dict[str, Any] | None = None,
+        data: Body | None = None,
+        content_type: str | None = None,
+    ) -> None:
+        request = Request(path, method, params, data, content_type)
+        decision = await fetch_decision(client, request)
+        try:
+            await send_request(client, request)
+        except ForbiddenError:
+            return
+        except BaseFHIRError as error:
+            pytest.fail(f"expected 403 for {request}, got: {error}; decision: {decision}")
+>       pytest.fail(f"expected 403 for {request}, but it succeeded; decision: {decision}")
+E       Failed: expected 403 for GET Encounter/01a1bf3b-d00f-7e8a-8a11-8b628af14464 params=None, but it succeeded; decision: user=bakeoff-98260452 allowed_by=['receptionist-role-policy'] errors=[]
+
+tests/access_policy/decision.py:79: Failed
+----------------- generated xml file: /suite/reports/junit.xml -----------------
+=========================== short test summary info ============================
+FAILED tests/access_policy/test_04_receptionist.py::test_receptionist_sees_nothing_clinical
+FAILED tests/access_policy/test_08_matrix.py::test_matrix[receptionist-read-encounter]
+======================== 2 failed, 90 passed in 34.90s =========================
